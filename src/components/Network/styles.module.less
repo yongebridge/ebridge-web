@@ -1,0 +1,38 @@
+@import '/src/assets/theme/color.less';
+@import '/src/assets/theme/constants.less';
+.dropdown {
+  justify-content: space-between;
+  align-items: center;
+  :global {
+    .network-icon {
+      .anticon {
+        font-size: 12px;
+      }
+    }
+    .anticon {
+      margin-right: 5px;
+      font-size: 36px;
+      @media screen and (max-width: @md-width) {
+        font-size: 26px;
+      }
+      @media screen and (max-width: @xs-width) {
+        font-size: 24px;
+      }
+    }
+  }
+}
+.dropdown-overlay {
+  width: auto;
+  box-shadow: 0 9px 20px 8px @shadow-2;
+  :global {
+    .@{app-prefix}-dropdown-menu-item {
+      min-height: 40px;
+      &:hover:not(.@{app-prefix}-dropdown-menu-item-selected) {
+        background: @bg-3;
+      }
+    }
+    .@{app-prefix}-dropdown-menu-item-selected {
+      background: @bg-8;
+    }
+  }
+}

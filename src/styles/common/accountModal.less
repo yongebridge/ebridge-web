@@ -1,0 +1,48 @@
+@import '/src/assets/theme/color.less';
+@import '/src/assets/theme/font.less';
+.account-modal {
+  p {
+    line-height: 20px;
+    font-size: 14px;
+    color: @font-5;
+    margin-bottom: 16px;
+    .font-family-medium();
+  }
+  .account-modal-card {
+    border: 0;
+    border-radius: 2px;
+    .@{app-prefix}-card-body {
+      padding: 0;
+      .account-modal-account {
+        font-size: 14px;
+        .font-family-medium();
+        .anticon{
+          margin-right: 5px;
+        }
+      }
+      .common-link {
+        margin-top: 18px;
+      }
+      .account-modal-copy {
+        color: @font-5;
+        font-size: 14px;
+        height: 18px;
+        line-height: 18px;
+        .anticon {
+          margin-right: 2px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  .account-modal-button {
+    width: 100%;
+    margin-top: 10px;
+    .@{app-prefix}-btn-primary {
+      height: 40px;
+      width: calc(49% - 8px);
+      font-size: 16px;
+      line-height: 20px;
+    }
+  }
+}

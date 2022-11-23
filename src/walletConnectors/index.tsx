@@ -1,0 +1,81 @@
+import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
+import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
+import { WalletConnect } from '@web3-react/walletconnect';
+import { MetaMask } from '@web3-react/metamask';
+import { Network } from '@web3-react/network';
+import { SupportedChainId } from 'constants/chain';
+import { Connector } from '@web3-react/types';
+import * as MAINNET from 'constants/platform/main';
+import * as KOVAN from 'constants/platform/kovan';
+export const NETWORK_URLS: { [key: number]: string } = {
+  [SupportedChainId.MAINNET]: MAINNET.CHAIN_INFO.rpcUrl,
+  [SupportedChainId.KOVAN]: KOVAN.CHAIN_INFO.rpcUrl,
+};
+export enum ConnectionType {
+  INJECTED = 'INJECTED',
+  COINBASE_WALLET = 'COINBASE_WALLET',
+  WALLET_CONNECT = 'WALLET_CONNECT',
+  NETWORK = 'NETWORK',
+}
+export interface Connection {
+  connector: Connector;
+  hooks: Web3ReactHooks;
+  type: ConnectionType;
+}
+
+export const BACKFILLABLE_WALLETS = [
+  ConnectionType.COINBASE_WALLET,
+  ConnectionType.WALLET_CONNECT,
+  ConnectionType.INJECTED,
+];
+function onError(error: Error) {
+  console.debug(`web3-react error: ${error}`);
+}
+export const [injected, injectedHooks] = initializeConnector<MetaMask>((actions) => new MetaMask({ actions, onError }));
+export const injectedConnection: Connection = {
+  connector: injected,
+  hooks: injectedHooks,
+  type: ConnectionType.INJECTED,
+};
+export const [network, networkHooks] = initializeConnector<Network>(
+  (actions) => new Network({ actions, urlMap: NETWORK_URLS, defaultChainId: 1 }),
+);
+export const networkConnection: Connection = {
+  connector: network,
+  hooks: networkHooks,
+  type: ConnectionType.NETWORK,
+};
+export const [walletConnect, walletConnectHooks] = initializeConnector<WalletConnect>(
+  (actions) =>
+    new WalletConnect({
+      actions,
+      options: {
+        rpc: NETWORK_URLS,
+        qrcode: true,
+      },
+      onError,
+    }),
+);
+export const walletConnectConnection: Connection = {
+  connector: walletConnect,
+  hooks: walletConnectHooks,
+  type: ConnectionType.WALLET_CONNECT,
+};
+export const [coinbaseWallet, coinbaseWalletHooks] = initializeConnector<CoinbaseWallet>(
+  (actions) =>
+    new CoinbaseWallet({
+      actions,
+      options: {
+        url: NETWORK_URLS[SupportedChainId.MAINNET],
+        appName: process.env.NEXT_PUBLIC_PREFIX || 'appName',
+        reloadOnDisconnect: false,
+      },
+      onError,
+    }),
+);
+
+export const coinbaseWalletConnection: Connection = {
+  connector: coinbaseWallet,
+  hooks: coinbaseWalletHooks,
+  type: ConnectionType.COINBASE_WALLET,
+};
