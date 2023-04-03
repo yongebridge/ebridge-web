@@ -94,7 +94,7 @@ export const getTokenLogoURL = (address?: string | string, chainId?: ChainId) =>
   if (!address) return '';
   const networkName = chainIdToNetworkName(chainId);
   let repositories = 'trustwallet';
-  if (networksWithNativeUrls.includes(chainId)) repositories = 'mason-hz';
+  if (networksWithNativeUrls.includes(chainId)) repositories = 'eBridgeCrosschain';
   return `https://raw.githubusercontent.com/${repositories}/assets/master/blockchains/${networkName}/assets/${address}/logo.png`;
 };
 
