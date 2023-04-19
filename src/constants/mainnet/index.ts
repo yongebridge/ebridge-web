@@ -59,17 +59,17 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.KOVAN]: 'Kovan',
   [SupportedChainId.GORELI]: 'Goerli',
   [SupportedChainId.BSC_MAINNET]: 'BSC',
-  [SupportedChainId.BSC_TESTNET]: 'Binance Smart Chain Testnet',
+  [SupportedChainId.BSC_TESTNET]: 'Binance Smart Chain Mainnet',
   [SupportedChainId.HECO_MAINNET]: 'HECO',
   [SupportedChainId.HECO_TESTNET]: 'HECO Testnet',
   [SupportedChainId.OEC_MAINNET]: 'OEC',
   [SupportedChainId.OEC_TESTNET]: 'OEC Testnet',
   [SupportedChainId.POLYGON_MAINNET]: 'Polygon',
   [SupportedChainId.POLYGON_TESTNET]: 'Polygon Testnet',
-  [SupportedELFChainId.AELF]: 'MainChain AELF Testnet',
-  [SupportedELFChainId.tDVV]: 'SideChain tDVV Testnet',
-  [SupportedELFChainId.tDVW]: 'SideChain tDVW Testnet',
-  [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
+  [SupportedELFChainId.AELF]: 'MainChain AELF Mainnet',
+  [SupportedELFChainId.tDVV]: 'SideChain tDVV Mainnet',
+  [SupportedELFChainId.tDVW]: 'SideChain tDVW Mainnet',
+  [SupportedChainId.SEPOLIA]: 'Sepolia Mainnet',
 };
 
 export const networkList = [
