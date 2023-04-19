@@ -1,4 +1,4 @@
-import defaultWhitelistMap from 'constants/tokenWhitelist.json';
+import { defaultWhitelistMap } from 'constants/index';
 import { ChainId, TokenInfo } from 'types';
 export function getDecimalByWhitelist(chainId: ChainId, symbol: string) {
   return (defaultWhitelistMap as any)[symbol]?.[chainId].decimals;

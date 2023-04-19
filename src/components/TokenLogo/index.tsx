@@ -40,7 +40,9 @@ export default function TokenLogo({
       )}
       style={style}
       onClick={onClick}>
-      {!tmpSrc ? null : (
+      {!tmpSrc ? (
+        <span>{symbol?.[0]}</span>
+      ) : (
         <Image
           {...props}
           onError={() => {

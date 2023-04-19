@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BaseConfig, requestConfig } from './types';
+import { BaseConfig, RequestConfig } from './types';
 
 const axiosInstance = axios.create({
   baseURL: '/',
@@ -33,7 +33,7 @@ export function spliceUrl(baseUrl: string, extendArg?: string) {
   return extendArg ? baseUrl + '/' + extendArg : baseUrl;
 }
 
-export function getRequestConfig(base: BaseConfig, config?: requestConfig) {
+export function getRequestConfig(base: BaseConfig, config?: RequestConfig) {
   if (typeof base === 'string') {
     return config;
   } else {

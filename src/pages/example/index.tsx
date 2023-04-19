@@ -17,7 +17,7 @@ export default function Example() {
   const { account: aelfAccount, chainId: fromChainId, aelfInstance } = fromWallet || {};
   const { account, chainId } = toWallet || {};
   const modalDispatch = useModalDispatch();
-  const [[fromBalance]] = useBalances(fromWallet, 'ELF');
+  const [[fromBalance]] = useBalances(fromWallet, 'WBNB');
   const [[toBalance]] = useBalances(toWallet, 'ELF');
   const fromToken = useTokenContract(fromChainId);
   const onChange = useDebounceCallback(() => {
@@ -25,7 +25,7 @@ export default function Example() {
   }, [dispatch, changeWallet]);
   return (
     <div>
-      fromBalance: {divDecimals(fromBalance, 8).toFixed()}
+      fromBalance: {divDecimals(fromBalance, 18).toFixed()}
       <br />
       toBalance: {divDecimals(toBalance, 8).toFixed()}
       <br />
@@ -107,9 +107,9 @@ export default function Example() {
         type="primary"
         onClick={async () => {
           const transfer = await fromToken?.callSendMethod('Transfer', '', {
-            amount: 1000 * 10 ** 8,
+            amount: 1 * 10 ** 8,
             symbol: 'ELF',
-            to: 'bnQqDTkQ8nQPX7qai2fbov5JiZnVyEYDCFpechp1tNMNyD51Y',
+            to: 'uGxKxnt5Lvi4LjbP1CkYstANNgks1Ets8rpeH79ukGJnNvhiw',
           });
           console.log(transfer, '=====transfer');
         }}>

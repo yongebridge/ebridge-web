@@ -96,6 +96,7 @@ export class ContractBasic {
   };
 
   public callSendMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
+    console.log(paramsOption, '++++paramsOption');
     if (this.callContract instanceof AElfContractBasic)
       return this.callContract.callSendMethod(functionName, paramsOption, sendOptions);
     return this.callContract.callSendMethod(functionName, account, paramsOption, sendOptions);
@@ -179,12 +180,14 @@ export class WB3ContractBasic {
             reject(error);
           }),
       );
+
       if (onMethod === 'receipt') return { ...result, TransactionId: result.transactionHash };
       return { TransactionId: result };
     } catch (error) {
       return { error };
     }
   };
+
   public callSendPromiseMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
     if (!this.contract) return { error: { code: 401, message: 'Contract init error5' } };
     try {
@@ -259,7 +262,6 @@ export class AElfContractBasic {
     if (!this.aelfContract) return { error: { code: 401, message: 'Contract init error2' } };
     try {
       const { onMethod = 'receipt' } = sendOptions || {};
-
       await this.checkMethods();
       await this.checkConnected();
       const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());

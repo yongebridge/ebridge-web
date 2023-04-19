@@ -4,15 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next dev",
     "build": "next build",
+    "build:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next build",
     "start": "next start",
+    "start:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next start",
     "lint": "next lint",
-    "dev:analyze": "PORT=4000 ANALYZE=true next dev"
+    "dev:analyze": "PORT=4000 ANALYZE=true next dev",
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@aelf-react/core": "^0.1.19",
     "@aelf-react/types": "^0.1.10",
     "@ant-design/icons": "^4.7.0",
+    "@sentry/nextjs": "^7.48.0",
     "@walletconnect/ethereum-provider": "^1.7.8",
     "@web3-react/coinbase-wallet": "^8.0.34-beta.0",
     "@web3-react/core": "^8.0.35-beta.0",
@@ -34,6 +39,7 @@
     "query-string": "^7.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-ga": "^3.3.1",
     "react-i18next": "^11.18.0",
     "react-use": "^17.4.0",
     "web3": "^1.7.4",
@@ -41,6 +47,8 @@
   },
   "devDependencies": {
     "@coinbase/wallet-sdk": "^3.3.0",
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
     "@next/bundle-analyzer": "^12.2.4",
     "@types/node": "18.0.1",
     "@types/react": "18.0.14",
@@ -51,8 +59,10 @@
     "eslint-config-next": "12.2.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
     "less": "^4.1.3",
     "less-loader": "^11.0.0",
+    "lint-staged": "^13.2.1",
     "postcss-less": "^6.0.0",
     "prettier": "^2.7.1",
     "stylelint": "^14.9.1",
@@ -60,5 +70,9 @@
     "stylelint-config-standard": "^26.0.0",
     "typescript": "4.7.4",
     "vconsole": "^3.14.6"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*.{css,less}": "stylelint --fix"
   }
 }

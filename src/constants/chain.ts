@@ -10,6 +10,7 @@ export enum SupportedChainId {
   OEC_TESTNET = 65,
   POLYGON_MAINNET = 137,
   POLYGON_TESTNET = 80001,
+  SEPOLIA = 11155111,
 }
 
 export enum SupportedELFChainId {
@@ -23,7 +24,10 @@ export const CHAIN_ID_MAP = {
   tDVV: 'SideChain_tDVV',
   tDVW: 'SideChain_tDVW',
   42: 'Kovan',
-  5: 'NewGoerli',
+  // 5: 'NewGoerli',
+  5: 'Goerli',
+  97: 'BSCTest',
+  11155111: 'Sepolia',
 };
 
 /**

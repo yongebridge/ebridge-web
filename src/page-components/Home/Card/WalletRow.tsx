@@ -37,7 +37,7 @@ function WalletRow({ wallet, isForm }: { wallet?: Web3Type; isForm?: boolean }) 
             dispatch(setWallet({ chainType: 'ERC' }));
           }
           try {
-            await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector);
+            await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector, !!account);
           } catch (error: any) {
             message.error(error.message);
           }

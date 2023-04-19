@@ -19,7 +19,6 @@ import { Content, NetworkSelect, StatusSelect, TablePagination } from './compone
 import styles from './styles.module.less';
 import CommonTable from 'components/CommonTable';
 import { useLanguage } from 'i18n';
-import { enumToMap } from 'utils';
 type State = {
   fromChainId?: ChainId;
   toChainId?: ChainId;
@@ -219,7 +218,6 @@ function HomogeneousHistory() {
   );
 }
 
-const historyMap = enumToMap(CrossChainType);
 export default function History() {
   const [{ historyType }, setActiveKey] = useUrlSearchState();
 
@@ -227,13 +225,13 @@ export default function History() {
   return (
     <div className={styles.history}>
       <Tabs
-        defaultActiveKey={CrossChainType.Homogeneous}
-        activeKey={historyMap[historyType] ? historyType : undefined}
+        defaultActiveKey={CrossChainType.heterogeneous}
+        activeKey={CrossChainType[historyType as CrossChainType] ? historyType : undefined}
         onChange={(v) => setActiveKey({ historyType: v })}>
-        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.Heterogeneous}>
+        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous}>
           <HeterogeneousHistory />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.Homogeneous}>
+        <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous}>
           <HomogeneousHistory />
         </Tabs.TabPane>
         <div className="tip-icon">

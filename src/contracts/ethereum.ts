@@ -130,5 +130,5 @@ export const checkAllowanceAndApprove = async ({
 
 export const getETHBalance = async (address: string, library?: provider) => {
   const web3 = new Web3(library || getDefaultProvider());
-  return await web3.eth.getBalance(address);
+  return web3.eth.getBalance(address);
 };

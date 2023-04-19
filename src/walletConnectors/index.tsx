@@ -5,11 +5,18 @@ import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { SupportedChainId } from 'constants/chain';
 import { Connector } from '@web3-react/types';
-import * as MAINNET from 'constants/platform/main';
-import * as KOVAN from 'constants/platform/kovan';
+// import * as MAINNET from 'constants/platform/main';
+// import * as KOVAN from 'constants/platform/kovan';
+// import * as GORELI from 'constants/platform/goreli';
+import * as BSC_TESTNET from 'constants/platform/BSC_Test';
+import * as SEPOLIA from 'constants/platform/sepolia';
+import { DEFAULT_ERC_CHAIN } from 'constants/index';
 export const NETWORK_URLS: { [key: number]: string } = {
-  [SupportedChainId.MAINNET]: MAINNET.CHAIN_INFO.rpcUrl,
-  [SupportedChainId.KOVAN]: KOVAN.CHAIN_INFO.rpcUrl,
+  // [SupportedChainId.MAINNET]: MAINNET.CHAIN_INFO.rpcUrl,
+  [SupportedChainId.BSC_TESTNET]: BSC_TESTNET.CHAIN_INFO.rpcUrl,
+  [SupportedChainId.SEPOLIA]: SEPOLIA.CHAIN_INFO.rpcUrl,
+  // [SupportedChainId.GORELI]: GORELI.CHAIN_INFO.rpcUrl,
+  // [SupportedChainId.KOVAN]: KOVAN.CHAIN_INFO.rpcUrl,
 };
 export enum ConnectionType {
   INJECTED = 'INJECTED',
@@ -38,7 +45,7 @@ export const injectedConnection: Connection = {
   type: ConnectionType.INJECTED,
 };
 export const [network, networkHooks] = initializeConnector<Network>(
-  (actions) => new Network({ actions, urlMap: NETWORK_URLS, defaultChainId: 1 }),
+  (actions) => new Network({ actions, urlMap: NETWORK_URLS, defaultChainId: DEFAULT_ERC_CHAIN }),
 );
 export const networkConnection: Connection = {
   connector: network,
@@ -66,7 +73,7 @@ export const [coinbaseWallet, coinbaseWalletHooks] = initializeConnector<Coinbas
     new CoinbaseWallet({
       actions,
       options: {
-        url: NETWORK_URLS[SupportedChainId.MAINNET],
+        url: NETWORK_URLS[DEFAULT_ERC_CHAIN],
         appName: process.env.NEXT_PUBLIC_PREFIX || 'appName',
         reloadOnDisconnect: false,
       },

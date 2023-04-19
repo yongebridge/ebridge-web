@@ -1,9 +1,10 @@
-import { CHAIN_ICON, CHAIN_NAME, CHAIN_SHORT_NAME } from 'constants/chainInfo';
+import { CHAIN_ICON, CHAIN_SHORT_NAME } from 'constants/chainInfo';
 import { CHAIN_ID_MAP } from 'constants/chain';
 import { ChainId } from 'types';
 import { enumToMap, shortenAddress } from 'utils';
 import { isELFChain } from './aelfUtils';
 import AElf from 'aelf-sdk';
+import { CHAIN_NAME } from 'constants/index';
 const { chainIdConvertor } = AElf.utils;
 export function getIconByChainId(chainId: ChainId) {
   return CHAIN_ICON[chainId];
@@ -18,6 +19,14 @@ export function getShortNameByChainId(chainId?: ChainId) {
   if (name) return name;
   return chainId as string;
 }
+
+export function getNativeTokenByChainId(chainId?: ChainId) {
+  if (!chainId) return 'unknown chain';
+  const name = (CHAIN_SHORT_NAME as any)[chainId];
+  if (name) return name;
+  return chainId as string;
+}
+
 const chainMap = enumToMap(CHAIN_ID_MAP);
 export function getChainIdByAPI(chainId: string) {
   const elfChainId = chainMap[chainId];

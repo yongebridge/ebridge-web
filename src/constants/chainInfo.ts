@@ -1,29 +1,14 @@
 import { IconInfo } from 'types/misc';
 import { SupportedChainId, SupportedELFChainId } from './chain';
 
-export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: string } = {
-  [SupportedChainId.MAINNET]: 'Ethereum',
-  [SupportedChainId.KOVAN]: 'Kovan',
-  [SupportedChainId.GORELI]: 'Goreli',
-  [SupportedChainId.BSC_MAINNET]: 'BSC',
-  [SupportedChainId.BSC_TESTNET]: 'Binance Testnet',
-  [SupportedChainId.HECO_MAINNET]: 'HECO',
-  [SupportedChainId.HECO_TESTNET]: 'HECO Testnet',
-  [SupportedChainId.OEC_MAINNET]: 'OEC',
-  [SupportedChainId.OEC_TESTNET]: 'OEC Testnet',
-  [SupportedChainId.POLYGON_MAINNET]: 'Polygon',
-  [SupportedChainId.POLYGON_TESTNET]: 'Polygon Testnet',
-  [SupportedELFChainId.AELF]: 'MainChain AELF',
-  [SupportedELFChainId.tDVV]: 'SideChain tDVV',
-  [SupportedELFChainId.tDVW]: 'SideChain tDVW',
-};
-
 export const CHAIN_SHORT_NAME = {
   [SupportedELFChainId.AELF]: 'AELF',
   [SupportedELFChainId.tDVV]: 'tDVV',
   [SupportedELFChainId.tDVW]: 'tDVW',
   [SupportedChainId.KOVAN]: 'Kovan',
-  [SupportedChainId.GORELI]: 'Goreli',
+  [SupportedChainId.GORELI]: 'Goerli',
+  [SupportedChainId.BSC_TESTNET]: 'Binance',
+  [SupportedChainId.SEPOLIA]: 'Sepolia',
 };
 export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
   [SupportedChainId.MAINNET]: {
@@ -60,12 +45,16 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
     type: 'Binance',
   },
   [SupportedELFChainId.AELF]: {
-    type: 'AELF',
+    type: 'aelfTestnet',
   },
   [SupportedELFChainId.tDVV]: {
-    type: 'tDVV',
+    type: 'aelfTestnet',
   },
   [SupportedELFChainId.tDVW]: {
-    type: 'tDVW',
+    type: 'aelfTestnet',
+  },
+  [SupportedChainId.SEPOLIA]: {
+    // type: 'SEPOLIA',
+    type: 'Ethereum',
   },
 };

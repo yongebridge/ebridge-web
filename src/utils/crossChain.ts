@@ -1,4 +1,4 @@
-import { SupportedELFChainId } from 'constants/chain';
+import { SupportedChainId, SupportedELFChainId } from 'constants/chain';
 import { ChainId, TokenInfo } from 'types';
 import { CrossChainItem } from 'types/api';
 import { encodeTransaction, getAElf, uint8ArrayToHex } from './aelfUtils';
@@ -27,11 +27,13 @@ export async function CrossChainTransfer({
   toChainId: ChainId;
   amount: string;
 }) {
+  console.log('CrossChainTransfer', '===CrossChainTransfer');
+
   return contract.callSendMethod(
     'CrossChainTransfer',
     account,
     [to, token.symbol, amount, ' ', base58ToChainId(toChainId), token.issueChainId],
-    { onMethod: 'transactionHash' },
+    { onMethod: 'receipt' },
   );
 }
 
@@ -255,14 +257,45 @@ export async function CreateReceipt({
   );
 }
 
+export async function LockToken({
+  account,
+  bridgeContract,
+  amount,
+  toChainId,
+  to,
+}: {
+  bridgeContract: ContractBasic;
+  library: provider;
+  fromToken: string;
+  account: string;
+  amount: string;
+  toChainId: ChainId;
+  to: string;
+  tokenContract?: ContractBasic;
+}) {
+  const toAddress = formatAddress(to);
+  return bridgeContract.callSendMethod('lockToken', account, [getChainIdToMap(toChainId), toAddress], {
+    onMethod: 'transactionHash',
+    value: amount,
+  });
+}
+
+// TODO native token symbol WBNB -> BNB WETH -> ETH
 const tokenList = [
   {
-    fromChainId: [42, 5],
-    toChainId: ['AELF', 'tDVV', 'tDVW'],
+    fromChainId: [SupportedChainId.BSC_TESTNET],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    fromSymbol: 'WBNB',
+    toSymbol: 'BNB',
+  },
+  {
+    fromChainId: [SupportedChainId.SEPOLIA],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
   },
 ];
+
 export async function SwapToken({
   bridgeOutContract,
   toAccount,

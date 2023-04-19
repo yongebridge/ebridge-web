@@ -11,6 +11,11 @@ import { setSelectERCWallet } from 'contexts/useChain/actions';
 import IconFont from 'components/IconFont';
 import { SUPPORTED_WALLETS } from 'constants/wallets';
 import { getConnection } from 'walletConnectors/utils';
+import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
+
+import { DEFAULT_ERC_CHAIN_INFO } from 'constants/index';
+import { switchChain } from 'utils/network';
+import { sleep } from 'utils';
 export default function WalletList() {
   const [{ walletWallet }] = useModal();
   const { chainId, connector: connectedConnector, account } = walletWallet || {};
@@ -32,6 +37,10 @@ export default function WalletList() {
         } else {
           await connector.activate();
           chainDispatch(setSelectERCWallet(getConnection(connector).type));
+        }
+        if (connector instanceof CoinbaseWallet) {
+          await sleep(500);
+          await switchChain(DEFAULT_ERC_CHAIN_INFO, connector, true);
         }
         onCancel();
       } catch (error: any) {

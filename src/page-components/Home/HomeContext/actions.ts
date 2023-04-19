@@ -4,7 +4,7 @@ import { CrossChainItem } from 'types/api';
 import BigNumber from 'bignumber.js';
 import { TokenInfo } from 'types';
 
-export enum homeActions {
+export enum HomeActionsEnum {
   setSelectModal = 'SET_SELECT_TOKEN_MODAL',
   setAddModal = 'SET_ACCOUNT_MODAL',
   setNetWorkDrawer = 'SET_NETWORK_DRAWER',
@@ -22,7 +22,7 @@ export enum homeActions {
   destroyState = 'DESTROY_STATE',
 }
 
-export type homeState = {
+export type HomeState = {
   selectModal?: boolean;
   addModal?: boolean;
   selectToken?: CurrentWhitelistItem;
@@ -60,27 +60,28 @@ export const HomeActions = {
     if (selectModal) {
       obj.destroyModal = true;
     }
-    return basicActions(homeActions['setSelectModal'], obj);
+    return basicActions(HomeActionsEnum['setSelectModal'], obj);
   },
   setAddModal: (addModal: boolean) => {
     const obj: any = { addModal };
     if (addModal) {
       obj.destroyModal = true;
     }
-    return basicActions(homeActions['setAddModal'], obj);
+    return basicActions(HomeActionsEnum['setAddModal'], obj);
   },
-  setSelectToken: (selectToken?: CurrentWhitelistItem) => basicActions(homeActions['setSelectToken'], { selectToken }),
-  homeModalDestroy: () => basicActions(homeActions['destroyModal']),
-  homeStateDestroy: () => basicActions(homeActions['destroyState']),
-  setFrom: (input: string) => basicActions(homeActions['setFrom'], { fromInput: input }),
-  setTo: (input: string) => basicActions(homeActions['setTo'], { toInput: input }),
-  setToChecked: (checked: boolean) => basicActions(homeActions['setToChecked'], { toChecked: checked }),
-  setToAddress: (address: string) => basicActions(homeActions['setToAddress'], { toAddress: address }),
-  setActionLoading: (actionLoading?: boolean) => basicActions(homeActions['setActionLoading'], { actionLoading }),
-  setReceiveList: (receiveList: CrossChainItem[]) => basicActions(homeActions['setReceiveList'], { receiveList }),
-  setReceiveId: (receiveId?: string) => basicActions(homeActions['setReceiveId'], { receiveId }),
-  setHomeState: (state: homeState) => basicActions(homeActions['default'], state),
-  homeDestroy: () => basicActions(homeActions['destroy']),
+  setSelectToken: (selectToken?: CurrentWhitelistItem) =>
+    basicActions(HomeActionsEnum['setSelectToken'], { selectToken }),
+  homeModalDestroy: () => basicActions(HomeActionsEnum['destroyModal']),
+  homeStateDestroy: () => basicActions(HomeActionsEnum['destroyState']),
+  setFrom: (input: string) => basicActions(HomeActionsEnum['setFrom'], { fromInput: input }),
+  setTo: (input: string) => basicActions(HomeActionsEnum['setTo'], { toInput: input }),
+  setToChecked: (checked: boolean) => basicActions(HomeActionsEnum['setToChecked'], { toChecked: checked }),
+  setToAddress: (address: string) => basicActions(HomeActionsEnum['setToAddress'], { toAddress: address }),
+  setActionLoading: (actionLoading?: boolean) => basicActions(HomeActionsEnum['setActionLoading'], { actionLoading }),
+  setReceiveList: (receiveList: CrossChainItem[]) => basicActions(HomeActionsEnum['setReceiveList'], { receiveList }),
+  setReceiveId: (receiveId?: string) => basicActions(HomeActionsEnum['setReceiveId'], { receiveId }),
+  setHomeState: (state: HomeState) => basicActions(HomeActionsEnum['default'], state),
+  homeDestroy: () => basicActions(HomeActionsEnum['destroy']),
 };
 
 export const {

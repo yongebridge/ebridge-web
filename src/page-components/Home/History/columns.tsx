@@ -9,7 +9,7 @@ import { useHover } from 'react-use';
 import { ChainId, TokenInfo } from 'types';
 import { CrossChainItem } from 'types/api';
 import { CrossChainStatus } from 'types/misc';
-import { getExploreLink, shortenString } from 'utils';
+import { formatNativeToken, getExploreLink, shortenString } from 'utils';
 import { getShortNameByChainId, shortenAddressByAPI } from 'utils/chain';
 import { unitConverter } from 'utils/converter';
 import { formatTime } from 'utils/time';
@@ -33,11 +33,12 @@ function Transaction({ transactionId, chainId }: { transactionId: string; chainI
 
 function Amount({ amount, chainId, token }: { amount?: number; chainId?: ChainId; token?: TokenInfo }) {
   const { symbol, decimals } = token || {};
+  const tmpSymbol = formatNativeToken(symbol);
   return (
     <div className={clsx('row-center')}>
-      <TokenLogo style={{ height: 20, width: 20, marginRight: '4px' }} chainId={chainId} symbol={symbol} />
+      <TokenLogo style={{ height: 20, width: 20, marginRight: '4px' }} chainId={chainId} symbol={tmpSymbol} />
       <div>
-        {unitConverter({ num: amount, minDecimals: decimals })} {symbol}
+        {unitConverter({ num: amount, minDecimals: decimals })} {tmpSymbol}
       </div>
     </div>
   );
