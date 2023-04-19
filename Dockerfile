@@ -7,8 +7,8 @@ WORKDIR ${web}
 COPY . ${web}
 
 RUN yarn \
-    && yarn build 
+    && yarn build:mainnet
 
-ENTRYPOINT yarn start
+ENTRYPOINT yarn start:mainnet
 
 EXPOSE 3000

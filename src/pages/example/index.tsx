@@ -2,7 +2,7 @@ import { Button, message } from 'antd';
 import Network from 'components/Network';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { basicModalView } from 'contexts/useModal/actions';
-import { networkList } from 'constants/index';
+import { NetworkList } from 'constants/index';
 import { useWalletContext } from 'contexts/useWallet';
 import { changeWallet, setFromWallet, setToWallet } from 'contexts/useWallet/actions';
 import { switchNetwork } from 'utils/network';
@@ -17,7 +17,7 @@ export default function Example() {
   const { account: aelfAccount, chainId: fromChainId, aelfInstance } = fromWallet || {};
   const { account, chainId } = toWallet || {};
   const modalDispatch = useModalDispatch();
-  const [[fromBalance]] = useBalances(fromWallet, 'ELF');
+  const [[fromBalance]] = useBalances(fromWallet, 'WBNB');
   const [[toBalance]] = useBalances(toWallet, 'ELF');
   const fromToken = useTokenContract(fromChainId);
   const onChange = useDebounceCallback(() => {
@@ -25,13 +25,13 @@ export default function Example() {
   }, [dispatch, changeWallet]);
   return (
     <div>
-      fromBalance: {divDecimals(fromBalance, 8).toFixed()}
+      fromBalance: {divDecimals(fromBalance, 18).toFixed()}
       <br />
       toBalance: {divDecimals(toBalance, 8).toFixed()}
       <br />
       FROM: {aelfAccount}
       <Network
-        networkList={networkList}
+        networkList={NetworkList}
         chainId={fromChainId}
         onChange={(info) => {
           if (typeof info.chainId === 'string') {
@@ -45,7 +45,7 @@ export default function Example() {
       <br />
       TO: {account}
       <Network
-        networkList={networkList}
+        networkList={NetworkList}
         chainId={chainId}
         onChange={(info) => {
           if (typeof info.chainId === 'string') {
@@ -107,9 +107,9 @@ export default function Example() {
         type="primary"
         onClick={async () => {
           const transfer = await fromToken?.callSendMethod('Transfer', '', {
-            amount: 1000 * 10 ** 8,
+            amount: 1 * 10 ** 8,
             symbol: 'ELF',
-            to: 'bnQqDTkQ8nQPX7qai2fbov5JiZnVyEYDCFpechp1tNMNyD51Y',
+            to: 'uGxKxnt5Lvi4LjbP1CkYstANNgks1Ets8rpeH79ukGJnNvhiw',
           });
           console.log(transfer, '=====transfer');
         }}>

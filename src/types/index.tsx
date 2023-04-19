@@ -3,7 +3,7 @@ import type { AElfDappBridge } from '@aelf-react/types';
 import type { Web3ContextType } from '@web3-react/core';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
 import { AElfNodes } from 'constants/aelf';
-import { CHAIN_NAME } from 'constants/chainInfo';
+import { CHAIN_NAME } from 'constants/index';
 import type { Connector } from '@web3-react/types';
 
 export type ChainId = keyof typeof CHAIN_NAME;
@@ -40,11 +40,12 @@ export type TokenInfo = {
   issuer?: string;
   isBurnable?: boolean;
   totalSupply?: number;
+  isNativeToken?: boolean;
 };
 
 export enum CrossChainType {
-  'Homogeneous' = 'homogeneous',
-  'Heterogeneous' = 'heterogeneous',
+  homogeneous = 'homogeneous',
+  heterogeneous = 'heterogeneous',
 }
 
 export interface WalletInfo {

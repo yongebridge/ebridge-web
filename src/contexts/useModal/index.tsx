@@ -1,19 +1,19 @@
 import { BasicActions } from 'contexts/utils';
 import { useAElf, useWeb3 } from 'hooks/web3';
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
-import { modalActions, modalState } from './actions';
+import { ModalActions, ModalState } from './actions';
 
 const INITIAL_STATE = {};
 const ModalContext = createContext<any>(INITIAL_STATE);
 
-export function useModal(): [modalState, BasicActions<modalActions>] {
+export function useModal(): [ModalState, BasicActions<ModalActions>] {
   return useContext(ModalContext);
 }
 
 //reducer
-function reducer(state: modalState, { type, payload }: { type: modalActions; payload: any }) {
+function reducer(state: ModalState, { type, payload }: { type: ModalActions; payload: any }) {
   switch (type) {
-    case modalActions.destroy: {
+    case ModalActions.destroy: {
       return {};
     }
     default: {
@@ -25,7 +25,7 @@ function reducer(state: modalState, { type, payload }: { type: modalActions; pay
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch]: [modalState, BasicActions<modalActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
+  const [state, dispatch]: [ModalState, BasicActions<ModalActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
   const { walletChainId, accountChainId } = state;
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const aelfWallet = useAElf();

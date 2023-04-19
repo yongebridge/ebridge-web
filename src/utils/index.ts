@@ -6,6 +6,7 @@ import { isELFChain } from './aelfUtils';
 export const eventBus = new EventEmitter();
 import { getAddress } from '@ethersproject/address';
 import AElf from 'aelf-sdk';
+import { NATIVE_TOKEN_LIST } from 'constants/index';
 
 export const sleep = (time: number) => {
   return new Promise<string>((resolve) => {
@@ -70,31 +71,37 @@ type Network = 'ethereum' | 'binance' | 'kovan' | 'AELF' | 'tDVV' | 'tDVW';
 
 function chainIdToNetworkName(chainId?: ChainId): Network {
   switch (chainId) {
-    case SupportedChainId.MAINNET:
-      return 'ethereum';
-    case SupportedChainId.BSC_MAINNET:
-      return 'binance';
+    // case SupportedChainId.MAINNET:
+    //   return 'ethereum';
+    // case SupportedChainId.BSC_MAINNET:
+    //   return 'binance';
     case SupportedChainId.KOVAN:
     case SupportedELFChainId.AELF:
     case SupportedELFChainId.tDVV:
     case SupportedELFChainId.tDVW:
+    case SupportedChainId.SEPOLIA:
+    case SupportedChainId.BSC_TESTNET:
       return 'AELF';
     default:
       return 'AELF';
   }
 }
-const networksWithNativeUrls: any = [
-  SupportedChainId.KOVAN,
-  SupportedChainId.GORELI,
-  SupportedELFChainId.AELF,
-  SupportedELFChainId.tDVV,
-  SupportedELFChainId.tDVW,
-];
+// const networksWithNativeUrls: any = [
+//   SupportedChainId.KOVAN,
+//   SupportedChainId.GORELI,
+//   SupportedELFChainId.AELF,
+//   SupportedELFChainId.tDVV,
+//   SupportedELFChainId.tDVW,
+//   SupportedChainId.BSC_TESTNET,
+//   SupportedChainId.SEPOLIA,
+// ];
+
 export const getTokenLogoURL = (address?: string | string, chainId?: ChainId) => {
   if (!address) return '';
   const networkName = chainIdToNetworkName(chainId);
-  let repositories = 'trustwallet';
-  if (networksWithNativeUrls.includes(chainId)) repositories = 'eBridgeCrosschain';
+  // const repositories = 'trustwallet';
+  const repositories = 'eBridgeCrosschain';
+  // if (networksWithNativeUrls.includes(chainId)) repositories = 'eBridgeCrosschain';
   return `https://raw.githubusercontent.com/${repositories}/assets/master/blockchains/${networkName}/assets/${address}/logo.png`;
 };
 
@@ -132,4 +139,10 @@ export function isAddress(value?: string, chainId?: ChainId) {
 export function formatAddress(value: string) {
   const reg = /.*_([a-zA-Z0-9]*)_.*/;
   return value.replace(reg, '$1');
+}
+
+export function formatNativeToken(symbol?: string) {
+  if (!symbol) return symbol;
+  if (NATIVE_TOKEN_LIST.includes(symbol)) return symbol.slice(1);
+  return symbol;
 }

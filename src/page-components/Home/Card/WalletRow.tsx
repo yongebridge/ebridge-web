@@ -2,7 +2,7 @@ import { Button, Divider, message, Row } from 'antd';
 import clsx from 'clsx';
 import Network from 'components/Network';
 import WalletIcon from 'components/WalletIcon';
-import { networkList } from 'constants/index';
+import { NetworkList } from 'constants/index';
 import { setAccountModal, setWalletModal } from 'contexts/useModal/actions';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { setFromWallet, setToWallet } from 'contexts/useWallet/actions';
@@ -28,7 +28,7 @@ function WalletRow({ wallet, isForm }: { wallet?: Web3Type; isForm?: boolean }) 
       <Network
         className={clsx(styles['network'], { [styles['wallet-connected']]: account })}
         chainId={chainId}
-        networkList={networkList}
+        networkList={NetworkList}
         onChange={async (info) => {
           const setWallet = isForm ? setFromWallet : setToWallet;
           if (typeof info.chainId === 'string') {
@@ -37,7 +37,7 @@ function WalletRow({ wallet, isForm }: { wallet?: Web3Type; isForm?: boolean }) 
             dispatch(setWallet({ chainType: 'ERC' }));
           }
           try {
-            await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector);
+            await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector, !!account);
           } catch (error: any) {
             message.error(error.message);
           }

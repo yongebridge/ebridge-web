@@ -1,14 +1,14 @@
 import { basicActions } from 'contexts/utils';
 import type { ChainId, Web3Type } from 'types';
 
-export enum modalActions {
+export enum ModalActions {
   setWalletModal = 'SET_WALLET_MODAL',
   setAccountModal = 'SET_ACCOUNT_MODAL',
   setNetWorkDrawer = 'SET_NETWORK_DRAWER',
   destroy = 'DESTROY',
 }
 
-export type modalState = {
+export type ModalState = {
   walletModal?: boolean;
   netWorkDrawer?: boolean;
   accountModal?: boolean;
@@ -25,7 +25,7 @@ export const basicModalView = {
       obj.walletChainId = walletChainId;
       obj.destroy = true;
     }
-    return basicActions(modalActions['setWalletModal'], obj);
+    return basicActions(ModalActions['setWalletModal'], obj);
   },
 
   setAccountModal: (accountModal: boolean, accountChainId?: ChainId) => {
@@ -34,10 +34,10 @@ export const basicModalView = {
       obj.accountChainId = accountChainId;
       obj.destroy = true;
     }
-    return basicActions(modalActions['setAccountModal'], obj);
+    return basicActions(ModalActions['setAccountModal'], obj);
   },
-  setNetWorkDrawer: (netWorkDrawer: boolean) => basicActions(modalActions['setNetWorkDrawer'], { netWorkDrawer }),
-  modalDestroy: () => basicActions(modalActions['destroy']),
+  setNetWorkDrawer: (netWorkDrawer: boolean) => basicActions(ModalActions['setNetWorkDrawer'], { netWorkDrawer }),
+  modalDestroy: () => basicActions(ModalActions['destroy']),
 };
 
 export const { setWalletModal, setAccountModal, setNetWorkDrawer, modalDestroy } = basicModalView;

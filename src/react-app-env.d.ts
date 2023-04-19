@@ -8,6 +8,7 @@ interface Window {
     autoRefreshOnNetworkChange?: boolean;
     request?: (...args: unknown[]) => void;
     chainId?: number;
+    providerMap?: any;
   };
   web3?: any;
   plus?: any;

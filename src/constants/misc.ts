@@ -31,7 +31,7 @@ export const CrossFeeTokenDecimals = 8;
 
 export const crossTokenMin: any = {
   ELF: 0,
-  BNB: 0,
-  ETH: 0,
+  WBNB: 0,
+  WETH: 0,
   USDT: 0,
 };

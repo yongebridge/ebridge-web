@@ -6,7 +6,7 @@ export type Options = {
   chainId?: ChainId;
 };
 
-export enum walletActions {
+export enum WalletActions {
   setFromWallet = 'SET_FROM_WALLET',
   setToWallet = 'SET_TO_WALLET',
   changeWallet = 'CHANGE_WALLET',
@@ -14,7 +14,7 @@ export enum walletActions {
   destroy = 'DESTROY',
 }
 
-export type modalState = {
+export type ModalState = {
   fromWallet?: Web3Type;
   toWallet?: Web3Type;
   fromOptions?: Options;
@@ -24,11 +24,11 @@ export type modalState = {
 };
 
 export const basicWalletActions = {
-  setFromWallet: (options: Options) => basicActions(walletActions['setFromWallet'], { fromOptions: options }),
-  setToWallet: (options: Options) => basicActions(walletActions['setToWallet'], { toOptions: options }),
-  changeWallet: () => basicActions(walletActions.changeWallet),
-  changeEnd: () => basicActions(walletActions.changeEnd),
-  web3ProviderDestroy: () => basicActions(walletActions['destroy']),
+  setFromWallet: (options: Options) => basicActions(WalletActions['setFromWallet'], { fromOptions: options }),
+  setToWallet: (options: Options) => basicActions(WalletActions['setToWallet'], { toOptions: options }),
+  changeWallet: () => basicActions(WalletActions.changeWallet),
+  changeEnd: () => basicActions(WalletActions.changeEnd),
+  web3ProviderDestroy: () => basicActions(WalletActions['destroy']),
 };
 
 export const { setFromWallet, setToWallet, web3ProviderDestroy, changeWallet, changeEnd } = basicWalletActions;
