@@ -5,8 +5,8 @@ import * as BSC from '../platform/BSC';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 
 import { SupportedChainId, SupportedELFChainId } from '../chain';
-import { CHAIN_ICON } from '../chainInfo';
 import { NetworkType } from 'types';
+import { IconInfo } from 'types/misc';
 
 export type ChainConstantsType = typeof MAINNET | typeof AELF | typeof tDVV | typeof BSC;
 
@@ -58,6 +58,55 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
 };
 
+export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
+  [SupportedChainId.MAINNET]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.KOVAN]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.GORELI]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.BSC_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.BSC_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.HECO_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.HECO_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.OEC_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.OEC_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.POLYGON_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.POLYGON_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedELFChainId.AELF]: {
+    type: 'aelfMainnet',
+  },
+  [SupportedELFChainId.tDVV]: {
+    type: 'aelfMainnet',
+  },
+  [SupportedELFChainId.tDVW]: {
+    type: 'aelfMainnet',
+  },
+  [SupportedChainId.SEPOLIA]: {
+    // type: 'SEPOLIA',
+    type: 'Ethereum',
+  },
+};
+
 export const NetworkList = [
   {
     title: CHAIN_NAME[SupportedELFChainId.AELF],
@@ -96,5 +145,33 @@ export const FormatTokenList = [
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
+  },
+];
+
+export const CrossChainTimeList = [
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '4minutes',
+  },
+  {
+    fromChainId: SupportedChainId.MAINNET,
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '25minutes',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [SupportedChainId.MAINNET],
+    time: '25minutes',
+  },
+  {
+    fromChainId: SupportedChainId.BSC_MAINNET,
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '5minutes',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [SupportedChainId.BSC_MAINNET],
+    time: '5minutes',
   },
 ];

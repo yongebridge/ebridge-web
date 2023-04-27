@@ -1,6 +1,6 @@
 export const CHAIN_INFO = {
   chainId: 56,
-  exploreUrl: 'https://testnet.bscscan.com/',
+  exploreUrl: 'https://bscscan.com/',
   rpcUrl: 'https://bsc-dataseed.binance.org',
   chainName: 'Binance Smart Chain Mainnet',
   nativeCurrency: {
@@ -13,5 +13,5 @@ export const CHAIN_INFO = {
   blockExplorerUrls: ['https://bscscan.com/'],
 };
 
-export const BRIDGE_CONTRACT = '0x66760B644668d4E7de273bc788F915Efd5536332';
-export const BRIDGE_CONTRACT_OUT = '0xaD3eaC8ad11d14808E1598D264cD25CE151e80a4';
+export const BRIDGE_CONTRACT = '0x710D12Be551ff965F8f621a392746f84E2F09F4e';
+export const BRIDGE_CONTRACT_OUT = '0xE6d0B7B043217Da485BE30c57D36E02FDfa7cfc6';

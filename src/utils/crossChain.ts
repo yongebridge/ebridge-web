@@ -11,8 +11,8 @@ import type { provider } from 'web3-core';
 import { CrossFeeToken, REQ_CODE } from 'constants/misc';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
-import { formatAddress } from 'utils';
-import { FormatTokenList } from 'constants/index';
+import { formatAddress, isIncludesChainId } from 'utils';
+import { FormatTokenList, IS_MAINNET } from 'constants/index';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -275,10 +275,16 @@ export async function LockToken({
   tokenContract?: ContractBasic;
 }) {
   const toAddress = formatAddress(to);
-  return bridgeContract.callSendMethod('lockToken', account, [getChainIdToMap(toChainId), toAddress], {
-    onMethod: 'transactionHash',
-    value: amount,
-  });
+  // FIXME: functionName
+  return bridgeContract.callSendMethod(
+    IS_MAINNET ? 'createNativeTokenReceipt' : 'lockToken',
+    account,
+    [getChainIdToMap(toChainId), toAddress],
+    {
+      onMethod: 'transactionHash',
+      value: amount,
+    },
+  );
 }
 
 export async function SwapToken({
@@ -296,8 +302,8 @@ export async function SwapToken({
   const item = FormatTokenList.find(
     (i) =>
       i.fromSymbol === transferToken.symbol &&
-      i.fromChainId.includes(fromChainId as any) &&
-      i.toChainId.includes(toChainId as any),
+      isIncludesChainId(i.fromChainId, fromChainId) &&
+      isIncludesChainId(i.toChainId, toChainId),
   );
   if (item) toSymbol = item.toSymbol;
 

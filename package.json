@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next dev",
+    "dev:mainnet": "ENV_NAME=mainnet next dev",
     "build": "next build",
-    "build:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next build",
+    "build:mainnet": "ENV_NAME=mainnet next build",
     "start": "next start",
-    "start:mainnet": "NEXT_PUBLIC_APP_ENV=mainnet next start",
+    "start:mainnet": "ENV_NAME=mainnet next start",
     "lint": "next lint",
     "dev:analyze": "PORT=4000 ANALYZE=true next dev",
     "postinstall": "husky install"

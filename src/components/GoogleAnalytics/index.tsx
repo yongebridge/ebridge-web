@@ -8,7 +8,7 @@ export default function GoogleAnalytics({ id }: { id?: string }) {
         {`window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', 'G-1DW8NWCXJF');`}
+          gtag('config', '${id}');`}
       </Script>
     </>
   );

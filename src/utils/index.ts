@@ -146,3 +146,8 @@ export function formatNativeToken(symbol?: string) {
   if (NATIVE_TOKEN_LIST.includes(symbol)) return symbol.slice(1);
   return symbol;
 }
+
+export function isIncludesChainId(list: ChainId[] | ChainId, chainId?: ChainId) {
+  if (!chainId) return false;
+  return Array.isArray(list) ? list.includes(chainId) : chainId === list;
+}

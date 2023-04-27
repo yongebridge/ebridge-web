@@ -3,5 +3,5 @@ export const CHAIN_INFO = {
   exploreUrl: 'https://etherscan.io/',
   rpcUrl: 'https://eth-mainnet.token.im',
 };
-export const BRIDGE_CONTRACT = '0x164322657FC57EA95CAc4bF6623E53CA0f952E11';
-export const BRIDGE_CONTRACT_OUT = '0x26a44A0383F15f7f83D84eb95c4b7762d8de995A';
+export const BRIDGE_CONTRACT = '0x14fa2D85346e50Ae49ED62CB8b366c68da284993';
+export const BRIDGE_CONTRACT_OUT = '0xe75C1578127cc0dc8b38C63b1723b72d32e9fa42';

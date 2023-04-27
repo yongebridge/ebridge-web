@@ -20,14 +20,15 @@ export enum SupportedELFChainId {
 }
 
 export const CHAIN_ID_MAP = {
-  AELF: 'MainChain_AELF',
-  tDVV: 'SideChain_tDVV',
-  tDVW: 'SideChain_tDVW',
-  42: 'Kovan',
-  // 5: 'NewGoerli',
-  5: 'Goerli',
-  97: 'BSCTest',
-  11155111: 'Sepolia',
+  [SupportedChainId.MAINNET]: 'Ethereum',
+  [SupportedChainId.BSC_MAINNET]: 'BSC',
+  [SupportedELFChainId.AELF]: 'MainChain_AELF',
+  [SupportedELFChainId.tDVV]: 'SideChain_tDVV',
+  [SupportedELFChainId.tDVW]: 'SideChain_tDVW',
+  [SupportedChainId.KOVAN]: 'Kovan',
+  [SupportedChainId.GORELI]: 'Goerli',
+  [SupportedChainId.BSC_TESTNET]: 'BSCTest',
+  [SupportedChainId.SEPOLIA]: 'Sepolia',
 };
 
 /**

@@ -8,8 +8,8 @@ import * as BSC_TESTNET from '../platform/BSC_Test';
 import * as SEPOLIA from '../platform/sepolia';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
-import { CHAIN_ICON } from '../chainInfo';
 import { NetworkType } from 'types';
+import { IconInfo } from 'types/misc';
 
 export type ChainConstantsType =
   | typeof MAINNET
@@ -72,6 +72,55 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
 };
 
+export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
+  [SupportedChainId.MAINNET]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.KOVAN]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.GORELI]: {
+    type: 'Ethereum',
+  },
+  [SupportedChainId.BSC_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.BSC_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.HECO_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.HECO_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.OEC_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.OEC_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.POLYGON_MAINNET]: {
+    type: 'Binance',
+  },
+  [SupportedChainId.POLYGON_TESTNET]: {
+    type: 'Binance',
+  },
+  [SupportedELFChainId.AELF]: {
+    type: 'aelfTestnet',
+  },
+  [SupportedELFChainId.tDVV]: {
+    type: 'aelfTestnet',
+  },
+  [SupportedELFChainId.tDVW]: {
+    type: 'aelfTestnet',
+  },
+  [SupportedChainId.SEPOLIA]: {
+    // type: 'SEPOLIA',
+    type: 'Ethereum',
+  },
+};
+
 export const NetworkList = [
   { title: CHAIN_NAME[SupportedChainId.SEPOLIA], icon: CHAIN_ICON[SupportedChainId.SEPOLIA], info: SEPOLIA.CHAIN_INFO },
   // { title: CHAIN_NAME[SupportedChainId.GORELI], icon: CHAIN_ICON[SupportedChainId.GORELI], info: GORELI.CHAIN_INFO },
@@ -113,5 +162,23 @@ export const FormatTokenList = [
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
+  },
+];
+
+export const CrossChainTimeList = [
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '4minutes',
+  },
+  {
+    fromChainId: SupportedChainId.BSC_TESTNET,
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '500s',
+  },
+  {
+    fromChainId: SupportedChainId.SEPOLIA,
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '500s',
   },
 ];

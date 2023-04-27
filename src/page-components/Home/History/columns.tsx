@@ -3,7 +3,6 @@ import type { ColumnType } from 'antd/lib/table';
 import clsx from 'clsx';
 import CommonLink from 'components/CommonLink';
 import TokenLogo from 'components/TokenLogo';
-import { CrossChainTime } from 'constants/misc';
 import { Trans } from 'react-i18next';
 import { useHover } from 'react-use';
 import { ChainId, TokenInfo } from 'types';
@@ -44,7 +43,7 @@ function Amount({ amount, chainId, token }: { amount?: number; chainId?: ChainId
   );
 }
 
-function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogeneous?: boolean }) {
+function FromTo({ items }: { items: CrossChainItem; isHeterogeneous?: boolean }) {
   const { progress, fromChainId, toChainId, status } = items;
   const [hoverable] = useHover((hovered: boolean) => {
     const success = status === CrossChainStatus.Received;
@@ -60,7 +59,7 @@ function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogen
           <div className="flex-column">
             {Math.floor(progress ?? 0)} %
             <Progress className={styles.progress} showInfo={false} percent={progress} size="small" />
-            <div className={styles.tip}>
+            {/* <div className={styles.tip}>
               {isHeterogeneous ? (
                 <Trans tOptions={{ time: CrossChainTime.heterogeneous }}>
                   Estimated time of heterogenous cross-chain arrival is
@@ -70,7 +69,7 @@ function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogen
                   Estimated time of homogeneous cross-chain arrival is
                 </Trans>
               )}
-            </div>
+            </div> */}
           </div>
         ) : (
           `${getShortNameByChainId(fromChainId)} - ${getShortNameByChainId(toChainId)}`

@@ -1,10 +1,10 @@
-import { CHAIN_ICON, CHAIN_SHORT_NAME } from 'constants/chainInfo';
+import { CHAIN_SHORT_NAME } from 'constants/chainInfo';
 import { CHAIN_ID_MAP } from 'constants/chain';
 import { ChainId } from 'types';
 import { enumToMap, shortenAddress } from 'utils';
 import { isELFChain } from './aelfUtils';
 import AElf from 'aelf-sdk';
-import { CHAIN_NAME } from 'constants/index';
+import { CHAIN_ICON, CHAIN_NAME } from 'constants/index';
 const { chainIdConvertor } = AElf.utils;
 export function getIconByChainId(chainId: ChainId) {
   return CHAIN_ICON[chainId];

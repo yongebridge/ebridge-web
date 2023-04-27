@@ -1,26 +1,14 @@
 /* eslint-disable */
 /** @type {import('next').NextConfig} */
-const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV, NEXT_PUBLIC_APP_ENV } = process.env;
+const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV } = process.env;
 const withLess = require('next-with-less');
 const withPlugins = require('next-compose-plugins');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: ANALYZE === 'true',
 });
-const path = require('path');
-const fs = require('fs');
-const filePath = path.resolve(__dirname, `./src/constants/index.ts`);
-const IS_MAINNET = NEXT_PUBLIC_APP_ENV === 'mainnet';
-
-const appEnv = NEXT_PUBLIC_APP_ENV || 'testnet';
-
-const rewrites = require(`./rewrites.${appEnv}`);
-
-fs.writeFileSync(
-  filePath,
-  `export const IS_MAINNET = ${IS_MAINNET};\n
-export * from './${appEnv}';\n`,
-);
-
+const { rewriteConstants, getRewrites, rewriteEnv } = require('./rewriteENV');
+rewriteEnv();
+rewriteConstants();
 const plugins = [
   [withBundleAnalyzer],
   [
@@ -45,7 +33,7 @@ const nextConfig = {
   //   return config;
   // },
   async rewrites() {
-    return rewrites;
+    return getRewrites();
   },
   images: {
     domains: ['raw.githubusercontent.com'],

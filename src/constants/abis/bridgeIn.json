@@ -202,6 +202,24 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "targetChainId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "targetAddress",
+        "type": "string"
+      }
+    ],
+    "name": "createNativeTokenReceipt",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "user",
         "type": "address"

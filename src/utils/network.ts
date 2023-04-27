@@ -108,6 +108,8 @@ export const switchChain = async (info: Info, connector?: Connector | string, is
         blockExplorerUrls,
       };
       await connector.activate(addChainParameter);
+      // fix disconnect metamask
+      if (connector === injectedConnection.connector) connector.connectEagerly?.();
     }
   } else {
     // unlink metamask
