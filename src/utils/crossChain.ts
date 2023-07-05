@@ -275,16 +275,10 @@ export async function LockToken({
   tokenContract?: ContractBasic;
 }) {
   const toAddress = formatAddress(to);
-  // FIXME: functionName
-  return bridgeContract.callSendMethod(
-    IS_MAINNET ? 'createNativeTokenReceipt' : 'lockToken',
-    account,
-    [getChainIdToMap(toChainId), toAddress],
-    {
-      onMethod: 'transactionHash',
-      value: amount,
-    },
-  );
+  return bridgeContract.callSendMethod('createNativeTokenReceipt', account, [getChainIdToMap(toChainId), toAddress], {
+    onMethod: 'transactionHash',
+    value: amount,
+  });
 }
 
 export async function SwapToken({

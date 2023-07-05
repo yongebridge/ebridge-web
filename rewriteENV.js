@@ -4,7 +4,7 @@ const fs = require('fs');
 
 function rewriteConstants() {
   const IS_MAINNET = process.env.NEXT_PUBLIC_APP_ENV === 'mainnet';
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV || 'testnet';
+  const appEnv = IS_MAINNET ? 'mainnet' : 'testnet';
   const constantsPath = path.resolve(__dirname, `./src/constants/index.ts`);
   fs.writeFileSync(
     constantsPath,
@@ -14,7 +14,7 @@ export * from './${appEnv}';\n`,
 }
 
 function getRewrites() {
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV || 'testnet';
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV == 'mainnet' ? 'mainnet' : 'testnet';
   return require(`./rewrites.${appEnv}`);
 }
 
