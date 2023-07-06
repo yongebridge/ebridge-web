@@ -38,11 +38,17 @@
       "address": "",
       "issueChainId": 9992731
     },
+    "97": {
+      "name": "USDT Token",
+      "decimals": 18,
+      "symbol": "USDT",
+      "address": "0x3F280eE5876CE8B15081947E0f189E336bb740A5"
+    },
     "11155111": {
       "name": "USDT Token",
       "decimals": 6,
       "symbol": "USDT",
-      "address": "0x35E875C8790A240bd680DEC8C0fe3ffeb5fC4933"
+      "address": "0x60eeCc4d19f65B9EaDe628F2711C543eD1cE6679"
     }
   },
   "ETH": {
