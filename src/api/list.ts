@@ -32,18 +32,10 @@ const CMSApiList = {
  * api request extension configuration directory
  * @description object.key // The type of this object key comes from from @type {UrlObj}
  */
-export const EXPAND_APIS = { cross: CrossApiList };
-
-export const CMS_APIS = { cms: CMSApiList };
+export const EXPAND_APIS = { cross: CrossApiList, cms: CMSApiList };
 
 export type BASE_REQ_TYPES = {
   [x in keyof typeof BASE_APIS]: API_REQ_FUNCTION;
-};
-
-export type CMS_REQ_TYPES = {
-  [X in keyof typeof CMS_APIS]: {
-    [K in keyof typeof CMS_APIS[X]]: API_REQ_FUNCTION;
-  };
 };
 
 export type EXPAND_REQ_TYPES = {

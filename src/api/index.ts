@@ -1,12 +1,4 @@
-import {
-  BASE_APIS,
-  BASE_REQ_TYPES,
-  DEFAULT_METHOD,
-  EXPAND_APIS,
-  EXPAND_REQ_TYPES,
-  CMS_APIS,
-  CMS_REQ_TYPES,
-} from './list';
+import { BASE_APIS, BASE_REQ_TYPES, DEFAULT_METHOD, EXPAND_APIS, EXPAND_REQ_TYPES } from './list';
 import myServer from './server';
 import { IBaseRequest } from './types';
 import { spliceUrl, service } from './utils';
@@ -21,14 +13,10 @@ function baseRequest({ url, method = DEFAULT_METHOD, query = '', ...c }: IBaseRe
 
 myServer.parseRouter('base', BASE_APIS);
 
-Object.entries(CMS_APIS).forEach(([key, value]) => {
-  myServer.parseRouter(key, value);
-});
-
 Object.entries(EXPAND_APIS).forEach(([key, value]) => {
   myServer.parseRouter(key, value);
 });
 
-const request: BASE_REQ_TYPES & EXPAND_REQ_TYPES & CMS_REQ_TYPES = Object.assign({}, myServer.base, myServer);
+const request: BASE_REQ_TYPES & EXPAND_REQ_TYPES = Object.assign({}, myServer.base, myServer);
 
 export { baseRequest, request };

@@ -17,10 +17,10 @@ export default function Mask() {
           <CommonImage priority src={warnIcon} className={styles['warn-icon']} />
           <h1>{t('Upgrade Title')}</h1>
         </div>
-        {Object.values(t('Upgrade Notice', { returnObjects: true })).map((ele: Array<string> | string, idx: number) => {
+        {Object.values(t('Upgrade Notice', { returnObjects: true })).map((ele: any, idx: number) => {
           return (
             <section key={idx}>
-              {ele instanceof Array
+              {Array.isArray(ele)
                 ? ele.map((segment, segIdx) => {
                     return <p key={segIdx}>{segment}</p>;
                   })
