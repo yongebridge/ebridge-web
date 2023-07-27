@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FromCard, ToCard } from './Card';
 import HomeProvider from './HomeContext';
 import SelectTokenModal from './SelectTokenModal';
@@ -13,29 +13,26 @@ import { useLanguage } from 'i18n';
 import PageHead from 'components/PageHead';
 import { Notification, NotificationForPhone } from 'components/Notification';
 import Mask from './Mask';
-// import { baseRequest } from 'api';
+import { baseRequest } from 'api';
 export default function Home() {
   const isMd = useMediaQueries('md');
-  const flag = false;
   const { t } = useLanguage();
-
-  console.log('xxxxx');
+  const [isShowMask, setIsShowMask] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchData() {
-      // await baseRequest({
-      //   url: `http://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/page/initData`,
-      //   // params: { address },
-      //   method: 'GET',
-      // });
-      await fetch(`https://3xsw4ap8wah59.cfc-execute.bj.baidubce.com/api/amis-mock/mock2/page/initData`);
+      const rs = await baseRequest({
+        url: `cms/items/home`,
+        method: 'GET',
+      });
+      setIsShowMask(rs?.data?.isShowMask);
     }
     fetchData();
   }, []);
   return (
     <HomeProvider>
       <PageHead title={t('Token Bridge')} />
-      {flag ? (
+      {!isShowMask ? (
         <>
           <div className={styles.body}>
             {isMd && <h2 className={styles.title}>{t('Token Bridge')}</h2>}
