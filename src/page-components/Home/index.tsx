@@ -13,7 +13,7 @@ import { useLanguage } from 'i18n';
 import PageHead from 'components/PageHead';
 import { Notification, NotificationForPhone } from 'components/Notification';
 import Mask from './Mask';
-import { baseRequest } from 'api';
+import { request } from 'api';
 export default function Home() {
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
@@ -21,11 +21,11 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      const rs = await baseRequest({
-        url: `cms/items/home`,
-        method: 'GET',
-      });
-      setIsShowMask(rs?.data?.isShowMask);
+      try {
+        const rs = await request.cms.getToggleReslutOfMask();
+        setIsShowMask(rs?.data?.isShowMask);
+        // eslint-disable-next-line no-empty
+      } catch (e) {}
     }
     fetchData();
   }, []);
