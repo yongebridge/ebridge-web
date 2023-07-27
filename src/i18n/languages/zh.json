@@ -95,6 +95,17 @@
     "Invalid from chain": "無效的來源鏈",
     "Please confirm the recipient's address": "請確認跨鏈目標地址",
     "Confirm3": "確認",
-    "Cancel": "返回"
+    "Cancel": "返回",
+    "Notification Title": "eBridge Alpha版本",
+    "Notification Content Section 1": "这是eBridge的ALPHA版本。因此，可能会出现延迟，并存在重大错误。感谢您在这个早期阶段尝试使用它。",
+    "Notification Content Section 2": "有问题可以加入我们的电报群获取支持：",
+    "Upgrade Title": "服务升级通知",
+    "Upgrade Notice": {
+      "section 1": "尊敬的 eBridge 用户",
+      "section 2": "我们正在进行系统升级以提供更优质的服务。在此期间，eBridge 服务暂时无法使用。为避免可能的不便或损失，我们建议您暂时不要使用此服务。",
+      "section 3": "感谢您的理解和耐心等待，我们期待着尽快为您提供更好的 eBridge 体验。",
+      "section 4": ["感谢您的支持！", "eBridge 团队"],
+      "section 5": "有问题可以加入我们的电报群获取支持："
+    }
   }
 }
