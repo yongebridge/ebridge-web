@@ -4,8 +4,8 @@
     "Connect": "連接錢包",
     "Connect Wallet": "請連接錢包",
     "Connect aelf wallet to view transaction history": "連接AELF錢包查看操作記錄",
-    "Heterogeneous Chain Cross-Chain History": "異構跨鏈記錄",
-    "Homogeneous Chain Cross-Chain History": "同構跨鏈記錄",
+    "Heterogeneous Chain Cross-Chain History": "外部跨鏈記錄",
+    "Homogeneous Chain Cross-Chain History": "内部跨鏈記錄",
     "Select a Receipt ID": "選擇Receipt ID",
     "From": "來源鏈",
     "To": "目標鏈",
@@ -37,12 +37,12 @@
     "The minimum crosschain amount is": "最小跨鏈金額{{amount}}{{symbol}}。",
     "The minimum crosschain amount is2": "最小跨鏈金額 ",
     "Estimated time of heterogenous cross-chain arrival is": "異構跨鏈耗時約為{{time}}",
-    "Estimated time of homogeneous cross-chain arrival is": "同構跨鏈耗時約為{{time}}",
-    "Estimated time of homogeneous cross-chain arrival is2": "同構跨鏈耗時約為{{time}}。",
+    "Estimated time of homogeneous cross-chain arrival is": "内部跨鏈耗時約為{{time}}",
+    "Estimated time of homogeneous cross-chain arrival is2": "内部跨鏈耗時約為{{time}}。",
     "Estimated time of arrival in AELF is": "代幣跨入AELF用時約{{time}}。",
     "Cross Chain time": "異構跨鏈耗時約為{{heterogeneous}}，同構跨鏈的耗時約為{{homogeneous}}。",
-    "Tokens will arrive automatically after being sent. Please check them in your wallet": "代幣在發送後將自動到賬，請在錢包內查收。",
-    "The cross-chain transaction fee will be covered by AELF": "本次跨鏈手續費將由AELF替您支付。",
+    "Tokens will arrive automatically after being sent. Please check them in your wallet": "請耐心等待，您的代幣將自動顯示在您的錢包中。",
+    "The cross-chain transaction fee will be covered by AELF": "您僅需支付在ETH/BNB上產生的跨鏈交易手續費，aelf區塊鏈上的手續費將由eBridge支付。",
     "Estimated time of sending tokens is time. Please select Receipt ID and receive the token(s) transferred": "代幣發送用時約{{time}}，發送完成後請選擇Receipt ID並接收代幣。",
     "Token not received?": "發送了代幣但沒有接收？",
     "Initiate cross-chain transfer to the recipient's address": "向目標地址發起跨鏈轉賬",
@@ -95,6 +95,17 @@
     "Invalid from chain": "無效的來源鏈",
     "Please confirm the recipient's address": "請確認跨鏈目標地址",
     "Confirm3": "確認",
-    "Cancel": "返回"
+    "Cancel": "返回",
+    "Notification Title": "eBridge Alpha",
+    "Notification Content Section 1": "This is an ALPHA version of eBridge. As such, delays may occur, and catastrophic bugs may lurk. Thanks, for trying it at this early stage.",
+    "Notification Content Section 2": "For any issues, join our Telegram group for support: ",
+    "Upgrade Title": "Service Upgrade Notice",
+    "Upgrade Notice": {
+      "section 1": "Dear eBridge User,",
+      "section 2": "We are currently upgrading our system to serve you better. During this period, the eBridge service is temporarily unavailable. We kindly advise you to refrain from using the service at this moment to avoid any potential inconveniences or losses.",
+      "section 3": "We appreciate your understanding and patience and look forward to providing you with an improved eBridge experience soon.",
+      "section 4": ["Thank you for your support!", "The eBridge Team"],
+      "section 5": "For any issues, join our Telegram group for support: "
+    }
   }
 }
