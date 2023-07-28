@@ -58,14 +58,16 @@
       display: flex;
       flex-direction: row;
       line-height: 28px;
+      position: relative;
       &::before {
         content: '';
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        margin-right: 8px;
+        position: absolute;
+        top: 11px;
+        left: -14px;
         background: @font-7;
-        align-self: center;
       }
     }
   }
