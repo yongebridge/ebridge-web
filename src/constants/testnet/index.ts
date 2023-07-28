@@ -169,7 +169,7 @@ export const CrossChainTimeList = [
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '4minutes',
+    time: '4 minutes',
   },
   {
     fromChainId: SupportedChainId.BSC_TESTNET,
