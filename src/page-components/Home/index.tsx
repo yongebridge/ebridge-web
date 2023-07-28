@@ -23,33 +23,28 @@ export default function Home() {
     return <Skeleton paragraph={{ rows: 10 }} />;
   }
 
-  function renderContentOrMask() {
-    if (isShowMask) {
-      return <Mask />;
-    }
-    return (
-      <>
-        <div className={styles.body}>
-          {isMd && <h2 className={styles.title}>{t('Token Bridge')}</h2>}
-          <FromCard />
-          <ChangeIcon />
-          <ToCard />
-          <Notice />
-          {!isMd && <ActionButton />}
-          <History />
-        </div>
-        {isMd && <ActionButton />}
-        <SelectTokenModal />
-        <AddTokenModal />
-        {isMd ? <NotificationForPhone /> : <Notification />}
-      </>
-    );
-  }
-
   return (
     <HomeProvider>
       <PageHead title={t('Token Bridge')} />
-      {renderContentOrMask()}
+      {!isShowMask ? (
+        <>
+          <div className={styles.body}>
+            {isMd && <h2 className={styles.title}>{t('Token Bridge')}</h2>}
+            <FromCard />
+            <ChangeIcon />
+            <ToCard />
+            <Notice />
+            {!isMd && <ActionButton />}
+            <History />
+          </div>
+          {isMd && <ActionButton />}
+          <SelectTokenModal />
+          <AddTokenModal />
+          {isMd ? <NotificationForPhone /> : <Notification />}
+        </>
+      ) : (
+        <Mask />
+      )}
     </HomeProvider>
   );
 }
