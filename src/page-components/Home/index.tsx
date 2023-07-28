@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { FromCard, ToCard } from './Card';
 import HomeProvider from './HomeContext';
 import SelectTokenModal from './SelectTokenModal';
@@ -12,23 +11,18 @@ import useMediaQueries from 'hooks/useMediaQueries';
 import { useLanguage } from 'i18n';
 import PageHead from 'components/PageHead';
 import { Notification, NotificationForPhone } from 'components/Notification';
+import useMaskQuery from 'hooks/useMaskQuery';
 import Mask from './Mask';
-import { request } from 'api';
+import { Skeleton } from 'antd';
+
 export default function Home() {
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
-  const [isShowMask, setIsShowMask] = useState<boolean>(true);
+  const { isShowMask, isLoading } = useMaskQuery();
+  if (isLoading) {
+    return <Skeleton paragraph={{ rows: 10 }} />;
+  }
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const rs = await request.cms.getToggleReslutOfMask();
-        setIsShowMask(rs?.data?.isShowMask);
-        // eslint-disable-next-line no-empty
-      } catch (e) {}
-    }
-    fetchData();
-  }, []);
   return (
     <HomeProvider>
       <PageHead title={t('Token Bridge')} />
