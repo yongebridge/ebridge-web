@@ -118,6 +118,7 @@ export class WB3ContractBasic {
   public address?: string;
   public provider?: provider;
   public chainId?: number;
+  public web3?: Web3;
   constructor(options: ContractProps) {
     const { contractABI, provider, contractAddress, chainId } = options;
     const contactABITemp = contractABI;
@@ -132,8 +133,8 @@ export class WB3ContractBasic {
   }
 
   public initContract: InitContract = (provider, address, ABI) => {
-    const web3 = new Web3(provider);
-    return new web3.eth.Contract(ABI as any, address);
+    this.web3 = new Web3(provider);
+    return new this.web3.eth.Contract(ABI as any, address);
   };
   public initViewOnlyContract: InitViewOnlyContract = (address, ABI) => {
     const defaultProvider = getDefaultProvider();
@@ -167,18 +168,12 @@ export class WB3ContractBasic {
       const contract = this.contract;
       const { onMethod = 'receipt', ...options } = sendOptions || {};
 
-      // const req = await contract.methods[functionName](...(paramsOption || [])).send({ from: account, ...sendOptions });
-      // return { ...req, TransactionId: req.transactionHash };
-
+      // const gasPrice = (await this.web3?.eth.getGasPrice()) || '10000000000';
       const result: any = await new Promise((resolve, reject) =>
         contract.methods[functionName](...(paramsOption || []))
           .send({ from: account, ...options })
-          .on(onMethod, function (result: any) {
-            resolve(result);
-          })
-          .on('error', function (error: any) {
-            reject(error);
-          }),
+          .on(onMethod, resolve)
+          .on('error', reject),
       );
 
       if (onMethod === 'receipt') return { ...result, TransactionId: result.transactionHash };
