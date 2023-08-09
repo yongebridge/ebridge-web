@@ -1,14 +1,14 @@
 import { ERCChainConstants } from 'constants/ChainConstants';
-import { supportedERCChainId } from 'constants/index';
+import { SupportedERCChain } from 'constants/index';
 import Web3 from 'web3';
-const Provider = Object.values(supportedERCChainId).map((i) => {
+const Provider = Object.values(SupportedERCChain).map((i) => {
   return new Web3.providers.HttpProvider(i.CHAIN_INFO.rpcUrl, {
     keepAlive: true,
     withCredentials: false,
     timeout: 20000, // ms
   });
 });
-const chainKeys = Object.keys(supportedERCChainId);
+const chainKeys = Object.keys(SupportedERCChain);
 export const getProvider = (chainId?: number | string) => {
   const index = chainKeys.findIndex((i) => Number(i) === chainId);
   if (index !== -1) return Provider[index];

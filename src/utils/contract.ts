@@ -96,6 +96,7 @@ export class ContractBasic {
   };
 
   public callSendMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
+    console.log(paramsOption, '++++paramsOption');
     if (this.callContract instanceof AElfContractBasic)
       return this.callContract.callSendMethod(functionName, paramsOption, sendOptions);
     return this.callContract.callSendMethod(functionName, account, paramsOption, sendOptions);
@@ -117,6 +118,7 @@ export class WB3ContractBasic {
   public address?: string;
   public provider?: provider;
   public chainId?: number;
+  public web3?: Web3;
   constructor(options: ContractProps) {
     const { contractABI, provider, contractAddress, chainId } = options;
     const contactABITemp = contractABI;
@@ -131,8 +133,8 @@ export class WB3ContractBasic {
   }
 
   public initContract: InitContract = (provider, address, ABI) => {
-    const web3 = new Web3(provider);
-    return new web3.eth.Contract(ABI as any, address);
+    this.web3 = new Web3(provider);
+    return new this.web3.eth.Contract(ABI as any, address);
   };
   public initViewOnlyContract: InitViewOnlyContract = (address, ABI) => {
     const defaultProvider = getDefaultProvider();
@@ -166,25 +168,21 @@ export class WB3ContractBasic {
       const contract = this.contract;
       const { onMethod = 'receipt', ...options } = sendOptions || {};
 
-      // const req = await contract.methods[functionName](...(paramsOption || [])).send({ from: account, ...sendOptions });
-      // return { ...req, TransactionId: req.transactionHash };
-
+      // const gasPrice = (await this.web3?.eth.getGasPrice()) || '10000000000';
       const result: any = await new Promise((resolve, reject) =>
         contract.methods[functionName](...(paramsOption || []))
           .send({ from: account, ...options })
-          .on(onMethod, function (result: any) {
-            resolve(result);
-          })
-          .on('error', function (error: any) {
-            reject(error);
-          }),
+          .on(onMethod, resolve)
+          .on('error', reject),
       );
+
       if (onMethod === 'receipt') return { ...result, TransactionId: result.transactionHash };
       return { TransactionId: result };
     } catch (error) {
       return { error };
     }
   };
+
   public callSendPromiseMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
     if (!this.contract) return { error: { code: 401, message: 'Contract init error5' } };
     try {
@@ -245,7 +243,6 @@ export class AElfContractBasic {
       await this.checkMethods();
       const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());
       const inputType = this.methods[functionNameUpper];
-      console.log(functionNameUpper, transformArrayToMap(inputType, paramsOption), '=====transformArrayToMap');
 
       const req = await contract[functionNameUpper].call(transformArrayToMap(inputType, paramsOption));
       if (!req?.error && (req?.result || req?.result === null)) return req.result;
@@ -259,7 +256,6 @@ export class AElfContractBasic {
     if (!this.aelfContract) return { error: { code: 401, message: 'Contract init error2' } };
     try {
       const { onMethod = 'receipt' } = sendOptions || {};
-
       await this.checkMethods();
       await this.checkConnected();
       const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());

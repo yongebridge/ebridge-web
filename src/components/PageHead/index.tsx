@@ -1,7 +1,18 @@
+import GoogleAnalytics from 'components/GoogleAnalytics';
 import Head from 'next/head';
 import React from 'react';
+export type DefaultHeadProps = { title?: string; description?: string };
 
-export default function PageHead({ title = 'eBridge', description }: { title: string; description?: string }) {
+export default function PageHead(props: DefaultHeadProps) {
+  return (
+    <>
+      <GoogleAnalytics id={process.env.NEXT_PUBLIC_ANALYTICS_ID} />
+      <DefaultHead {...props} />
+    </>
+  );
+}
+
+export function DefaultHead({ title = 'eBridge', description }: DefaultHeadProps) {
   return (
     <Head>
       <title>{title}</title>

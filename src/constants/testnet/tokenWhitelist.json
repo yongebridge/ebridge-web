@@ -3,17 +3,17 @@
     "AELF": { "name": "Native Token", "decimals": 8, "symbol": "ELF", "address": "", "issueChainId": 9992731 },
     "tDVV": { "name": "Native Token", "decimals": 8, "symbol": "ELF", "address": "", "issueChainId": 9992731 },
     "tDVW": { "name": "Native Token", "decimals": 8, "symbol": "ELF", "address": "", "issueChainId": 9992731 },
-    "42": {
+    "97": {
       "name": "ELF Token",
       "decimals": 18,
       "symbol": "ELF",
-      "address": "0xb085f10C869022E8588825f901a54C1ACeb13A07"
+      "address": "0xd1CD51a8d28ab58464839ba840E16950A6a635ad"
     },
-    "5": {
+    "11155111": {
       "name": "ELF Token",
       "decimals": 18,
       "symbol": "ELF",
-      "address": "0xE0D31195320aeAA20a1acD60CA8Ed78446400B61"
+      "address": "0x8adD57b8aD6C291BC3E3ffF89F767fcA08e0E7Ab"
     }
   },
   "USDT": {
@@ -38,17 +38,17 @@
       "address": "",
       "issueChainId": 9992731
     },
-    "42": {
+    "97": {
       "name": "USDT Token",
-      "decimals": 6,
+      "decimals": 18,
       "symbol": "USDT",
-      "address": "0x53e8d0c17e258c7adc446b4e160a2000816f00d9"
+      "address": "0x3F280eE5876CE8B15081947E0f189E336bb740A5"
     },
-    "5": {
+    "11155111": {
       "name": "USDT Token",
       "decimals": 6,
       "symbol": "USDT",
-      "address": "0x5651b56c18a32BF1c69D87f86394036C97bF9B61"
+      "address": "0x60eeCc4d19f65B9EaDe628F2711C543eD1cE6679"
     }
   },
   "ETH": {
@@ -73,18 +73,24 @@
       "address": "",
       "issueChainId": 9992731
     },
-    "42": {
-      "name": "WETH Token",
+    "11155111": {
+      "name": "ETH Token",
       "decimals": 18,
       "symbol": "ETH",
-      "address": "0xA050886815CFc52a24B9C4aD044ca199990B6690"
-    },
-    "5": {
-      "name": "WETH Token",
-      "decimals": 18,
-      "symbol": "ETH",
-      "address": "0x28D389f11d6E8C4bfB7339B170715b1e03B6299c"
+      "address": "0x035900292c309d8beCBCAFb3227238bec0EBa253",
+      "isNativeToken": true
     }
+  },
+  "BNB": {
+    "AELF": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 },
+    "97": {
+      "name": "BNB Token",
+      "decimals": 18,
+      "symbol": "BNB",
+      "address": "0x0CBAb7E71f969Bfb3eF5b13542E9087a73244F02",
+      "isNativeToken": true
+    },
+    "tDVW": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 }
   },
   "WRITE": {
     "AELF": { "name": "WRITE Token", "decimals": 8, "symbol": "WRITE", "address": "", "issueChainId": 9992731 },

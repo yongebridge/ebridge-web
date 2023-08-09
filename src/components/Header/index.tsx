@@ -1,5 +1,6 @@
 import styles from './styles.module.less';
 import logo from './images/logo.svg';
+import testLogo from './images/testLogo.svg';
 import clsx from 'clsx';
 import { Drawer, Select } from 'antd';
 import { LOCAL_LANGUAGE } from 'i18n/config';
@@ -11,6 +12,7 @@ import useMediaQueries from 'hooks/useMediaQueries';
 import { useMemo, useState } from 'react';
 import CommonImage from 'components/CommonImage';
 import { useRouter } from 'next/router';
+import { IS_MAINNET } from 'constants/index';
 const navList = [
   {
     title: 'Token Bridge',
@@ -45,7 +47,7 @@ function MDHeader({ selectedHref }: { selectedHref: string[] }) {
   const { t } = useLanguage();
   return (
     <>
-      <CommonImage style={{ width: 72, height: 24 }} src={logo} alt="logo" />
+      <CommonImage style={{ width: IS_MAINNET ? 72 : 89, height: 24 }} src={IS_MAINNET ? logo : testLogo} alt="logo" />
       <IconFont type="more" onClick={() => setVisible(true)} />
       <Drawer
         className={styles.drawer}
@@ -94,7 +96,11 @@ export default function Header() {
         )}>
         {!isMd ? (
           <>
-            <CommonImage style={{ width: 96, height: 32 }} src={logo} alt="logo" />
+            <CommonImage
+              style={{ width: IS_MAINNET ? 96 : 119, height: 32 }}
+              src={IS_MAINNET ? logo : testLogo}
+              alt="logo"
+            />
             <div className={clsx(styles['header-body'], 'row-center')}>
               {navList.map(({ title, href }, k) => {
                 return (

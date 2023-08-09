@@ -3,10 +3,10 @@ import type { provider } from 'web3-core';
 import {
   ACTIVE_CHAIN,
   ChainConstantsType,
-  ERC_CHAIN_ID_TYPE,
+  ERC_CHAIN_TYPE,
   DEFAULT_ERC_CHAIN,
-  supportedERCChainId,
-  supportedELFChainId,
+  SupportedERCChain,
+  SupportedELFChain,
 } from '.';
 
 type AElfOwnConstants = {
@@ -29,7 +29,7 @@ export class ChainConstants {
 }
 
 export class ERCChainConstants extends ChainConstants {
-  static constants: Constants;
+  static constants: Constants = SupportedERCChain[DEFAULT_ERC_CHAIN];
   static chainType: ChainType = 'ERC';
   static library?: provider;
   constructor(id: number | string, library?: provider) {
@@ -38,12 +38,12 @@ export class ERCChainConstants extends ChainConstants {
     this.setStaticAttrs();
   }
   setStaticAttrs() {
-    const chainId = (this.id || window.ethereum?.chainId) as ERC_CHAIN_ID_TYPE;
+    const chainId = (this.id || window.ethereum?.chainId) as ERC_CHAIN_TYPE;
     let attrs;
     if (ACTIVE_CHAIN[chainId]) {
-      attrs = supportedERCChainId[chainId];
+      attrs = SupportedERCChain[chainId];
     } else {
-      attrs = supportedERCChainId[DEFAULT_ERC_CHAIN];
+      attrs = SupportedERCChain[DEFAULT_ERC_CHAIN];
     }
     ERCChainConstants['constants'] = attrs;
     ERCChainConstants['chainId'] = attrs?.CHAIN_INFO.chainId;
@@ -59,6 +59,6 @@ export class ELFChainConstants extends ChainConstants {
     this.setStaticAttrs();
   }
   setStaticAttrs() {
-    ELFChainConstants['constants'] = supportedELFChainId as any;
+    ELFChainConstants['constants'] = SupportedELFChain as any;
   }
 }

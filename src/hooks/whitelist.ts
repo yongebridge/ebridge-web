@@ -1,9 +1,9 @@
 import { useWhitelist } from 'contexts/useWhitelist';
 import { WhitelistItem } from 'contexts/useWhitelist/actions';
 import { useMemo } from 'react';
-import defaultWhitelistMap from 'constants/tokenWhitelist.json';
 import { useWallet } from 'contexts/useWallet/hooks';
 import { isSymbol } from 'utils/reg';
+import { DefaultWhitelistMap } from 'constants/index';
 export type CurrentWhitelistItem = {
   symbol: string;
 } & WhitelistItem;
@@ -11,7 +11,7 @@ export type CurrentWhitelistItem = {
 export function useActiveWhitelist() {
   const [{ whitelistMap }] = useWhitelist();
   return useMemo(() => {
-    return Object.assign({}, defaultWhitelistMap, whitelistMap);
+    return Object.assign({}, DefaultWhitelistMap, whitelistMap);
   }, [whitelistMap]);
 }
 

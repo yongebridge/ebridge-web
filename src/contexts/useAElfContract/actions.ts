@@ -1,17 +1,17 @@
 import { basicActions } from 'contexts/utils';
 import { ContractBasic } from 'utils/contract';
 
-export enum aelfContractActions {
+export enum AElfContractActions {
   setContract = 'SET_CONTRACT',
   destroy = 'DESTROY',
 }
 
-export type aelfContractState = { [key: string]: ContractBasic };
+export type AElfContractState = { [key: string]: ContractBasic };
 
 export const basicAElfContractActions = {
   setContract: (contract: { [key: string]: ContractBasic }) =>
-    basicActions(aelfContractActions['setContract'], contract),
-  aelfContractDestroy: () => basicActions(aelfContractActions['destroy']),
+    basicActions(AElfContractActions['setContract'], contract),
+  aelfContractDestroy: () => basicActions(AElfContractActions['destroy']),
 };
 
 export const { setContract, aelfContractDestroy } = basicAElfContractActions;

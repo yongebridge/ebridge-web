@@ -34,7 +34,7 @@ function createMatch(userAgent: UserAgent): (regex: RegExp) => boolean {
   return (regex: RegExp): boolean => regex.test(userAgent);
 }
 
-export type isMobileResult = {
+export type IsMobileResult = {
   apple: {
     phone: boolean;
     ipod: boolean;
@@ -72,7 +72,7 @@ export type isMobileResult = {
 
 export type IsMobileParameter = UserAgent | Navigator;
 
-export default function isMobile(param?: IsMobileParameter): isMobileResult {
+export default function isMobile(param?: IsMobileParameter): IsMobileResult {
   let nav: Navigator = {
     userAgent: '',
     platform: '',
@@ -114,7 +114,7 @@ export default function isMobile(param?: IsMobileParameter): isMobileResult {
 
   const match = createMatch(userAgent);
 
-  const result: isMobileResult = {
+  const result: IsMobileResult = {
     apple: {
       phone: match(appleIphone) && !match(windowsPhone),
       ipod: match(appleIpod),

@@ -1,13 +1,14 @@
 /* eslint-disable */
 /** @type {import('next').NextConfig} */
+const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV } = process.env;
 const withLess = require('next-with-less');
 const withPlugins = require('next-compose-plugins');
-const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV } = process.env;
-const rewrites = require('./rewrites');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: ANALYZE === 'true',
 });
-const path = require('path');
+const { rewriteConstants, getRewrites, rewriteEnv } = require('./rewriteENV');
+rewriteEnv();
+rewriteConstants();
 const plugins = [
   [withBundleAnalyzer],
   [
@@ -32,7 +33,7 @@ const nextConfig = {
   //   return config;
   // },
   async rewrites() {
-    return rewrites;
+    return getRewrites();
   },
   images: {
     domains: ['raw.githubusercontent.com'],

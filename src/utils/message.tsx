@@ -5,7 +5,11 @@ import { Trans } from 'react-i18next';
 import { ChainId } from 'types';
 import { getTXLink } from './link';
 import writeText from 'copy-to-clipboard';
-import { divDecimals } from './calculate';
+
+// message Configuration duration 5s
+antMessage.config({
+  duration: 5,
+});
 
 export function txSuccess({ req, chainId, message }: { req: any; chainId: ChainId; message: string }) {
   const { TransactionId } = req || {};
@@ -17,23 +21,23 @@ export function txSuccess({ req, chainId, message }: { req: any; chainId: ChainI
   // TransactionId && antMessage.success(getTXLink(TransactionId, chainId));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function formatMessage(s: string, decimals?: number) {
   try {
     if (s.includes('Insufficient balance') && s.includes('Current balance')) {
-      const strList = s.replace('AElf.Sdk.CSharp.AssertionException:', '').split('.');
-      let currentBalance = '',
-        symbol = '';
-      strList.forEach((i) => {
-        if (i.includes('Current balance')) {
-          const lastStrList = i.split(';');
-          currentBalance = lastStrList[lastStrList.length - 1].split(':')[1].trim();
-        }
-        if (i.includes('Insufficient balance of')) symbol = i.replace('Insufficient balance of', '').trim();
-      });
-      return i18n.t('The amount to be transferred should be smaller than', {
-        amount: divDecimals(currentBalance, decimals).toFixed(),
-        symbol,
-      });
+      s = s.replace('AElf.Sdk.CSharp.AssertionException:', '');
+      // format message
+      const strList = s.split('.');
+      // let currentBalance = '',
+      //   symbol = '';
+      // strList.forEach((i) => {
+      //   if (i.includes('Current balance')) {
+      //     const lastStrList = i.split(';');
+      //     currentBalance = lastStrList[lastStrList.length - 1].split(':')[1].trim();
+      //   }
+      //   if (i.includes('Insufficient balance of')) symbol = i.replace('Insufficient balance of', '').trim();
+      // });
+      return strList[1] + strList[2];
     }
   } catch (error) {
     console.debug(error);
@@ -52,18 +56,31 @@ export function txError({
   message: string;
   decimals?: number;
 }) {
-  const { TransactionId } = req || {};
-  TransactionId && antMessage.error(getTXLink(TransactionId, chainId));
+  const { TransactionId, isTransactionHash } = req || {};
+  if (isTransactionHash) {
+    const msg = i18n.t(message);
+    const txt = (
+      <span>
+        <span>{msg}: </span>
+        {getTXLink(TransactionId, chainId)}
+      </span>
+    );
+    TransactionId && antMessage.error(txt);
+  } else {
+    TransactionId && antMessage.error(getTXLink(TransactionId, chainId));
+  }
+
   const s = req.error.message || message;
   const text = decimals ? formatMessage(s, decimals) : s;
-  antMessage.error(
-    <span
-      onClick={() => {
-        writeText(text);
-      }}>
-      {text}
-    </span>,
-  );
+  !isTransactionHash &&
+    antMessage.error(
+      <span
+        onClick={() => {
+          writeText(text);
+        }}>
+        {text}
+      </span>,
+    );
 }
 
 export function txMessage({

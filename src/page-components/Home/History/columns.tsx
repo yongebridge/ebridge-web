@@ -3,13 +3,12 @@ import type { ColumnType } from 'antd/lib/table';
 import clsx from 'clsx';
 import CommonLink from 'components/CommonLink';
 import TokenLogo from 'components/TokenLogo';
-import { CrossChainTime } from 'constants/misc';
 import { Trans } from 'react-i18next';
 import { useHover } from 'react-use';
 import { ChainId, TokenInfo } from 'types';
 import { CrossChainItem } from 'types/api';
 import { CrossChainStatus } from 'types/misc';
-import { getExploreLink, shortenString } from 'utils';
+import { formatNativeToken, getExploreLink, shortenString } from 'utils';
 import { getShortNameByChainId, shortenAddressByAPI } from 'utils/chain';
 import { unitConverter } from 'utils/converter';
 import { formatTime } from 'utils/time';
@@ -33,17 +32,18 @@ function Transaction({ transactionId, chainId }: { transactionId: string; chainI
 
 function Amount({ amount, chainId, token }: { amount?: number; chainId?: ChainId; token?: TokenInfo }) {
   const { symbol, decimals } = token || {};
+  const tmpSymbol = formatNativeToken(symbol);
   return (
     <div className={clsx('row-center')}>
-      <TokenLogo style={{ height: 20, width: 20, marginRight: '4px' }} chainId={chainId} symbol={symbol} />
+      <TokenLogo style={{ height: 20, width: 20, marginRight: '4px' }} chainId={chainId} symbol={tmpSymbol} />
       <div>
-        {unitConverter({ num: amount, minDecimals: decimals })} {symbol}
+        {unitConverter({ num: amount, minDecimals: decimals })} {tmpSymbol}
       </div>
     </div>
   );
 }
 
-function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogeneous?: boolean }) {
+function FromTo({ items }: { items: CrossChainItem; isHeterogeneous?: boolean }) {
   const { progress, fromChainId, toChainId, status } = items;
   const [hoverable] = useHover((hovered: boolean) => {
     const success = status === CrossChainStatus.Received;
@@ -59,7 +59,7 @@ function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogen
           <div className="flex-column">
             {Math.floor(progress ?? 0)} %
             <Progress className={styles.progress} showInfo={false} percent={progress} size="small" />
-            <div className={styles.tip}>
+            {/* <div className={styles.tip}>
               {isHeterogeneous ? (
                 <Trans tOptions={{ time: CrossChainTime.heterogeneous }}>
                   Estimated time of heterogenous cross-chain arrival is
@@ -69,7 +69,7 @@ function FromTo({ items, isHeterogeneous }: { items: CrossChainItem; isHeterogen
                   Estimated time of homogeneous cross-chain arrival is
                 </Trans>
               )}
-            </div>
+            </div> */}
           </div>
         ) : (
           `${getShortNameByChainId(fromChainId)} - ${getShortNameByChainId(toChainId)}`

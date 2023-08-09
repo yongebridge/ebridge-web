@@ -1,18 +1,18 @@
 import { BasicActions } from 'contexts/utils';
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
-import { aelfContractState, aelfContractActions } from './actions';
+import { AElfContractState, AElfContractActions } from './actions';
 
-const INITIAL_STATE: aelfContractState = {};
+const INITIAL_STATE: AElfContractState = {};
 const ContractContext = createContext<any>(INITIAL_STATE);
 
-export function useAElfContractContext(): [aelfContractState, BasicActions<aelfContractActions>] {
+export function useAElfContractContext(): [AElfContractState, BasicActions<AElfContractActions>] {
   return useContext(ContractContext);
 }
 
 //reducer
-function reducer(state: aelfContractState, { type, payload }: { type: aelfContractActions; payload: any }) {
+function reducer(state: AElfContractState, { type, payload }: { type: AElfContractActions; payload: any }) {
   switch (type) {
-    case aelfContractActions.destroy: {
+    case AElfContractActions.destroy: {
       return {};
     }
     default: {
@@ -23,7 +23,7 @@ function reducer(state: aelfContractState, { type, payload }: { type: aelfContra
   }
 }
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch]: [aelfContractState, BasicActions<aelfContractActions>['dispatch']] = useReducer(
+  const [state, dispatch]: [AElfContractState, BasicActions<AElfContractActions>['dispatch']] = useReducer(
     reducer,
     INITIAL_STATE,
   );

@@ -6,7 +6,7 @@ import { getProvider } from 'utils/provider';
 import { AElfNodes } from 'constants/aelf';
 import { Web3Type } from 'types';
 import { useChain } from 'contexts/useChain';
-import { ACTIVE_CHAIN } from 'constants/index';
+import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
 import { message } from 'antd';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
@@ -45,6 +45,7 @@ export function useWeb3(): Web3Type {
     const contextNetwork: Web3Type = { ...web3React };
     if (!web3React.account) {
       if (typeof window === 'object') {
+        contextNetwork.chainId = DEFAULT_ERC_CHAIN;
         const chainId = ZERO.plus(window.ethereum?.chainId ?? '');
         if (!chainId.isNaN()) {
           contextNetwork.chainId = chainId.toNumber();

@@ -11,7 +11,8 @@ import type { provider } from 'web3-core';
 import { CrossFeeToken, REQ_CODE } from 'constants/misc';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
-import { formatAddress } from 'utils';
+import { formatAddress, isIncludesChainId } from 'utils';
+import { FormatTokenList, IS_MAINNET } from 'constants/index';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -27,11 +28,13 @@ export async function CrossChainTransfer({
   toChainId: ChainId;
   amount: string;
 }) {
+  console.log('CrossChainTransfer', '===CrossChainTransfer');
+
   return contract.callSendMethod(
     'CrossChainTransfer',
     account,
     [to, token.symbol, amount, ' ', base58ToChainId(toChainId), token.issueChainId],
-    { onMethod: 'transactionHash' },
+    { onMethod: 'receipt' },
   );
 }
 
@@ -255,14 +258,29 @@ export async function CreateReceipt({
   );
 }
 
-const tokenList = [
-  {
-    fromChainId: [42, 5],
-    toChainId: ['AELF', 'tDVV', 'tDVW'],
-    fromSymbol: 'WETH',
-    toSymbol: 'ETH',
-  },
-];
+export async function LockToken({
+  account,
+  bridgeContract,
+  amount,
+  toChainId,
+  to,
+}: {
+  bridgeContract: ContractBasic;
+  library: provider;
+  fromToken: string;
+  account: string;
+  amount: string;
+  toChainId: ChainId;
+  to: string;
+  tokenContract?: ContractBasic;
+}) {
+  const toAddress = formatAddress(to);
+  return bridgeContract.callSendMethod('createNativeTokenReceipt', account, [getChainIdToMap(toChainId), toAddress], {
+    onMethod: 'transactionHash',
+    value: amount,
+  });
+}
+
 export async function SwapToken({
   bridgeOutContract,
   toAccount,
@@ -275,11 +293,11 @@ export async function SwapToken({
   const { transferAmount, receiptId, toAddress, transferToken, toChainId, fromChainId } = receiveItem || {};
   if (!(toChainId && transferToken?.symbol)) return;
   let toSymbol = transferToken.symbol;
-  const item = tokenList.find(
+  const item = FormatTokenList.find(
     (i) =>
       i.fromSymbol === transferToken.symbol &&
-      i.fromChainId.includes(fromChainId as any) &&
-      i.toChainId.includes(toChainId as any),
+      isIncludesChainId(i.fromChainId, fromChainId) &&
+      isIncludesChainId(i.toChainId, toChainId),
   );
   if (item) toSymbol = item.toSymbol;
 

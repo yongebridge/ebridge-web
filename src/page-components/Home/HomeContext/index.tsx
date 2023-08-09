@@ -13,8 +13,8 @@ import { getChainIdToMap } from 'utils/chain';
 import {
   DestroyModal,
   DestroyState,
-  homeActions,
-  homeState,
+  HomeActionsEnum,
+  HomeState,
   setFrom,
   setHomeState,
   setReceiveId,
@@ -23,13 +23,13 @@ import {
   setTo,
 } from './actions';
 import { parseCrossChainTransfers } from './utils';
-import defaultWhitelistMap from 'constants/tokenWhitelist.json';
+import { DefaultWhitelistMap } from 'constants/index';
 import { crossTokenMin } from 'constants/misc';
 import { sliceDecimals } from 'utils/input';
 
 const defaultSelectToken = {
   symbol: 'ELF',
-  ...defaultWhitelistMap.ELF,
+  ...DefaultWhitelistMap.ELF,
 };
 const INITIAL_STATE = {
   selectToken: defaultSelectToken,
@@ -39,8 +39,8 @@ const INITIAL_STATE = {
 const HomeContext = createContext<any>(INITIAL_STATE);
 const ExpirationTime = 1000 * 60 * 5;
 export function useHomeContext(): [
-  homeState,
-  BasicActions<homeActions> & {
+  HomeState,
+  BasicActions<HomeActionsEnum> & {
     addReceivedList: (s?: string) => void;
   },
 ] {
@@ -48,15 +48,15 @@ export function useHomeContext(): [
 }
 
 //reducer
-function reducer(state: homeState, { type, payload }: { type: homeActions; payload: any }) {
+function reducer(state: HomeState, { type, payload }: { type: HomeActionsEnum; payload: any }) {
   switch (type) {
-    case homeActions.destroy: {
+    case HomeActionsEnum.destroy: {
       return {};
     }
-    case homeActions.destroyState: {
+    case HomeActionsEnum.destroyState: {
       return Object.assign({}, state, DestroyState);
     }
-    case homeActions.destroyModal: {
+    case HomeActionsEnum.destroyModal: {
       return Object.assign({}, state, DestroyModal);
     }
     default: {
@@ -68,7 +68,7 @@ function reducer(state: homeState, { type, payload }: { type: homeActions; paylo
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch]: [homeState, BasicActions<homeActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
+  const [state, dispatch]: [HomeState, BasicActions<HomeActionsEnum>['dispatch']] = useReducer(reducer, INITIAL_STATE);
   const [receivedValue, updateReceivedList] = useCookie(storages.crossChainReceived);
   const { selectToken, fromInput, toInput, receiveList, receiveId } = state;
   const { fromWallet, toWallet } = useWallet();
@@ -76,14 +76,15 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const preFromAccount = usePrevious(fromAccount);
   const { chainId: toChainId, account: toAccount } = toWallet || {};
   const preToAccount = usePrevious(toAccount);
-
   const tokenInfo = useUserAddedToken(selectToken?.symbol);
   const tokens = useMemo(() => {
     if (!fromChainId) return;
-    const { symbol, address } = selectToken?.[fromChainId] || {};
+    const { symbol, address, isNativeToken } = selectToken?.[fromChainId] || {};
     if (isELFChain(fromChainId)) return [symbol];
+    if (isNativeToken) return [symbol];
     return [address];
   }, [fromChainId, selectToken]);
+
   const [[balance]] = useBalances(fromWallet, tokens);
   useEffect(() => {
     if (selectToken && fromChainId && toChainId && (!selectToken[fromChainId] || !selectToken[toChainId])) {
@@ -119,8 +120,12 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       params: { toChainId: getChainIdToMap(toChainId), toAddress: toAccount, status: 1, maxResultCount: 100 },
     });
     const list = parseCrossChainTransfers(req);
-    list && dispatch(setReceiveList(list));
-  }, [toAccount, toChainId]);
+    if (list) {
+      const existed = list.some((i) => i.id === receiveId);
+      if (!existed) dispatch(setReceiveId(undefined));
+      dispatch(setReceiveList(list));
+    }
+  }, [receiveId, toAccount, toChainId]);
   useEffect(() => {
     dispatch(setReceiveId(undefined));
   }, [toChainId]);

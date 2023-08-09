@@ -4,7 +4,7 @@ import { useWallet } from 'contexts/useWallet/hooks';
 import { useBridgeContract, useBridgeOutContract, useCrossChainContract, useTokenContract } from 'hooks/useContract';
 import { useCallback, useMemo, useState } from 'react';
 import styles from './styles.module.less';
-import { CrossChainTransfer, CrossChainReceive, CreateReceipt, SwapToken } from 'utils/crossChain';
+import { CrossChainTransfer, CrossChainReceive, CreateReceipt, SwapToken, LockToken } from 'utils/crossChain';
 import { useHomeContext } from '../HomeContext';
 import { txMessage } from 'utils/message';
 import { timesDecimals } from 'utils/calculate';
@@ -34,7 +34,9 @@ function Actions() {
   const itemSendChainID = useMemo(() => receiveItem?.fromChainId, [receiveItem?.fromChainId]);
   const fromTokenInfo = useMemo(() => {
     if (!fromChainId) return;
-    return selectToken?.[fromChainId];
+    const token = selectToken?.[fromChainId];
+    if (token?.isNativeToken) token.address = '';
+    return token;
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
 
@@ -121,23 +123,28 @@ function Actions() {
         bridgeContract &&
         toChainId &&
         fromChainId &&
-        tokenContract &&
         ((toChecked && (toAccount || isAddress(toAddress, toChainId))) || toAccount)
       )
     )
       return;
+
     dispatch(setActionLoading(true));
+
+    const params: any = {
+      library,
+      fromToken: fromTokenInfo?.address || fromTokenInfo?.symbol,
+      account: fromAccount,
+      bridgeContract,
+      amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
+      toChainId,
+      to: toChecked && toAddress ? toAddress : (toAccount as string),
+    };
+    if (tokenContract) {
+      params.tokenContract = tokenContract;
+    }
     try {
-      const req = await CreateReceipt({
-        library,
-        fromToken: fromTokenInfo?.address || fromTokenInfo?.symbol,
-        account: fromAccount,
-        bridgeContract,
-        amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
-        toChainId,
-        to: toChecked && toAddress ? toAddress : (toAccount as string),
-        tokenContract,
-      });
+      const req = await (fromTokenInfo.isNativeToken ? LockToken : CreateReceipt)(params);
+
       if (!req.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
@@ -163,15 +170,26 @@ function Actions() {
     if (!(toAccount && toChainId && bridgeOutContract)) return;
     dispatch(setActionLoading(true));
     try {
-      console.log(receiveItem, '=====receiveItem');
-
       const req = await SwapToken({ bridgeOutContract, receiveItem, toAccount });
       if (!req.error) {
         addReceivedList(receiveItem.id);
         dispatch(setReceiveId(undefined));
       }
-      txMessage({ req, chainId: toChainId });
+      const { status, transactionHash } = req.error?.receipt || {};
+      if (status === false && transactionHash) {
+        txMessage({
+          req: {
+            ...req,
+            TransactionId: transactionHash,
+            isTransactionHash: true,
+          },
+          chainId: toChainId,
+        });
+      } else {
+        txMessage({ req, chainId: toChainId });
+      }
     } catch (error: any) {
+      console.log(error, '======test=error');
       message.error(error.message);
     }
     dispatch(setActionLoading(false));
