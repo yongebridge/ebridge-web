@@ -1,5 +1,6 @@
 import { useAElfReact } from '@aelf-react/core';
 import { useWeb3React } from '@web3-react/core';
+import { useProtkeyContext } from 'contexts/usePortkey';
 import { ZERO } from 'constants/misc';
 import { useCallback, useMemo } from 'react';
 import { getProvider } from 'utils/provider';
@@ -88,5 +89,37 @@ export function useAElf(): Web3Type {
       connector: aelfReact.account ? 'NIGHT ELF' : undefined,
     };
   }, [aelfReact, chainId]);
+  return tmpContext;
+}
+
+export function usePortkeyConnect() {
+  const { activate, connectEagerly } = useProtkeyContext();
+
+  return useCallback(
+    async (isConnectEagerly?: boolean) => {
+      try {
+        await (isConnectEagerly ? connectEagerly : activate)();
+      } catch (error: any) {
+        let message = error?.message || error;
+        if (Array.isArray(error)) message = error[0]?.errorMessage || error[0];
+        message = typeof message === 'string' ? message : JSON.stringify(message);
+        throw Error(message);
+      }
+    },
+    [activate, connectEagerly],
+  );
+}
+
+export function usePortkey() {
+  const portkeyContext = useProtkeyContext();
+  // const [{ userELFChainId }] = useChain();
+  // const chainId = userELFChainId;
+
+  const tmpContext = useMemo(() => {
+    return {
+      ...portkeyContext,
+    };
+  }, [portkeyContext]);
+
   return tmpContext;
 }

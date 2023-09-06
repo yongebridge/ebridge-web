@@ -180,3 +180,7 @@ export function isMobileDevices() {
   const isM = isMobile();
   return isM.apple.device || isM.android.device;
 }
+
+export function isPortkeyAPP(): boolean {
+  return true;
+}

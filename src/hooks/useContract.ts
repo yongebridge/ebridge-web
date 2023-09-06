@@ -11,6 +11,7 @@ import { AElfDappBridge } from '@aelf-react/types';
 import { checkAElfBridge } from 'utils/checkAElfBridge';
 import { setContract } from 'contexts/useAElfContract/actions';
 import { useAElfContractContext } from 'contexts/useAElfContract';
+import { useProtkeyContext } from 'contexts/usePortkey';
 
 export function getContract(address: string, ABI: any, library?: provider) {
   return new ContractBasic({
@@ -65,30 +66,9 @@ export async function getELFContract(
   });
 }
 
-// export function useAElfContract(contractAddress: string, chainId?: ChainId) {
-//   const [contracts, setContracts] = useState<ContractBasic>();
-//   const { account, aelfInstances } = useAElf();
-//   const aelfInstance = useMemo(() => aelfInstances?.[chainId as AelfInstancesKey], [aelfInstances, chainId]);
-//   const getContract = useCallback(async () => {
-//     if (!chainId || !aelfInstance) return;
-//     try {
-//       const contract = await getELFContract(contractAddress, aelfInstance, account, chainId);
-//       setContracts(contract);
-//     } catch (error) {
-//       await sleep(1000);
-//       getContract();
-//       console.error(error, '====getContract', contractAddress);
-//     }
-//   }, [aelfInstance, chainId, contractAddress, account]);
-
-//   useEffect(() => {
-//     getContract();
-//   }, [getContract]);
-
-//   return contracts;
-// }
 export function useAElfContract(contractAddress: string, chainId?: ChainId) {
   const { account, aelfInstances } = useAElf();
+
   const [contracts, { dispatch }] = useAElfContractContext();
   const aelfInstance = useMemo(() => aelfInstances?.[chainId as AelfInstancesKey], [aelfInstances, chainId]);
   const key = useMemo(() => contractAddress + '_' + chainId + '_' + account, [account, chainId, contractAddress]);
@@ -120,9 +100,15 @@ export function useAElfContract(contractAddress: string, chainId?: ChainId) {
   }, [contracts, key]);
 }
 
+// export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
+//   const { chain } = useProtkeyContext();
+// }
+
 function useContract(address: string, ABI: any, chainId?: ChainId): ContractBasic | undefined {
   const ercContract = useERCContract(address, ABI, chainId);
   const elfContract = useAElfContract(address, chainId);
+  // const portketContract = usePortkeyContract(address, chainId);
+
   return isELFChain(chainId) ? elfContract : ercContract;
 }
 

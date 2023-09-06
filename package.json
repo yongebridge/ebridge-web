@@ -17,6 +17,7 @@
     "@aelf-react/core": "^0.1.19",
     "@aelf-react/types": "^0.1.10",
     "@ant-design/icons": "^4.7.0",
+    "@portkey/detect-provider": "^1.0.1",
     "@sentry/nextjs": "^7.48.0",
     "@walletconnect/ethereum-provider": "^1.7.8",
     "@web3-react/coinbase-wallet": "^8.0.34-beta.0",

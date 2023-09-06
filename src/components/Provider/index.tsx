@@ -7,6 +7,7 @@ import WalletProvider from 'contexts/useWallet';
 import AElfContractProvider from 'contexts/useAElfContract';
 import ChainProvider from 'contexts/useChain';
 import WhitelistProvider from 'contexts/useWhitelist';
+import PortkeyProvider from 'contexts/usePortkey';
 import Modals from 'modals';
 import type { ReactNode } from 'react';
 import { initLanguage, useLanguage } from 'i18n';
@@ -23,10 +24,12 @@ export default function Provider({ children }: { children: ReactNode }) {
             <StoreProvider>
               <WalletProvider>
                 <AElfContractProvider>
-                  <ModalProvider>
-                    <Modals />
-                    {children}
-                  </ModalProvider>
+                  <PortkeyProvider>
+                    <ModalProvider>
+                      <Modals />
+                      {children}
+                    </ModalProvider>
+                  </PortkeyProvider>
                 </AElfContractProvider>
               </WalletProvider>
             </StoreProvider>
