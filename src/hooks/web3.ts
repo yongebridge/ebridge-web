@@ -5,11 +5,17 @@ import { useCallback, useMemo } from 'react';
 import { getProvider } from 'utils/provider';
 import { AElfNodes } from 'constants/aelf';
 import { Web3Type } from 'types';
-import { useChain } from 'contexts/useChain';
+import { useChain, useChainDispatch } from 'contexts/useChain';
 import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
 import { message } from 'antd';
+import { usePortkeyReact } from 'contexts/usePortkey/provider';
+import { ChainId } from '@portkey/provider-types';
+import { getELFAddress } from 'utils/aelfUtils';
+import { setAELFType } from 'contexts/useChain/actions';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
+  const chainDispatch = useChainDispatch();
+
   return useCallback(
     async (isConnectEagerly?: boolean) => {
       try {
@@ -26,6 +32,7 @@ export function useAEflConnect() {
               if (i && i.error) message.error(`${Object.keys(bridges)[k]} getChainStatus error`);
             });
         }
+        chainDispatch(setAELFType('NIGHTELF'));
       } catch (error: any) {
         let message = error?.message || error;
         if (Array.isArray(error)) message = error[0]?.errorMessage || error[0];
@@ -33,10 +40,21 @@ export function useAEflConnect() {
         throw Error(message);
       }
     },
-    [activate, connectEagerly],
+    [activate, chainDispatch, connectEagerly],
   );
 }
 
+export function usePortkeyConnect() {
+  const { activate, connectEagerly } = usePortkeyReact();
+  const chainDispatch = useChainDispatch();
+  return useCallback(
+    async (isConnectEagerly?: boolean) => {
+      await (isConnectEagerly ? connectEagerly : activate)();
+      chainDispatch(setAELFType('PORTKEY'));
+    },
+    [activate, chainDispatch, connectEagerly],
+  );
+}
 // useActiveWeb3React contains all attributes of useWeb3React and aelf combination
 export function useWeb3(): Web3Type {
   const web3React = useWeb3React();
@@ -60,6 +78,7 @@ export function useWeb3(): Web3Type {
       }
       return contextNetwork;
     } else {
+      contextNetwork.walletType = 'ERC';
       contextNetwork.library = contextNetwork.provider?.provider;
     }
     return contextNetwork;
@@ -80,6 +99,7 @@ export function useAElf(): Web3Type {
     };
     if (chainId && ACTIVE_CHAIN[chainId] && aelfReact.aelfBridges) {
       contextNetwork.aelfInstance = aelfReact.aelfBridges[chainId];
+      contextNetwork.walletType = 'NIGHTELF';
     }
     return {
       ...contextNetwork,
@@ -88,5 +108,30 @@ export function useAElf(): Web3Type {
       connector: aelfReact.account ? 'NIGHT ELF' : undefined,
     };
   }, [aelfReact, chainId]);
+  return tmpContext;
+}
+
+export function usePortkey() {
+  const portkeyReact = usePortkeyReact();
+  const [{ userELFChainId }] = useChain();
+  const chainId = userELFChainId;
+  const tmpContext = useMemo(() => {
+    const contextNetwork: any = {
+      ...portkeyReact,
+    };
+    const chainAccounts = portkeyReact?.accounts?.[chainId as ChainId];
+
+    if (chainId && ACTIVE_CHAIN[chainId] && chainAccounts?.[0] && portkeyReact.isActive) {
+      contextNetwork.account = getELFAddress(chainAccounts?.[0]);
+      contextNetwork.isPortkey = true;
+      contextNetwork.walletType = 'PORTKEY';
+    }
+    return {
+      ...contextNetwork,
+      library: undefined,
+      provider: undefined,
+      connector: contextNetwork.account ? 'PORTKEY' : undefined,
+    };
+  }, [chainId, portkeyReact]);
   return tmpContext;
 }

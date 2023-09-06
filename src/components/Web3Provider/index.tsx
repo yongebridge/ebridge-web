@@ -1,11 +1,13 @@
 import { AElfReactProvider } from '@aelf-react/core';
 import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
 import { Connector } from '@web3-react/types';
+import { PORTKEY_NETWORK_TYPE } from 'constants/index';
 import { AElfNodes } from 'constants/aelf';
 import { APP_NAME } from 'constants/misc';
 import { useChain } from 'contexts/useChain';
+import { PortkeyReactProvider } from 'contexts/usePortkey/provider';
 import useOrderedConnections from 'hooks/useOrderedConnections';
-import { useAEflConnect } from 'hooks/web3';
+import { useAEflConnect, usePortkeyConnect } from 'hooks/web3';
 import { useCallback, useMemo } from 'react';
 import { useEffectOnce } from 'react-use';
 import { Connection, network } from 'walletConnectors';
@@ -25,7 +27,8 @@ const connect = async (connector: Connector) => {
 
 function Web3Manager({ children }: { children: JSX.Element }) {
   const aelfConnect = useAEflConnect();
-  const [{ selectERCWallet }] = useChain();
+  const [{ selectERCWallet, aelfType }] = useChain();
+  const portkeyConnect = usePortkeyConnect();
   const tryAElf = useCallback(async () => {
     try {
       await aelfConnect(true);
@@ -41,8 +44,16 @@ function Web3Manager({ children }: { children: JSX.Element }) {
       console.debug(error, '=====error');
     }
   }, [selectERCWallet]);
+
+  const tryPortkey = useCallback(async () => {
+    try {
+      await portkeyConnect(true);
+    } catch (error) {
+      console.debug(error, '=====error');
+    }
+  }, [portkeyConnect]);
   useEffectOnce(() => {
-    tryAElf();
+    aelfType === 'NIGHTELF' ? tryAElf() : tryPortkey();
     tryERC();
   });
   return children;
@@ -58,7 +69,9 @@ export default function Web3Provider({ children }: { children: JSX.Element }) {
   return (
     <Web3ReactProvider connectors={connectors} key={key}>
       <AElfReactProvider appName={APP_NAME} nodes={AElfNodes}>
-        <Web3Manager>{children}</Web3Manager>
+        <PortkeyReactProvider appName={APP_NAME} nodes={AElfNodes} networkType={PORTKEY_NETWORK_TYPE}>
+          <Web3Manager>{children}</Web3Manager>
+        </PortkeyReactProvider>
       </AElfReactProvider>
     </Web3ReactProvider>
   );

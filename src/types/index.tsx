@@ -9,6 +9,8 @@ import type { Connector } from '@web3-react/types';
 export type ChainId = keyof typeof CHAIN_NAME;
 export type ChainType = 'ERC' | 'ELF';
 
+export type WalletType = 'PORTKEY' | 'NIGHTELF' | 'ERC';
+
 export type NetworkType = {
   title: string;
   info: {
@@ -30,6 +32,8 @@ export type Web3Type = {
   connector?: Web3ContextType['connector'] | string;
   deactivate?: AElfContextType['deactivate'];
   aelfInstances?: { [key in AelfInstancesKey]: AElfDappBridge };
+  isPortkey?: boolean;
+  walletType?: WalletType;
 };
 export type TokenInfo = {
   decimals: number;

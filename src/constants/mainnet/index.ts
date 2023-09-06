@@ -175,3 +175,5 @@ export const CrossChainTimeList = [
     time: '5minutes',
   },
 ];
+
+export const PORTKEY_NETWORK_TYPE = 'MAIN';

@@ -12,7 +12,7 @@ import { CrossFeeToken, REQ_CODE } from 'constants/misc';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
 import { formatAddress, isIncludesChainId } from 'utils';
-import { FormatTokenList, IS_MAINNET } from 'constants/index';
+import { FormatTokenList } from 'constants/index';
 export async function CrossChainTransfer({
   contract,
   account,

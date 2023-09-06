@@ -1,7 +1,7 @@
 import storages from 'constants/storages';
 import { BasicActions } from 'contexts/utils';
 import useStorageReducer from 'hooks/useStorageReducer';
-import { createContext, useContext, useEffect, useMemo } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo } from 'react';
 import { eventBus } from 'utils';
 import { ChainActions, ChainState, setUserELFChainId, setUserERCChainId } from './actions';
 
@@ -11,6 +11,11 @@ const ChainContext = createContext<any>([INITIAL_STATE]);
 
 export function useChain(): [ChainState, BasicActions<ChainActions>] {
   return useContext(ChainContext);
+}
+
+export function useChainDispatch() {
+  const [, { dispatch }] = useChain();
+  return useCallback(dispatch, [dispatch]);
 }
 
 const reducer = (state: ChainState, { type, payload }: { type: ChainActions; payload: any }) => {

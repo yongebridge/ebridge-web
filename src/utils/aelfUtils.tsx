@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getExploreLink, shortenString, sleep } from 'utils';
+import { getExploreLink, isELFAddress, shortenString, sleep } from 'utils';
 import BigNumber from 'bignumber.js';
 import { ContractBasic } from './contract';
 import AElf from 'aelf-sdk';
@@ -331,4 +331,10 @@ export const encodeTransaction = (tx: any) => {
 
 export const uint8ArrayToHex = (tx: any) => {
   return AElf.utils.uint8ArrayToHex(tx);
+};
+
+export const getELFAddress = (address?: string) => {
+  if (!address) return;
+  const list = address.split('_');
+  if (list.length === 3 && isELFAddress(list[1])) return list[1];
 };

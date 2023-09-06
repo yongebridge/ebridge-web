@@ -4,6 +4,7 @@ import type { ChainId, ChainType, Web3Type } from 'types';
 export type Options = {
   chainType: ChainType;
   chainId?: ChainId;
+  isPortkey?: boolean;
 };
 
 export enum WalletActions {

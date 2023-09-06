@@ -2,11 +2,14 @@ import { DEFAULT_MODAL_INITIAL_STATE } from 'constants/index';
 import storages from 'constants/storages';
 import { BasicActions } from 'contexts/utils';
 import useStorageReducer, { StorageOptions } from 'hooks/useStorageReducer';
-import { useAElf, useWeb3 } from 'hooks/web3';
-import React, { createContext, useContext, useMemo } from 'react';
+import { useAElf, usePortkey, useWeb3 } from 'hooks/web3';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { isELFChain } from 'utils/aelfUtils';
-import { WalletActions, ModalState } from './actions';
+import { WalletActions, ModalState, setToWallet, setFromWallet } from './actions';
 import { getWalletByOptions, isChange } from './utils';
+import { useChain } from 'contexts/useChain';
+import { usePrevious } from 'react-use';
+import { Web3Type } from 'types';
 
 const INITIAL_STATE = DEFAULT_MODAL_INITIAL_STATE as ModalState;
 const ModalContext = createContext<any>(INITIAL_STATE);
@@ -58,15 +61,40 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     options,
   );
   const { fromOptions, toOptions } = state;
+  const [{ aelfType }] = useChain();
+  const preAelfType = usePrevious(aelfType);
+
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
-  const [fromWallet, toWallet] = useMemo(
+  const portkeyWallet = usePortkey();
+  console.log(portkeyWallet, fromOptions, toOptions, '====portkeyWallet');
+
+  const [fromWallet, toWallet]: [Web3Type, Web3Type] = useMemo(
     () => [
-      getWalletByOptions(aelfWallet, web3Wallet, fromOptions),
-      getWalletByOptions(aelfWallet, web3Wallet, toOptions),
+      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, fromOptions, aelfType),
+      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, toOptions, aelfType),
     ],
-    [aelfWallet, fromOptions, toOptions, web3Wallet],
+    [aelfWallet, web3Wallet, portkeyWallet, fromOptions, aelfType, toOptions],
   );
+
+  const preFromWallet = usePrevious(fromWallet);
+
+  useEffect(() => {
+    if (aelfType === 'PORTKEY' && aelfType !== preAelfType && fromOptions?.chainType === toOptions?.chainType) {
+      dispatch(setToWallet({ chainType: 'ERC' }));
+    }
+  }, [
+    aelfType,
+    dispatch,
+    fromOptions?.chainType,
+    fromWallet.walletType,
+    preAelfType,
+    preFromWallet?.walletType,
+    toOptions?.chainType,
+  ]);
+
+  console.log(fromWallet, toWallet, '====toWallet-fromWallet');
+
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const isHomogeneous = useMemo(
     () => isELFChain(fromWallet?.chainId) && isELFChain(toWallet?.chainId),

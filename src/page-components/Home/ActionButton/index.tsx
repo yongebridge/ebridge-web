@@ -40,12 +40,12 @@ function Actions() {
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
 
-  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address);
-  const sendCrossChainContract = useCrossChainContract(itemSendChainID);
-  const receiveTokenContract = useTokenContract(itemToChainID);
-  const sendTokenContract = useTokenContract(itemSendChainID);
-  const bridgeContract = useBridgeContract(fromChainId);
-  const bridgeOutContract = useBridgeOutContract(toChainId);
+  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address, fromWallet?.isPortkey);
+  const sendCrossChainContract = useCrossChainContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const receiveTokenContract = useTokenContract(itemToChainID, undefined, toWallet?.isPortkey);
+  const sendTokenContract = useTokenContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const bridgeContract = useBridgeContract(fromChainId, fromWallet?.isPortkey);
+  const bridgeOutContract = useBridgeOutContract(toChainId, toWallet?.isPortkey);
 
   const [fromTokenAllowance, getAllowance] = useAllowance(
     tokenContract,

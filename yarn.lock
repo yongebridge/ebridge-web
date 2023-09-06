@@ -68,6 +68,39 @@
     lodash "^4.17.21"
     resize-observer-polyfill "^1.5.1"
 
+"@aws-crypto/sha256-js@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/@aws-crypto/sha256-js/-/sha256-js-5.0.0.tgz#fec6d5a9a097e812207eacaaa707bfa9191b3ad8"
+  integrity sha512-g+u9iKkaQVp9Mjoxq1IJSHj9NHGZF441+R/GIH0dn7u4mix5QQ4VqgpppHrNm1LzjUzb0BpcFGsBXP6cOVf+ZQ==
+  dependencies:
+    "@aws-crypto/util" "^5.0.0"
+    "@aws-sdk/types" "^3.222.0"
+    tslib "^1.11.1"
+
+"@aws-crypto/util@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/@aws-crypto/util/-/util-5.0.0.tgz#afa286af897ea2bd9fab194b4a6be9cc562db23a"
+  integrity sha512-1GYqLdYRe96idcCltlqxdJ68OWE6ADT8qGLmVi7PVHKl8AxD2EWSbJSSevPq2eTx6vaPZpkr1RoZ3lcw/uGoEA==
+  dependencies:
+    "@aws-sdk/types" "^3.222.0"
+    "@aws-sdk/util-utf8-browser" "^3.0.0"
+    tslib "^1.11.1"
+
+"@aws-sdk/types@^3.222.0":
+  version "3.398.0"
+  resolved "https://registry.npmjs.org/@aws-sdk/types/-/types-3.398.0.tgz#8ce02559536670f9188cddfce32e9dd12b4fe965"
+  integrity sha512-r44fkS+vsEgKCuEuTV+TIk0t0m5ZlXHNjSDYEUvzLStbbfUFiNus/YG4UCa0wOk9R7VuQI67badsvvPeVPCGDQ==
+  dependencies:
+    "@smithy/types" "^2.2.2"
+    tslib "^2.5.0"
+
+"@aws-sdk/util-utf8-browser@^3.0.0":
+  version "3.259.0"
+  resolved "https://registry.npmjs.org/@aws-sdk/util-utf8-browser/-/util-utf8-browser-3.259.0.tgz#3275a6f5eb334f96ca76635b961d3c50259fd9ff"
+  integrity sha512-UvFa/vR+e19XookZF8RzFZBrw2EUkQWxiBW0yYQAhvk3C+QVGl0H3ouca8LDBlBfQKXwmW3huo/59H8rwb1wJw==
+  dependencies:
+    tslib "^2.3.1"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.18.6":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.18.6.tgz#3b25d38c89600baa2dcc219edfa88a74eb2c427a"
@@ -910,6 +943,54 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
+"@portkey/detect-provider@1.0.1", "@portkey/detect-provider@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@portkey/detect-provider/-/detect-provider-1.0.1.tgz#17fe52d2a5bf98b3cf3c1f7e6b0e885de3c8e0f5"
+  integrity sha512-hHWW9vvfUI/1KX7pzjaLhG4eTh8FKL6575UIsuXw4BCjFQ9sO9IrjeAqc92DBnIicjVFAtxBQcM5HIZDdJAOCQ==
+  dependencies:
+    "@portkey/provider-types" "^1.0.1"
+
+"@portkey/onboarding@^1.5.0-alpha.6":
+  version "1.5.0-alpha.6"
+  resolved "https://registry.npmjs.org/@portkey/onboarding/-/onboarding-1.5.0-alpha.6.tgz#c3ab2051a2b7f0c29ec055f888509f6381bec788"
+  integrity sha512-MDBddyC6m+Jpy6H/x0JZdFM7CUbVu5UgfsrQgOS1qh1TOnouIuNkhVT2hBb5PcwV+vTQItECOKoEIPvS7v4zKQ==
+  dependencies:
+    "@portkey/detect-provider" "1.0.1"
+    "@portkey/types" "^1.5.0-alpha.6"
+    "@portkey/utils" "^1.5.0-alpha.6"
+    bowser "^2.11.0"
+    query-string "^7.1.1"
+
+"@portkey/provider-types@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@portkey/provider-types/-/provider-types-1.0.1.tgz#a05e7f19a1b9eda37381dbf1c8ec4b6b7ea2c566"
+  integrity sha512-Lgqh0S5/Kz414cngCygUEr92csIe2hy4r+8OH5zzzDmSh9T1nIGCZ8fyHBR8UpTchKS093AlyXPSCpudihTjXg==
+  dependencies:
+    "@portkey/types" "1.0.0-alpha.4"
+    "@types/readable-stream" "^2.3.15"
+
+"@portkey/types@1.0.0-alpha.4":
+  version "1.0.0-alpha.4"
+  resolved "https://registry.npmjs.org/@portkey/types/-/types-1.0.0-alpha.4.tgz#2f22a75a1af6df31db15fce1c473ca9e1f07f127"
+  integrity sha512-mOSl89fN+hQ4zun6MF2uuQH5Bz8Owf6eA+N1HJ5fwKUMbQqr+7uI1HJZstoTSLFTLPjVSAIaIauXb2sfdRIm7A==
+  dependencies:
+    "@types/elliptic" "^6.4.14"
+
+"@portkey/types@^1.5.0-alpha.6":
+  version "1.5.0-alpha.6"
+  resolved "https://registry.npmjs.org/@portkey/types/-/types-1.5.0-alpha.6.tgz#e9c4783f0f171095a5058330a3869ecb91e584a4"
+  integrity sha512-RpBurHRdKPsB+RgWsxoDRvU1UapObOHLkmqv+9zUkiLe6sVNWrpM2cTiQJ70a9iAV1L1PCzJ4BuU3JYK9tMPhQ==
+  dependencies:
+    "@types/elliptic" "^6.4.14"
+
+"@portkey/utils@^1.5.0-alpha.6":
+  version "1.5.0-alpha.6"
+  resolved "https://registry.npmjs.org/@portkey/utils/-/utils-1.5.0-alpha.6.tgz#495689c2a78b337e1e4e91830af91edccabdea52"
+  integrity sha512-yVqdLFQ+mROKw/bvKmh/wBPG+W4lukjvCRh5tkeijmxhnNeihuTHhXD0VLTCGH78bHuH00cP5AX4Rd6WUTCDmQ==
+  dependencies:
+    aelf-sdk "3.2.45-beta.0"
+    query-string "^7.1.1"
+
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
@@ -1120,6 +1201,13 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
+"@smithy/types@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/@smithy/types/-/types-2.2.2.tgz#bd8691eb92dd07ac33b83e0e1c45f283502b1bf7"
+  integrity sha512-4PS0y1VxDnELGHGgBWlDksB2LJK8TG8lcvlWxIsgR+8vROI7Ms8h1P4FQUx+ftAX2QZv5g1CJCdhdRmQKyonyw==
+  dependencies:
+    tslib "^2.5.0"
+
 "@swc/helpers@0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.2.tgz#ed1f6997ffbc22396665d9ba74e2a5c0a2d782f8"
@@ -1154,6 +1242,13 @@
   resolved "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
+"@types/bn.js@*":
+  version "5.1.1"
+  resolved "https://registry.npmjs.org/@types/bn.js/-/bn.js-5.1.1.tgz#b51e1b55920a4ca26e9285ff79936bbdec910682"
+  integrity sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==
+  dependencies:
+    "@types/node" "*"
+
 "@types/bn.js@^4.11.3":
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.6.tgz#c306c70d9358aaea33cd4eda092a742b9505967c"
@@ -1167,6 +1262,13 @@
   integrity sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==
   dependencies:
     "@types/node" "*"
+
+"@types/elliptic@^6.4.14":
+  version "6.4.14"
+  resolved "https://registry.npmjs.org/@types/elliptic/-/elliptic-6.4.14.tgz#7bbaad60567a588c1f08b10893453e6b9b4de48e"
+  integrity sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==
+  dependencies:
+    "@types/bn.js" "*"
 
 "@types/estree@*", "@types/estree@^1.0.0":
   version "1.0.0"
@@ -1261,6 +1363,14 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/readable-stream@^2.3.15":
+  version "2.3.15"
+  resolved "https://registry.npmjs.org/@types/readable-stream/-/readable-stream-2.3.15.tgz#3d79c9ceb1b6a57d5f6e6976f489b9b5384321ae"
+  integrity sha512-oM5JSKQCcICF1wvGgmecmHldZ48OZamtMxcGGVICOJA8o8cahXC1zEVAif8iwoc5j8etxFaRFnf095+CDsuoFQ==
+  dependencies:
+    "@types/node" "*"
+    safe-buffer "~5.1.1"
+
 "@types/scheduler@*":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
@@ -1298,6 +1408,16 @@
     "@typescript-eslint/typescript-estree" "5.30.4"
     debug "^4.3.4"
 
+"@typescript-eslint/parser@^5.47.1":
+  version "5.62.0"
+  resolved "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-5.62.0.tgz#1b63d082d849a2fcae8a569248fbe2ee1b8a56c7"
+  integrity sha512-VlJEV0fOQ7BExOsHYAGrgbEiZoi8D+Bl2+f6V2RrXerRSylnp+ZBHmPvaIa8cz0Ajx7WO7Z5RqfgYg7ED1nRhA==
+  dependencies:
+    "@typescript-eslint/scope-manager" "5.62.0"
+    "@typescript-eslint/types" "5.62.0"
+    "@typescript-eslint/typescript-estree" "5.62.0"
+    debug "^4.3.4"
+
 "@typescript-eslint/scope-manager@5.30.4":
   version "5.30.4"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.30.4.tgz#8140efd2bc12d41d74e8af23872a89f3edbe552e"
@@ -1305,6 +1425,14 @@
   dependencies:
     "@typescript-eslint/types" "5.30.4"
     "@typescript-eslint/visitor-keys" "5.30.4"
+
+"@typescript-eslint/scope-manager@5.62.0":
+  version "5.62.0"
+  resolved "https://registry.npmjs.org/@typescript-eslint/scope-manager/-/scope-manager-5.62.0.tgz#d9457ccc6a0b8d6b37d0eb252a23022478c5460c"
+  integrity sha512-VXuvVvZeQCQb5Zgf4HAxc04q5j+WrNAtNh9OwCsCgpKqESMTu3tF/jhZ3xG6T4NZwWl65Bg8KuS2uEvhSfLl0w==
+  dependencies:
+    "@typescript-eslint/types" "5.62.0"
+    "@typescript-eslint/visitor-keys" "5.62.0"
 
 "@typescript-eslint/type-utils@5.30.4":
   version "5.30.4"
@@ -1320,6 +1448,11 @@
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.30.4.tgz#3bc99eca8ba3fcfd6a21480e216b09dab81c3999"
   integrity sha512-NTEvqc+Vvu8Q6JeAKryHk2eqLKqsr2St3xhIjhOjQv5wQUBhaTuix4WOSacqj0ONWfKVU12Eug3LEAB95GBkMA==
 
+"@typescript-eslint/types@5.62.0":
+  version "5.62.0"
+  resolved "https://registry.npmjs.org/@typescript-eslint/types/-/types-5.62.0.tgz#258607e60effa309f067608931c3df6fed41fd2f"
+  integrity sha512-87NVngcbVXUahrRTqIK27gD2t5Cu1yuCXxbLcFtCzZGlfyVWWh8mLHkoxzjsB6DDNnvdL+fW8MiwPEJyGJQDgQ==
+
 "@typescript-eslint/typescript-estree@5.30.4":
   version "5.30.4"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.30.4.tgz#ac4be8a2f8fb1f1c3b346d5992a36163121ddb3f"
@@ -1327,6 +1460,19 @@
   dependencies:
     "@typescript-eslint/types" "5.30.4"
     "@typescript-eslint/visitor-keys" "5.30.4"
+    debug "^4.3.4"
+    globby "^11.1.0"
+    is-glob "^4.0.3"
+    semver "^7.3.7"
+    tsutils "^3.21.0"
+
+"@typescript-eslint/typescript-estree@5.62.0":
+  version "5.62.0"
+  resolved "https://registry.npmjs.org/@typescript-eslint/typescript-estree/-/typescript-estree-5.62.0.tgz#7d17794b77fabcac615d6a48fb143330d962eb9b"
+  integrity sha512-CmcQ6uY7b9y694lKdRB8FEel7JbU/40iSAPomu++SjLMntB+2Leay2LO6i8VnJk58MtE9/nQSFIH6jpyRWyYzA==
+  dependencies:
+    "@typescript-eslint/types" "5.62.0"
+    "@typescript-eslint/visitor-keys" "5.62.0"
     debug "^4.3.4"
     globby "^11.1.0"
     is-glob "^4.0.3"
@@ -1351,6 +1497,14 @@
   integrity sha512-ulKGse3mruSc8x6l8ORSc6+1ORyJzKmZeIaRTu/WpaF/jx3vHvEn5XZUKF9XaVg2710mFmTAUlLcLYLPp/Zf/Q==
   dependencies:
     "@typescript-eslint/types" "5.30.4"
+    eslint-visitor-keys "^3.3.0"
+
+"@typescript-eslint/visitor-keys@5.62.0":
+  version "5.62.0"
+  resolved "https://registry.npmjs.org/@typescript-eslint/visitor-keys/-/visitor-keys-5.62.0.tgz#2174011917ce582875954ffe2f6912d5931e353e"
+  integrity sha512-07ny+LHRzQXepkGg6w0mFY41fVUNBrL2Roj/++7V1txKugfjm/Ci/qSND03r2RhlJhJYMcTn9AhhSSqQp0Ysyw==
+  dependencies:
+    "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
 "@walletconnect/browser-utils@^1.7.8":
@@ -1677,6 +1831,36 @@ aelf-sdk-cross-chain@^1.0.14:
   integrity sha512-scYGFqSDX4vgXtPP5HtWfvgeH2nTkhyT2TY0+2EeYj065PSKYSE+QzQPLIGfFiz/fXdhVtoyX3dRGDU8WleWVQ==
   dependencies:
     chalk "^2.4.2"
+
+aelf-sdk@3.2.45-beta.0:
+  version "3.2.45-beta.0"
+  resolved "https://registry.npmjs.org/aelf-sdk/-/aelf-sdk-3.2.45-beta.0.tgz#da9ce1230777d40eb2f79c88cf82103b44fbaa9f"
+  integrity sha512-T0u9SZBvO9iLjDiaxDzA2x5iDzc6x0i9k0sVmifkw0DPcLWjnQHlBp4eEI6lrFJmoHOm7SwfNx8it6z87r59bg==
+  dependencies:
+    "@aelfqueen/protobufjs" "^6.8.9"
+    "@aws-crypto/sha256-js" "^5.0.0"
+    "@babel/runtime" "^7.4.5"
+    "@typescript-eslint/parser" "^5.47.1"
+    assert "^2.0.0"
+    babel-plugin-rewire "^1.2.0"
+    bignumber.js "^9.0.0"
+    bip39 "^3.0.2"
+    browserify-cipher "^1.0.1"
+    bs58 "^4.0.1"
+    buffer "^5.2.1"
+    crypto-js "^3.1.9-1"
+    elliptic "^6.4.1"
+    gbk-string "^0.1.0"
+    hdkey "^1.1.1"
+    isomorphic-fetch "^3.0.0"
+    js-sha256 "^0.9.0"
+    keccak "^3.0.3"
+    query-string "5.1.1"
+    randombytes "^2.1.0"
+    readable-stream "^3.6.0"
+    scryptsy "^2.1.0"
+    typescript "^4.9.5"
+    xmlhttprequest "^1.8.0"
 
 aelf-sdk@^3.2.40:
   version "3.2.40"
@@ -2050,6 +2234,11 @@ babel-plugin-polyfill-regenerator@^0.3.1:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.1"
 
+babel-plugin-rewire@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npmjs.org/babel-plugin-rewire/-/babel-plugin-rewire-1.2.0.tgz#822562d72ed2c84e47c0f95ee232c920853e9d89"
+  integrity sha512-JBZxczHw3tScS+djy6JPLMjblchGhLI89ep15H3SyjujIzlxo5nr6Yjo7AXotdeVczeBmWs0tF8PgJWDdgzAkQ==
+
 backo2@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/backo2/-/backo2-1.0.2.tgz#31ab1ac8b129363463e35b3ebb69f4dfcfba7947"
@@ -2190,6 +2379,11 @@ body-parser@1.20.0, body-parser@^1.16.0:
     raw-body "2.5.1"
     type-is "~1.6.18"
     unpipe "1.0.0"
+
+bowser@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.npmjs.org/bowser/-/bowser-2.11.0.tgz#5ca3c35757a7aa5771500c70a73a9f91ef420a8f"
+  integrity sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -4119,6 +4313,13 @@ functions-have-names@^1.2.2:
   resolved "https://registry.yarnpkg.com/functions-have-names/-/functions-have-names-1.2.3.tgz#0404fe4ee2ba2f607f0e0ec3c80bae994133b834"
   integrity sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==
 
+gbk-string@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/gbk-string/-/gbk-string-0.1.0.tgz#7d4a0b1d095e07a6e39b191a8fd350f1c2cf8992"
+  integrity sha512-bx75Kj6F9oCEB5OHTCYe10DXglznGHYzGUJ4Iw5mXPFoA4HUBdx1T4pZwl4bc7Dz8jNLYnzxw2hssiWKaeCUcw==
+  dependencies:
+    iconv-lite "^0.4.19"
+
 get-caller-file@^2.0.1, get-caller-file@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
@@ -4565,7 +4766,7 @@ i18next@^21.8.13:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-iconv-lite@0.4.24:
+iconv-lite@0.4.24, iconv-lite@^0.4.19:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   integrity sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==
@@ -4932,6 +5133,14 @@ isobject@^3.0.1:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==
 
+isomorphic-fetch@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz#0267b005049046d2421207215d45d6a262b8b8b4"
+  integrity sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==
+  dependencies:
+    node-fetch "^2.6.1"
+    whatwg-fetch "^3.4.1"
+
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
@@ -5117,6 +5326,15 @@ keccak@^3.0.0, keccak@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/keccak/-/keccak-3.0.2.tgz#4c2c6e8c54e04f2670ee49fa734eb9da152206e0"
   integrity sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==
+  dependencies:
+    node-addon-api "^2.0.0"
+    node-gyp-build "^4.2.0"
+    readable-stream "^3.6.0"
+
+keccak@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/keccak/-/keccak-3.0.3.tgz#4bc35ad917be1ef54ff246f904c2bbbf9ac61276"
+  integrity sha512-JZrLIAJWuZxKbCilMpNz5Vj7Vtb4scDG3dMXLOsbzBmQGyjwE61BbW7bJkfKKCShXiQZt3T6sBgALRtmd+nZaQ==
   dependencies:
     node-addon-api "^2.0.0"
     node-gyp-build "^4.2.0"
@@ -7217,7 +7435,7 @@ safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@^5.1.0, safe-buffer@^5.1.1, s
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
-safe-buffer@~5.1.0:
+safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
@@ -8055,7 +8273,7 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
+tslib@^1.11.1, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
@@ -8064,6 +8282,11 @@ tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
+tslib@^2.3.1, tslib@^2.5.0:
+  version "2.6.2"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
 tsutils@^3.21.0:
   version "3.21.0"
@@ -8155,6 +8378,11 @@ typescript@4.7.4:
   version "5.0.4"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
   integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
+
+typescript@^4.9.5:
+  version "4.9.5"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 ultron@~1.1.0:
   version "1.1.1"
@@ -8590,6 +8818,11 @@ websocket@^1.0.32:
     typedarray-to-buffer "^3.1.5"
     utf-8-validate "^5.0.2"
     yaeti "^0.0.6"
+
+whatwg-fetch@^3.4.1:
+  version "3.6.18"
+  resolved "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-3.6.18.tgz#2f640cdee315abced7daeaed2309abd1e44e62d4"
+  integrity sha512-ltN7j66EneWn5TFDO4L9inYC1D+Czsxlrw2SalgjMmEMkLfA5SIZxEFdE6QtHFiiM6Q7WL32c7AkI3w6yxM84Q==
 
 whatwg-url@^5.0.0:
   version "5.0.0"
