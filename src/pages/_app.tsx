@@ -8,13 +8,14 @@ import '../utils/vconsole';
 import Header from 'components/Header';
 import dynamic from 'next/dynamic';
 import { DefaultHead } from 'components/PageHead';
+import { isPortkey } from 'utils/portkey';
 const Provider = dynamic(import('components/Provider'), { ssr: false });
 export default function APP({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultHead />
       <Provider>
-        <Header />
+        {!isPortkey() && <Header />}
         <div className="page-component">
           <div className="bg-body">
             <Component {...pageProps} />

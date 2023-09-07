@@ -14,6 +14,7 @@ import { Notification, NotificationForPhone } from 'components/Notification';
 import useMaskQuery from 'hooks/useMaskQuery';
 import Mask from './Mask';
 import { Skeleton } from 'antd';
+import { isPortkey } from 'utils/portkey';
 
 export default function Home() {
   const isMd = useMediaQueries('md');
@@ -31,7 +32,7 @@ export default function Home() {
       {!isShowMask ? (
         <>
           <div className={styles.body}>
-            {isMd && <h2 className={styles.title}>{t('Token Bridge')}</h2>}
+            {isMd && !isPortkey() && <h2 className={styles.title}>{t('Token Bridge')}</h2>}
             <FromCard />
             <ChangeIcon />
             <ToCard />

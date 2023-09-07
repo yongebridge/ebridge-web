@@ -21,6 +21,7 @@ import useMediaQueries from 'hooks/useMediaQueries';
 import { ZERO } from 'constants/misc';
 import { isAddress } from 'utils';
 import { useWalletContext } from 'contexts/useWallet';
+import { isPortkey } from 'utils/portkey';
 
 export function FromCard() {
   const [{ selectToken, fromInput, fromBalance, crossMin }, { dispatch }] = useHomeContext();
@@ -105,7 +106,7 @@ export function ToCard() {
           onInputChange={(e) => dispatch(setToAddress(e.target.value))}
         />
       )}
-      {!!account && (
+      {!!account && !isPortkey() && (
         <div className={clsx('flex-row-between', styles['receipt-row'])}>
           <div className={styles['receipt-title']}>
             <Trans>Select a Receipt ID</Trans>
