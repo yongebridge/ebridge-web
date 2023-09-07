@@ -1,6 +1,6 @@
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
-import { WalletConnect } from '@web3-react/walletconnect';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { SupportedChainId } from 'constants/chain';
@@ -55,8 +55,10 @@ export const [walletConnect, walletConnectHooks] = initializeConnector<WalletCon
     new WalletConnect({
       actions,
       options: {
-        rpc: NETWORK_URLS,
-        qrcode: true,
+        rpcMap: NETWORK_URLS,
+        projectId: '5c5740c548328b21cf14472d580f3e2a',
+        showQrModal: true,
+        chains: [1],
       },
       onError,
     }),

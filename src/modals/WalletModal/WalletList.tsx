@@ -35,15 +35,18 @@ export default function WalletList() {
         if (typeof connector === 'string') {
           await connect();
         } else {
+          console.log('connector.activate');
           await connector.activate();
           chainDispatch(setSelectERCWallet(getConnection(connector).type));
         }
+        console.log('connect success');
         if (connector instanceof CoinbaseWallet) {
           await sleep(500);
           await switchChain(DEFAULT_ERC_CHAIN_INFO, connector, true);
         }
         onCancel();
       } catch (error: any) {
+        console.log('connect error');
         console.debug(`connection error: ${error}`);
         message.error(`connection error: ${error.message}`);
       }
