@@ -7,7 +7,7 @@ import { useAEflConnect, usePortkeyConnect } from 'hooks/web3';
 import { Connector } from '@web3-react/types';
 import { useChainDispatch } from 'contexts/useChain';
 import { useModal } from 'contexts/useModal';
-import { setAELFType, setSelectERCWallet } from 'contexts/useChain/actions';
+import { setSelectELFWallet, setSelectERCWallet } from 'contexts/useChain/actions';
 import IconFont from 'components/IconFont';
 import { SUPPORTED_WALLETS } from 'constants/wallets';
 import { getConnection } from 'walletConnectors/utils';
@@ -36,10 +36,10 @@ export default function WalletList() {
         if (typeof connector === 'string') {
           if (connector === 'PORTKEY') {
             await portkeyConnect();
-            chainDispatch(setAELFType('PORTKEY'));
+            chainDispatch(setSelectELFWallet('PORTKEY'));
           } else {
             await connect();
-            chainDispatch(setAELFType('NIGHTELF'));
+            chainDispatch(setSelectELFWallet('NIGHTELF'));
           }
         } else {
           await connector.activate();

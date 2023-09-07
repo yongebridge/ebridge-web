@@ -21,7 +21,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   const { dispatch } = useWalletActions();
   const { connector: web3Connector } = useWeb3();
   const { chainId, account, connector } = wallet || {};
-  const [{ aelfType }] = useChain();
+  const [{ selectELFWallet }] = useChain();
   const modalDispatch = useModalDispatch();
   const isMd = useMediaQueries('md');
   const isXS = useMediaQueries('xs');
@@ -34,7 +34,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
         onChange={async (info) => {
           const setWallet = isForm ? setFromWallet : setToWallet;
           if (typeof info.chainId === 'string') {
-            dispatch(setWallet({ chainType: 'ELF', chainId: info.chainId, isPortkey: aelfType === 'PORTKEY' }));
+            dispatch(setWallet({ chainType: 'ELF', chainId: info.chainId, isPortkey: selectELFWallet === 'PORTKEY' }));
           } else {
             dispatch(setWallet({ chainType: 'ERC' }));
           }

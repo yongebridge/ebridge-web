@@ -28,7 +28,7 @@ const connect = async (connector: Connector) => {
 
 function Web3Manager({ children }: { children: JSX.Element }) {
   const aelfConnect = useAEflConnect();
-  const [{ selectERCWallet, aelfType }] = useChain();
+  const [{ selectERCWallet, selectELFWallet }] = useChain();
   const portkeyConnect = usePortkeyConnect();
   const tryAElf = useCallback(async () => {
     try {
@@ -41,7 +41,7 @@ function Web3Manager({ children }: { children: JSX.Element }) {
     try {
       connect(network);
       if (selectERCWallet) connect(getConnection(selectERCWallet).connector);
-    } catch (error: any) {
+    } catch (error) {
       console.debug(error, '=====error');
     }
   }, [selectERCWallet]);
@@ -60,7 +60,7 @@ function Web3Manager({ children }: { children: JSX.Element }) {
     if (isPortkeyConnectEagerly()) {
       tryPortkey();
     } else {
-      aelfType === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
+      selectELFWallet === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
     }
     tryERC();
   });

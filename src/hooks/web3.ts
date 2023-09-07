@@ -11,7 +11,7 @@ import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { ChainId } from '@portkey/provider-types';
 import { getELFAddress } from 'utils/aelfUtils';
-import { setAELFType } from 'contexts/useChain/actions';
+import { setSelectELFWallet } from 'contexts/useChain/actions';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
   const chainDispatch = useChainDispatch();
@@ -32,7 +32,7 @@ export function useAEflConnect() {
               if (i && i.error) message.error(`${Object.keys(bridges)[k]} getChainStatus error`);
             });
         }
-        chainDispatch(setAELFType('NIGHTELF'));
+        chainDispatch(setSelectELFWallet('NIGHTELF'));
       } catch (error: any) {
         let message = error?.message || error;
         if (Array.isArray(error)) message = error[0]?.errorMessage || error[0];
@@ -50,7 +50,7 @@ export function usePortkeyConnect() {
   return useCallback(
     async (isConnectEagerly?: boolean) => {
       await (isConnectEagerly ? connectEagerly : activate)();
-      chainDispatch(setAELFType('PORTKEY'));
+      chainDispatch(setSelectELFWallet('PORTKEY'));
     },
     [activate, chainDispatch, connectEagerly],
   );

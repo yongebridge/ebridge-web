@@ -6,12 +6,12 @@ export declare type ChainState = {
   userERCChainId?: number;
   userELFChainId?: string;
   selectERCWallet?: ConnectionType;
-  aelfType?: WalletType;
+  selectELFWallet?: WalletType;
 };
 
 export enum ChainActions {
   setSelectERCWallet = 'SET_SELECT_ERC_WALLET',
-  setAELFType = 'SET_AELF_TYPE',
+  setSelectELFWallet = 'SET_SELECT_ELF_WALLET',
   default = 'DEFAULT',
   destroy = 'DESTROY',
 }
@@ -20,9 +20,16 @@ export const useChainView = {
   setSelectERCWallet: (selectERCWallet?: ConnectionType) => basicActions(ChainActions['default'], { selectERCWallet }),
   setUserERCChainId: (userERCChainId: string) => basicActions(ChainActions['default'], { userERCChainId }),
   setUserELFChainId: (userELFChainId: string) => basicActions(ChainActions['default'], { userELFChainId }),
-  setAELFType: (aelfType?: WalletType) => basicActions(ChainActions['setAELFType'], { aelfType }),
+  setSelectELFWallet: (selectELFWallet?: WalletType) =>
+    basicActions(ChainActions['setSelectELFWallet'], { selectELFWallet }),
   chainProviderDestroy: () => basicActions(ChainActions['destroy']),
 };
 
-export const { setSelectERCWallet, setUserERCChainId, setUserELFChainId, chainProviderDestroy, setAELFType } =
-  useChainView;
+export const {
+  setSelectERCWallet,
+  setUserERCChainId,
+  setUserELFChainId,
+  chainProviderDestroy,
+  setAELFType,
+  setSelectELFWallet,
+} = useChainView;

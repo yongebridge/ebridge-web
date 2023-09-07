@@ -14,12 +14,12 @@ export function getWalletByOptions(
   web3Wallet: Web3Type,
   portkeyWallet: PortkeyContextState,
   options?: Options,
-  aelfType?: WalletType,
+  selectELFWallet?: WalletType,
 ) {
   const { chainType, chainId } = options || {};
   let wallet: any;
   if (chainType === 'ELF') {
-    if (aelfType === 'PORTKEY') {
+    if (selectELFWallet === 'PORTKEY') {
       wallet = formatPortkeyWallet(portkeyWallet, chainId as ChainId);
     } else {
       wallet = { ...aelfWallet };

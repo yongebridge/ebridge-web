@@ -61,8 +61,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     options,
   );
   const { fromOptions, toOptions } = state;
-  const [{ aelfType }] = useChain();
-  const preAelfType = usePrevious(aelfType);
+  const [{ selectELFWallet }] = useChain();
+  const preSelectELFWallet = usePrevious(selectELFWallet);
 
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
@@ -70,24 +70,28 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
   const [fromWallet, toWallet]: [Web3Type, Web3Type] = useMemo(
     () => [
-      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, fromOptions, aelfType),
-      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, toOptions, aelfType),
+      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, fromOptions, selectELFWallet),
+      getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, toOptions, selectELFWallet),
     ],
-    [aelfWallet, web3Wallet, portkeyWallet, fromOptions, aelfType, toOptions],
+    [aelfWallet, web3Wallet, portkeyWallet, fromOptions, selectELFWallet, toOptions],
   );
 
   const preFromWallet = usePrevious(fromWallet);
 
   useEffect(() => {
-    if (aelfType === 'PORTKEY' && aelfType !== preAelfType && fromOptions?.chainType === toOptions?.chainType) {
+    if (
+      selectELFWallet === 'PORTKEY' &&
+      selectELFWallet !== preSelectELFWallet &&
+      fromOptions?.chainType === toOptions?.chainType
+    ) {
       dispatch(setToWallet({ chainType: 'ERC' }));
     }
   }, [
-    aelfType,
+    selectELFWallet,
     dispatch,
     fromOptions?.chainType,
     fromWallet.walletType,
-    preAelfType,
+    preSelectELFWallet,
     preFromWallet?.walletType,
     toOptions?.chainType,
   ]);
