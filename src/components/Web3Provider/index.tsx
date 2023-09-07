@@ -12,6 +12,7 @@ import { useCallback, useMemo } from 'react';
 import { useEffectOnce } from 'react-use';
 import { Connection, network } from 'walletConnectors';
 import { getConnection, getConnectionName } from 'walletConnectors/utils';
+import { isPortkeyConnectEagerly } from 'utils/portkey';
 
 const connect = async (connector: Connector) => {
   try {
@@ -45,15 +46,22 @@ function Web3Manager({ children }: { children: JSX.Element }) {
     }
   }, [selectERCWallet]);
 
-  const tryPortkey = useCallback(async () => {
-    try {
-      await portkeyConnect(true);
-    } catch (error) {
-      console.debug(error, '=====error');
-    }
-  }, [portkeyConnect]);
+  const tryPortkey = useCallback(
+    async (isConnectEagerly?: boolean) => {
+      try {
+        await portkeyConnect(isConnectEagerly);
+      } catch (error) {
+        console.debug(error, '=====error');
+      }
+    },
+    [portkeyConnect],
+  );
   useEffectOnce(() => {
-    aelfType === 'NIGHTELF' ? tryAElf() : tryPortkey();
+    if (isPortkeyConnectEagerly()) {
+      tryPortkey();
+    } else {
+      aelfType === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
+    }
     tryERC();
   });
   return children;
