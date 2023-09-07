@@ -74,7 +74,6 @@ export function FromCard() {
 
 export function ToCard() {
   const { toWallet, changing, isHomogeneous } = useWallet();
-  console.log(toWallet, '=====toWallet');
   const [{ toOptions }] = useWalletContext();
   const { account, chainId } = toWallet || {};
   const [{ selectToken, toInput, receiveList, receiveId, toChecked, toAddress }, { dispatch }] = useHomeContext();

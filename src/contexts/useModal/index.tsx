@@ -27,8 +27,6 @@ function reducer(state: ModalState, { type, payload }: { type: ModalActions; pay
 
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch]: [ModalState, BasicActions<ModalActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
-  console.log(state, '=======state-walletChainType');
-
   const { accountWalletType, walletWalletType, walletChainId, accountChainId } = state;
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const aelfWallet = useAElf();

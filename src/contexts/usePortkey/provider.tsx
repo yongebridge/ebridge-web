@@ -50,7 +50,6 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
       provider.request({ method: MethodsBase.NETWORK }),
     ]);
     if (networkType !== propsNetworkType) throw Error('networkType error');
-    delete accounts.tDVW;
     dispatch({
       type: Actions.ACTIVATE,
       payload: {
@@ -69,13 +68,9 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   }, [accounts]);
 
   const connectEagerly = useCallback(async () => {
-    console.log('connectEagerly-networkType');
-
     const provider = await detectProvider();
     if (!provider) throw Error('provider init error');
     const accounts = await provider.request({ method: MethodsBase.ACCOUNTS });
-    console.log(accounts, '=====accounts-networkType');
-
     if (Object.keys(accounts).length) return activate();
     throw Error('Can‘t Connect Eagerly');
   }, [activate]);

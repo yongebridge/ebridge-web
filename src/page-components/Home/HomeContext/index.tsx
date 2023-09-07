@@ -86,8 +86,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   }, [fromChainId, selectToken]);
 
   const [[balance]] = useBalances(fromWallet, tokens);
-  console.log(balance, fromWallet, '=====balance');
-
   useEffect(() => {
     if (selectToken && fromChainId && toChainId && (!selectToken[fromChainId] || !selectToken[toChainId])) {
       if (tokenInfo) {

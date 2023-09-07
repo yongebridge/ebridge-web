@@ -361,10 +361,9 @@ export class PortkeyContractBasic {
       await this.checkMethods();
       const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());
       const inputType = this.methods[functionNameUpper];
-      console.log(functionNameUpper, '====functionNameUpper');
 
       const req = await contract.callViewMethod(functionNameUpper, transformArrayToMap(inputType, paramsOption));
-      console.log(req, transformArrayToMap(inputType, paramsOption), functionNameUpper, '=======req');
+      console.log(req, transformArrayToMap(inputType, paramsOption), functionNameUpper, '=======callViewMethod');
 
       if (req.error) return req;
 
@@ -384,7 +383,7 @@ export class PortkeyContractBasic {
       await this.checkMethods();
       const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());
       const inputType = this.methods[functionNameUpper];
-      console.log(transformArrayToMap(inputType, paramsOption), paramsOption, functionNameUpper, '=Option');
+      console.log(transformArrayToMap(inputType, paramsOption), paramsOption, functionNameUpper, '=callSendMethod');
       const req = await contract.callSendMethod(functionNameUpper, '', transformArrayToMap(inputType, paramsOption), {
         onMethod,
         ...options,

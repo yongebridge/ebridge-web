@@ -123,20 +123,14 @@ export function useAElfContract(contractAddress: string, chainId?: ChainId) {
 
 export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
   const { provider, accounts, isActive } = usePortkeyReact();
-  console.log(accounts, chainId, '=====accounts');
-
   const account: string = useMemo(() => {
     if (!chainId || !isActive) return '';
     return (accounts as any)?.[chainId]?.[0];
   }, [accounts, chainId, isActive]);
-  console.log(accounts, chainId, account, '=====accounts');
-
   const [contracts, { dispatch }] = useAElfContractContext();
   const key = useMemo(() => contractAddress + '_' + chainId + '_' + account, [account, chainId, contractAddress]);
   const getContract = useCallback(
     async (reCount = 0) => {
-      console.log(chainId, '=====chainId');
-
       if (!provider || !isELFChain(chainId)) return;
       try {
         const portkeyChain = await provider.getChain(chainId as any);

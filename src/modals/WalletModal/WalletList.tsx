@@ -19,8 +19,6 @@ import { sleep } from 'utils';
 export default function WalletList() {
   const [{ walletWallet, walletChainType }] = useModal();
   const { chainId, connector: connectedConnector, account } = walletWallet || {};
-  console.log(walletWallet, chainId, walletChainType, '====walletChainType');
-
   const connect = useAEflConnect();
   const portkeyConnect = usePortkeyConnect();
   const [loading, setLoading] = useState<any>();
@@ -58,7 +56,7 @@ export default function WalletList() {
       }
       setLoading(undefined);
     },
-    [chainDispatch, connect, dispatch, loading, onCancel, portkeyConnect],
+    [chainDispatch, connect, loading, onCancel, portkeyConnect],
   );
   return (
     <>

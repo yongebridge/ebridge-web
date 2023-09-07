@@ -16,8 +16,6 @@ export const useBalances = (
 ): [BigNumber[], () => void] => {
   const [balanceMap, setBalanceMap] = useState<{ [key: string]: BigNumber }>();
   const { library, chainId, account: owner } = wallet || {};
-  console.log(wallet, '======useBalances-wallet');
-
   const account = useMemo(() => targetAddress || owner, [targetAddress, owner]);
   const tokenContract = useTokenContract(chainId, undefined, wallet?.isPortkey);
   const tokensList = useMemo(() => (Array.isArray(tokens) ? tokens : [tokens]), [tokens]);

@@ -5,7 +5,7 @@ import useStorageReducer, { StorageOptions } from 'hooks/useStorageReducer';
 import { useAElf, usePortkey, useWeb3 } from 'hooks/web3';
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { isELFChain } from 'utils/aelfUtils';
-import { WalletActions, ModalState, setToWallet, setFromWallet } from './actions';
+import { WalletActions, ModalState, setToWallet } from './actions';
 import { getWalletByOptions, isChange } from './utils';
 import { useChain } from 'contexts/useChain';
 import { usePrevious } from 'react-use';
@@ -67,7 +67,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
   const portkeyWallet = usePortkey();
-  console.log(portkeyWallet, fromOptions, toOptions, '====portkeyWallet');
 
   const [fromWallet, toWallet]: [Web3Type, Web3Type] = useMemo(
     () => [
@@ -92,8 +91,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     preFromWallet?.walletType,
     toOptions?.chainType,
   ]);
-
-  console.log(fromWallet, toWallet, '====toWallet-fromWallet');
 
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const isHomogeneous = useMemo(
