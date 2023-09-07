@@ -12,6 +12,8 @@ import { setContract } from 'contexts/useAElfContract/actions';
 import { useAElfContractContext } from 'contexts/useAElfContract';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { ContractBasic } from 'utils/contract';
+import { IAElfChain } from '@portkey/provider-types';
+const ContractMap: { [key: string]: ContractBasic } = {};
 
 export function getContract(address: string, ABI: any, library?: provider) {
   return new ContractBasic({
@@ -19,6 +21,17 @@ export function getContract(address: string, ABI: any, library?: provider) {
     contractABI: ABI,
     provider: library,
   });
+}
+
+export function getPortkeyContract(address: string, chainId: ChainId, portkeyChain: IAElfChain) {
+  const key = address + chainId + portkeyChain.rpcUrl;
+  if (!ContractMap[key])
+    ContractMap[key] = new ContractBasic({
+      contractAddress: address,
+      chainId,
+      portkeyChain,
+    });
+  return ContractMap[key];
 }
 export function useERCContract(address: string | undefined, ABI: any, chainId?: ChainId) {
   const { library } = useWeb3();
@@ -48,6 +61,7 @@ export async function getELFContract(
       viewInstance?.chain.contractAt(contractAddress, getWallet()),
       aelfInstance?.chain.contractAt(contractAddress, wallet),
     ]);
+
     return new ContractBasic({
       aelfContract,
       contractAddress,
@@ -131,18 +145,12 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
   const key = useMemo(() => contractAddress + '_' + chainId + '_' + account, [account, chainId, contractAddress]);
   const getContract = useCallback(
     async (reCount = 0) => {
-      if (!provider || !isELFChain(chainId)) return;
+      if (!provider || !chainId || !isELFChain(chainId)) return;
       try {
         const portkeyChain = await provider.getChain(chainId as any);
-        console.log(portkeyChain, '=====portkeyChain');
-
         dispatch(
           setContract({
-            [key]: new ContractBasic({
-              contractAddress,
-              chainId,
-              portkeyChain,
-            }),
+            [key]: getPortkeyContract(contractAddress, chainId, portkeyChain),
           }),
         );
       } catch (error) {
