@@ -28,6 +28,7 @@ const plugins = [
 
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: false,
   // webpack(config) {
   //   config.resolve.alias['bn.js'] = path.resolve(process.cwd(), 'node_modules', 'bn.js');
   //   return config;
@@ -42,7 +43,7 @@ const nextConfig = {
 
 const productionConfig = {
   ...nextConfig,
-  // swcMinify: true,
+  swcMinify: false,
   compiler: {
     removeConsole: {
       exclude: ['error'],

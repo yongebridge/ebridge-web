@@ -3,7 +3,7 @@ import '../styles/globals.less';
 import '../styles/common.less';
 import '../styles/antd.less';
 import '../utils/sentry';
-import '../utils/vconsole';
+// import '../utils/vconsole';
 
 import Header from 'components/Header';
 import dynamic from 'next/dynamic';
