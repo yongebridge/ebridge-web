@@ -19,6 +19,7 @@ import { Content, NetworkSelect, StatusSelect, TablePagination } from './compone
 import styles from './styles.module.less';
 import CommonTable from 'components/CommonTable';
 import { useLanguage } from 'i18n';
+import { isPortkey } from 'utils/portkey';
 type State = {
   fromChainId?: ChainId;
   toChainId?: ChainId;
@@ -231,9 +232,11 @@ export default function History() {
         <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous}>
           <HeterogeneousHistory />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous}>
-          <HomogeneousHistory />
-        </Tabs.TabPane>
+        {!isPortkey() && (
+          <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous}>
+            <HomogeneousHistory />
+          </Tabs.TabPane>
+        )}
         <div className="tip-icon">
           <CommonPopover className="cursor-pointer" content={<Content />} placement="topRight">
             <IconFont type="QuestionCircleOutlined" />

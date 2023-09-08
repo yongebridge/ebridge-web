@@ -37,6 +37,7 @@ export function getWalletByOptions(
 export function isChange(stateOptions?: Options, payloadOptions?: Options) {
   const { chainType: stateType, chainId: stateChainId } = stateOptions || {};
   const { chainType, chainId, isPortkey } = payloadOptions || {};
+
   return (
     (isPortkey && stateType === 'ELF' && chainType === 'ELF') ||
     ((stateType === 'ERC' || chainType === 'ERC') && stateType === chainType) ||
