@@ -204,15 +204,15 @@ export function useCrossChainContract(chainId?: ChainId, address?: string, isPor
 
 export function useBridgeContract(chainId?: ChainId, isPortkey?: boolean) {
   const contractAddress = useMemo(() => {
-    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey].BRIDGE_CONTRACT;
-    return ERCChainConstants.constants.BRIDGE_CONTRACT;
+    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
+    return ERCChainConstants.constants?.BRIDGE_CONTRACT;
   }, [chainId]);
   return useContract(contractAddress || '', BRIDGE_IN_ABI, chainId, isPortkey);
 }
 export function useBridgeOutContract(chainId?: ChainId, isPortkey?: boolean) {
   const contractAddress = useMemo(() => {
-    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey].BRIDGE_CONTRACT;
-    return ERCChainConstants.constants.BRIDGE_CONTRACT_OUT;
+    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
+    return ERCChainConstants.constants?.BRIDGE_CONTRACT_OUT;
   }, [chainId]);
   return useContract(contractAddress || '', BRIDGE_OUT_ABI, chainId, isPortkey);
 }
