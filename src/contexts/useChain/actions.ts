@@ -30,6 +30,6 @@ export const {
   setUserERCChainId,
   setUserELFChainId,
   chainProviderDestroy,
-  setAELFType,
+  // setAELFType,
   setSelectELFWallet,
 } = useChainView;
