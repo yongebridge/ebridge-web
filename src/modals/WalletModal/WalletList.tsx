@@ -36,7 +36,7 @@ export default function WalletList() {
           await connect();
         } else {
           await connector.activate();
-          chainDispatch(setSelectERCWallet(getConnection(connector).type));
+          chainDispatch(setSelectERCWallet(getConnection(connector)?.type));
         }
         if (connector instanceof CoinbaseWallet) {
           await sleep(500);
