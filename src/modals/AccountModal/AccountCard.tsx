@@ -9,9 +9,14 @@ import { basicModalView } from 'contexts/useModal/actions';
 import { isELFChain } from 'utils/aelfUtils';
 import WalletIcon from 'components/WalletIcon';
 import { SUPPORTED_WALLETS } from 'constants/wallets';
+import { getConnection } from 'walletConnectors/utils';
+import { useChainDispatch } from 'contexts/useChain';
+import { setSelectERCWallet } from 'contexts/useChain/actions';
 
 function AccountCard() {
   const [{ accountWallet }, { dispatch }] = useModal();
+  const chainDispatch = useChainDispatch();
+
   const { connector, account, chainId, deactivate, aelfInstance, walletType } = accountWallet || {};
   const filter = useCallback(
     (k: string) => {
@@ -22,6 +27,10 @@ function AccountCard() {
     },
     [connector],
   );
+  const connection = useMemo(() => {
+    if (!connector || typeof connector === 'string') return;
+    return getConnection(connector);
+  }, [connector]);
   const formatConnectorName = useMemo(() => {
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter((k) => filter(k))
@@ -30,7 +39,9 @@ function AccountCard() {
   }, [filter]);
   const onDisconnect = useCallback(() => {
     if (typeof connector !== 'string') {
-      connector?.deactivate ? connector.deactivate() : connector?.resetState();
+      connection?.connector?.deactivate?.();
+      connection?.connector?.resetState?.();
+      chainDispatch(setSelectERCWallet(undefined));
     } else {
       deactivate?.();
     }
@@ -41,7 +52,7 @@ function AccountCard() {
         walletChainId: chainId,
       }),
     );
-  }, [connector, dispatch, walletType, chainId, deactivate]);
+  }, [connector, dispatch, walletType, chainId, connection?.connector, chainDispatch, deactivate]);
 
   const changeWallet = useCallback(async () => {
     try {
