@@ -57,12 +57,17 @@ function Web3Manager({ children }: { children: JSX.Element }) {
     [portkeyConnect],
   );
   useEffectOnce(() => {
-    if (isPortkeyConnectEagerly()) {
-      tryPortkey();
-    } else {
-      selectELFWallet === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
-    }
-    tryERC();
+    const timer = setTimeout(() => {
+      if (isPortkeyConnectEagerly()) {
+        tryPortkey();
+      } else {
+        selectELFWallet === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
+      }
+      tryERC();
+    }, 500);
+    return () => {
+      timer && clearTimeout(timer);
+    };
   });
   return children;
 }

@@ -1,5 +1,5 @@
 import { Button, message } from 'antd';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { basicModalView } from 'contexts/useModal/actions';
 import clsx from 'clsx';
@@ -17,6 +17,7 @@ import { DEFAULT_ERC_CHAIN_INFO } from 'constants/index';
 import { switchChain } from 'utils/network';
 import { sleep } from 'utils';
 import { isPortkey } from 'utils/portkey';
+import { MetaMask } from '@web3-react/metamask';
 export default function WalletList() {
   const [{ walletWallet, walletChainType }] = useModal();
   const { chainId, connector: connectedConnector, account } = walletWallet || {};
@@ -59,33 +60,41 @@ export default function WalletList() {
     },
     [chainDispatch, connect, loading, onCancel, portkeyConnect],
   );
+
+  const walletList = useMemo(
+    () =>
+      Object.keys(SUPPORTED_WALLETS).filter((key) => {
+        const option = SUPPORTED_WALLETS[key];
+        const isStringConnector = typeof option.connector === 'string';
+        const isStringChain = typeof chainId === 'string' || walletChainType === 'ELF';
+        if (isPortkey()) {
+          if (isStringChain) return option.connector === 'PORTKEY';
+          if (!isStringConnector) return !(option.connector instanceof MetaMask);
+        }
+        return isStringConnector ? isStringChain : !isStringChain;
+      }),
+    [chainId, walletChainType],
+  );
+
   return (
     <>
-      {Object.keys(SUPPORTED_WALLETS)
-        .filter((key) => {
-          const option = SUPPORTED_WALLETS[key];
-          const isStringConnector = typeof option.connector === 'string';
-          const isStringChain = typeof chainId === 'string' || walletChainType === 'ELF';
-          if (isPortkey() && isStringChain) return option.connector === 'PORTKEY';
-          return isStringConnector ? isStringChain : !isStringChain;
-        })
-        .map((key) => {
-          const option = SUPPORTED_WALLETS[key];
-          const disabled = !!(account && option.connector && option.connector === connectedConnector);
-          return (
-            <Button
-              className={clsx(disabled && 'selected')}
-              disabled={disabled}
-              loading={loading?.[option.name]}
-              key={option.name}
-              onClick={() => {
-                tryActivation(option.connector, option.name);
-              }}>
-              <div>{option.name}</div>
-              <IconFont className="wallet-icon" type={option.iconType} />
-            </Button>
-          );
-        })}
+      {walletList.map((key) => {
+        const option = SUPPORTED_WALLETS[key];
+        const disabled = !!(account && option.connector && option.connector === connectedConnector);
+        return (
+          <Button
+            className={clsx(disabled && 'selected')}
+            disabled={disabled}
+            loading={loading?.[option.name]}
+            key={option.name}
+            onClick={() => {
+              tryActivation(option.connector, option.name);
+            }}>
+            <div>{option.name}</div>
+            <IconFont className="wallet-icon" type={option.iconType} />
+          </Button>
+        );
+      })}
     </>
   );
 }
