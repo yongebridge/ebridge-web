@@ -9,7 +9,7 @@ import { useChain, useChainDispatch } from 'contexts/useChain';
 import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
 import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
-import { ChainId } from '@portkey/provider-types';
+import { Accounts, ChainId } from '@portkey/provider-types';
 import { getELFAddress } from 'utils/aelfUtils';
 import { setSelectELFWallet } from 'contexts/useChain/actions';
 export function useAEflConnect() {
@@ -60,7 +60,7 @@ export function useWeb3(): Web3Type {
   const web3React = useWeb3React();
   const [{ userERCChainId }] = useChain();
   const tmpContext = useMemo(() => {
-    const contextNetwork: Web3Type = { ...web3React };
+    const contextNetwork: Web3Type = { ...web3React, accounts: web3React?.accounts as Accounts };
     if (!web3React.account) {
       if (typeof window === 'object') {
         contextNetwork.chainId = DEFAULT_ERC_CHAIN;
