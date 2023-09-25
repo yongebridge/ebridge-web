@@ -16,7 +16,7 @@ import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { DEFAULT_ERC_CHAIN_INFO } from 'constants/index';
 import { switchChain } from 'utils/network';
 import { sleep } from 'utils';
-import { isPortkey } from 'utils/portkey';
+import { isPortkey, isPortkeyConnector } from 'utils/portkey';
 import { MetaMask } from '@web3-react/metamask';
 export default function WalletList() {
   const [{ walletWallet, walletChainType }] = useModal();
@@ -36,7 +36,7 @@ export default function WalletList() {
       setLoading({ [key]: true });
       try {
         if (typeof connector === 'string') {
-          if (connector === 'PORTKEY') {
+          if (isPortkeyConnector(connector)) {
             await portkeyConnect();
             chainDispatch(setSelectELFWallet('PORTKEY'));
           } else {
@@ -68,7 +68,7 @@ export default function WalletList() {
         const isStringConnector = typeof option.connector === 'string';
         const isStringChain = typeof chainId === 'string' || walletChainType === 'ELF';
         if (isPortkey()) {
-          if (isStringChain) return option.connector === 'PORTKEY';
+          if (isStringChain) return isPortkeyConnector(option.connector as string);
           if (!isStringConnector) return !(option.connector instanceof MetaMask);
         }
         return isStringConnector ? isStringChain : !isStringChain;

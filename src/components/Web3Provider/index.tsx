@@ -64,7 +64,7 @@ function Web3Manager({ children }: { children: JSX.Element }) {
         selectELFWallet === 'NIGHTELF' ? tryAElf() : tryPortkey(true);
       }
       tryERC();
-    }, 500);
+    }, 1000);
     return () => {
       timer && clearTimeout(timer);
     };

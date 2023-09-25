@@ -111,7 +111,7 @@ export function useAElf(): Web3Type {
   return tmpContext;
 }
 
-export function usePortkey() {
+export function usePortkey(): Web3Type {
   const portkeyReact = usePortkeyReact();
   const [{ userELFChainId }] = useChain();
   const chainId = userELFChainId;
@@ -120,17 +120,16 @@ export function usePortkey() {
       ...portkeyReact,
     };
     const chainAccounts = portkeyReact?.accounts?.[chainId as ChainId];
-
     if (chainId && ACTIVE_CHAIN[chainId] && chainAccounts?.[0] && portkeyReact.isActive) {
       contextNetwork.account = getELFAddress(chainAccounts?.[0]);
       contextNetwork.isPortkey = true;
-      contextNetwork.walletType = 'PORTKEY';
     }
     return {
       ...contextNetwork,
       library: undefined,
       provider: undefined,
-      connector: contextNetwork.account ? 'PORTKEY' : undefined,
+      walletType: 'PORTKEY',
+      connector: 'PORTKEY',
     };
   }, [chainId, portkeyReact]);
   return tmpContext;

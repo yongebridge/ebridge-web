@@ -27,3 +27,11 @@ export function isPortkeyConnectEagerly() {
   }
   return false;
 }
+
+export function isPortkeyConnector(connector?: string) {
+  return connector === 'PORTKEY';
+}
+
+export function isSelectPortkey(type?: string) {
+  return type === 'PORTKEY';
+}

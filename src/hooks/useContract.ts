@@ -155,10 +155,9 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
         );
       } catch (error) {
         console.log(error, '====error');
-
         await sleep(1000);
         reCount++;
-        if (reCount < 20) {
+        if (reCount < 5) {
           getContract(reCount);
         } else {
           console.error(error, reCount, '====getContract', contractAddress);
