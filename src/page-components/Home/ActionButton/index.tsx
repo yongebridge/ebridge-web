@@ -25,7 +25,7 @@ function Actions() {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
   const [toConfirmModal, setToConfirmModal] = useState<boolean>(false);
   const [
-    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress },
+    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress, crossFee },
     { dispatch, addReceivedList },
   ] = useHomeContext();
   const { chainId: fromChainId, account: fromAccount, library } = fromWallet || {};
@@ -138,6 +138,7 @@ function Actions() {
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
       toChainId,
       to: toChecked && toAddress ? toAddress : (toAccount as string),
+      crossFee,
     };
     if (tokenContract) {
       params.tokenContract = tokenContract;
@@ -152,17 +153,18 @@ function Actions() {
     }
     dispatch(setActionLoading(false));
   }, [
-    bridgeContract,
-    dispatch,
-    fromAccount,
-    fromChainId,
-    fromInput,
     fromTokenInfo,
-    library,
-    toAccount,
-    toChecked,
-    toAddress,
+    fromAccount,
+    bridgeContract,
     toChainId,
+    fromChainId,
+    toChecked,
+    toAccount,
+    toAddress,
+    dispatch,
+    library,
+    fromInput,
+    crossFee,
     tokenContract,
   ]);
   const onSwapToken = useCallback(async () => {

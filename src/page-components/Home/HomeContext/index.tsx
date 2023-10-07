@@ -26,6 +26,7 @@ import { parseCrossChainTransfers } from './utils';
 import { DefaultWhitelistMap } from 'constants/index';
 import { crossTokenMin } from 'constants/misc';
 import { sliceDecimals } from 'utils/input';
+import { useCrossFee } from 'hooks/useCrossFee';
 
 const defaultSelectToken = {
   symbol: 'ELF',
@@ -84,6 +85,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     if (isNativeToken) return [symbol];
     return [address];
   }, [fromChainId, selectToken]);
+  const crossFee = useCrossFee();
 
   const [[balance]] = useBalances(fromWallet, tokens);
   useEffect(() => {
@@ -175,8 +177,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   return (
     <HomeContext.Provider
       value={useMemo(
-        () => [{ ...state, receiveItem, receivedList, receiveList: tmpList, fromBalance, crossMin }, actions],
-        [state, receiveItem, receivedList, tmpList, fromBalance, crossMin, actions],
+        () => [{ ...state, receiveItem, receivedList, receiveList: tmpList, fromBalance, crossMin, crossFee }, actions],
+        [state, receiveItem, receivedList, tmpList, fromBalance, crossMin, crossFee, actions],
       )}>
       {children}
     </HomeContext.Provider>
