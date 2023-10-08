@@ -49,7 +49,7 @@ export default function WalletList() {
         }
         if (connector instanceof CoinbaseWallet) {
           await sleep(500);
-          await switchChain(DEFAULT_ERC_CHAIN_INFO, connector, true);
+          await switchChain(DEFAULT_ERC_CHAIN_INFO as any, connector, true);
         }
         onCancel();
       } catch (error: any) {

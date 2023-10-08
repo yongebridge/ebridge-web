@@ -8,6 +8,9 @@ import {
   networkConnection,
   walletConnectConnection,
 } from 'walletConnectors';
+import { isELFChain } from './aelfUtils';
+import { NetworkType } from 'types';
+import { ChainId } from 'types';
 
 type Info = {
   chainId: number | string;
@@ -85,15 +88,21 @@ export function isChainAllowed(connector: Connector, chainId: number) {
       return false;
   }
 }
-export const switchChain = async (info: Info, connector?: Connector | string, isActive?: boolean) => {
+export const switchChain = async (
+  info: NetworkType['info'] & Info,
+  connector?: Connector | string,
+  isWeb3Active?: boolean,
+  web3ChainId?: ChainId,
+) => {
   const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
   if (typeof chainId === 'string') {
     eventBus.emit(storages.userELFChainId, info.chainId);
     return true;
   }
+  if (!isELFChain(info.chainId) && web3ChainId === info.chainId) return;
   eventBus.emit(storages.userERCChainId, info.chainId);
   if (!connector || typeof connector === 'string') return;
-  if (isActive) {
+  if (isWeb3Active) {
     if (!isChainAllowed(connector, chainId)) {
       throw new Error(`Chain ${chainId} not supported for connector (${typeof connector})`);
     } else if (connector === walletConnectConnection.connector || connector === networkConnection.connector) {
@@ -109,7 +118,7 @@ export const switchChain = async (info: Info, connector?: Connector | string, is
       };
       await connector.activate(addChainParameter);
       // fix disconnect metamask
-      if (connector === injectedConnection.connector) connector.connectEagerly?.();
+      if (connector === injectedConnection.connector && !window.ethereum?.selectedAddress) connector.connectEagerly?.();
     }
   } else {
     // unlink metamask

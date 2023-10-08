@@ -22,7 +22,8 @@ import { Accounts, ChainId } from '@portkey/provider-types';
 
 function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: boolean; chainType?: ChainType }) {
   const { dispatch } = useWalletActions();
-  const { connector: web3Connector } = useWeb3();
+  const { connector: web3Connector, chainId: web3ChainId, account: web3Account } = useWeb3();
+
   const { chainId, account, connector } = wallet || {};
   const portkeyWallet = usePortkey();
   const [{ selectELFWallet }] = useChain();
@@ -90,12 +91,12 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
         dispatch(setWallet({ chainType: 'ERC' }));
       }
       try {
-        await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector, !!account);
+        await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector, !!web3Account, web3ChainId);
       } catch (error: any) {
         message.error(error.message);
       }
     },
-    [account, connector, dispatch, isForm, portkeyWallet, selectELFWallet, web3Connector],
+    [connector, dispatch, isForm, portkeyWallet, selectELFWallet, web3Account, web3ChainId, web3Connector],
   );
   return (
     <Row className={styles['wallet-row']}>

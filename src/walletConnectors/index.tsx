@@ -29,9 +29,9 @@ export interface Connection {
 }
 
 export const BACKFILLABLE_WALLETS = [
-  ConnectionType.COINBASE_WALLET,
-  ConnectionType.WALLET_CONNECT,
   ConnectionType.INJECTED,
+  ConnectionType.WALLET_CONNECT,
+  ConnectionType.COINBASE_WALLET,
 ];
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`);
