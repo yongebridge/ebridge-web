@@ -44,6 +44,11 @@ export default function WalletList() {
             chainDispatch(setSelectELFWallet('NIGHTELF'));
           }
         } else {
+          try {
+            delete (connector as any).eagerConnection;
+          } catch (error) {
+            // fix network error
+          }
           await connector.activate();
           chainDispatch(setSelectERCWallet(getConnection(connector)?.type));
         }
