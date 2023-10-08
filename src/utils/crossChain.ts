@@ -229,7 +229,7 @@ export async function CreateReceipt({
       undefined,
       fromELFChain ? tokenContract : undefined,
     );
-    if (req !== REQ_CODE.Success) return req;
+    if (req !== REQ_CODE.Success) throw req;
   }
   let checkAmount = amount;
   if (fromToken === CrossFeeToken) {
@@ -250,7 +250,7 @@ export async function CreateReceipt({
     undefined,
     fromELFChain ? tokenContract : undefined,
   );
-  if (req !== REQ_CODE.Success) return req;
+  if (req !== REQ_CODE.Success) throw req;
   if (fromELFChain) {
     return bridgeContract.callSendMethod('createReceipt', account, [
       fromToken,
