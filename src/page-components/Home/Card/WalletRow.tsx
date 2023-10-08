@@ -75,7 +75,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
     async (info: NetworkType['info']) => {
       const _wallet = portkeyWallet;
       const selectPortkey = isSelectPortkey(selectELFWallet);
-      if (selectPortkey && _wallet?.isActive) {
+      if (selectPortkey && _wallet?.isActive && isELFChain(info.chainId)) {
         const accounts = (_wallet as { accounts: Accounts }).accounts;
         if (!accounts?.[info.chainId as ChainId]) {
           return message.error('Synchronizing on-chain account information...');
