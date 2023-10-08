@@ -145,11 +145,10 @@ function Actions() {
     }
     try {
       const req = await (fromTokenInfo.isNativeToken ? LockToken : CreateReceipt)(params);
-
-      if (!req.error) dispatch(setFrom(''));
+      if (!req?.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
-      message.error(error.message);
+      error?.message && message.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [
