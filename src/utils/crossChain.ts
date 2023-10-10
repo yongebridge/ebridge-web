@@ -225,7 +225,7 @@ export async function CreateReceipt({
       CrossFeeToken,
       account,
       bridgeContract.address || '',
-      amount,
+      timesDecimals(crossFee, 8).toFixed(0),
       undefined,
       fromELFChain ? tokenContract : undefined,
     );
