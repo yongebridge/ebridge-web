@@ -9,8 +9,7 @@ import { useChain, useChainDispatch } from 'contexts/useChain';
 import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
 import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
-import { Accounts, ChainId } from '@portkey/provider-types';
-import { getELFAddress } from 'utils/aelfUtils';
+import { Accounts } from '@portkey/provider-types';
 import { setSelectELFWallet } from 'contexts/useChain/actions';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
@@ -113,16 +112,10 @@ export function useAElf(): Web3Type {
 
 export function usePortkey(): Web3Type {
   const portkeyReact = usePortkeyReact();
-  const [{ userELFChainId }] = useChain();
-  const chainId = userELFChainId;
   const tmpContext = useMemo(() => {
     const contextNetwork: any = {
       ...portkeyReact,
     };
-    const chainAccounts = portkeyReact?.accounts?.[chainId as ChainId];
-    if (chainId && ACTIVE_CHAIN[chainId] && chainAccounts?.[0] && portkeyReact.isActive) {
-      contextNetwork.account = getELFAddress(chainAccounts?.[0]);
-    }
     return {
       ...contextNetwork,
       library: undefined,
@@ -131,6 +124,6 @@ export function usePortkey(): Web3Type {
       connector: 'PORTKEY',
       isPortkey: true,
     };
-  }, [chainId, portkeyReact]);
+  }, [portkeyReact]);
   return tmpContext;
 }
