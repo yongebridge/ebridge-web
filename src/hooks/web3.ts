@@ -122,7 +122,6 @@ export function usePortkey(): Web3Type {
     const chainAccounts = portkeyReact?.accounts?.[chainId as ChainId];
     if (chainId && ACTIVE_CHAIN[chainId] && chainAccounts?.[0] && portkeyReact.isActive) {
       contextNetwork.account = getELFAddress(chainAccounts?.[0]);
-      contextNetwork.isPortkey = true;
     }
     return {
       ...contextNetwork,
@@ -130,6 +129,7 @@ export function usePortkey(): Web3Type {
       provider: undefined,
       walletType: 'PORTKEY',
       connector: 'PORTKEY',
+      isPortkey: true,
     };
   }, [chainId, portkeyReact]);
   return tmpContext;
