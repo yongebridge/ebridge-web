@@ -13,6 +13,8 @@ import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
 import { formatAddress, isIncludesChainId } from 'utils';
 import { FormatTokenList } from 'constants/index';
+import { LimitDataProps } from 'page-components/Home/useLimitAmountModal/constants';
+import BigNumber from 'bignumber.js';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -325,4 +327,100 @@ export async function SwapToken({
   }
   if (swapId.error) return swapId;
   return bridgeOutContract?.callSendMethod('swapToken', toAccount, [swapId, receiptId, originAmount, toAddress]);
+}
+
+export async function getSwapId({
+  bridgeOutContract,
+  toChainId,
+  fromChainId,
+  toSymbol,
+}: {
+  bridgeOutContract?: ContractBasic;
+  toChainId: ChainId;
+  fromChainId: ChainId;
+  toSymbol: string;
+}) {
+  let swapId;
+
+  const { address } = getTokenInfoByWhitelist(toChainId, toSymbol) || {};
+  const chainId = getChainIdToMap(fromChainId);
+  console.log('bridgeOutContract: ', bridgeOutContract, 'address: ', address, 'chainId: ', chainId);
+
+  if (bridgeOutContract?.contractType === 'ELF') {
+    swapId = await bridgeOutContract?.callViewMethod('GetSwapIdByToken', [chainId, toSymbol]);
+  } else {
+    swapId = await bridgeOutContract?.callViewMethod('getSwapId', [address, chainId]);
+  }
+
+  console.log('swapId: ', swapId);
+
+  return swapId;
+}
+
+export async function getReceiptLimit({
+  limitContract,
+  address,
+  toChainId,
+}: {
+  limitContract?: ContractBasic;
+  address?: string;
+  toChainId?: ChainId;
+}): Promise<LimitDataProps | undefined> {
+  try {
+    const result = await Promise.all([
+      limitContract?.callViewMethod('getReceiptDailyLimit', [address, getChainIdToMap(toChainId)]),
+      limitContract?.callViewMethod('GetCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
+    ]);
+
+    if (result[0].error || result[1].error) {
+      throw new Error(result[0].error || result[1].error);
+    }
+
+    console.log('getReceiptDailyLimit: ', result[0]);
+    console.log('GetCurrentReceiptTokenBucketState: ', result[1]);
+
+    return {
+      remain: new BigNumber(result[0].tokenAmount),
+      maxCapcity: new BigNumber(result[1].tokenCapacity),
+      currentCapcity: new BigNumber(result[1].currentTokenAmount),
+      fillRate: new BigNumber(result[1].rate),
+    };
+  } catch (e) {
+    console.log('getReceiptLimit error :', e);
+  }
+}
+
+export async function getSwapLimit({
+  limitContract,
+  address,
+  fromChainId,
+  swapId,
+}: {
+  limitContract?: ContractBasic;
+  address?: string;
+  fromChainId?: ChainId;
+  swapId?: string;
+}): Promise<LimitDataProps | undefined> {
+  try {
+    const result = await Promise.all([
+      limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
+      limitContract?.callViewMethod('GetCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
+    ]);
+
+    if (result[0].error || result[1].error) {
+      throw new Error(result[0].error || result[1].error);
+    }
+
+    console.log('getSwapDailyLimit: ', result[0]);
+    console.log('GetCurrentSwapTokenBucketState: ', result[1]);
+
+    return {
+      remain: new BigNumber(result[0].tokenAmount),
+      maxCapcity: new BigNumber(result[1].tokenCapacity),
+      currentCapcity: new BigNumber(result[1].currentTokenAmount),
+      fillRate: new BigNumber(result[1].rate),
+    };
+  } catch (e) {
+    console.log('getSwapLimit error :', e);
+  }
 }

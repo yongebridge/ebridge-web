@@ -16,6 +16,8 @@ import Mask from './Mask';
 import { Skeleton } from 'antd';
 import { isPortkey } from 'utils/portkey';
 
+import LimitAmountDescModal from './LimitAmountDescModal';
+
 export default function Home() {
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
@@ -44,6 +46,8 @@ export default function Home() {
           <SelectTokenModal />
           <AddTokenModal />
           {isMd ? <NotificationForPhone /> : <Notification />}
+
+          <LimitAmountDescModal />
         </>
       ) : (
         <Mask />

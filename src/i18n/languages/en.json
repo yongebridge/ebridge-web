@@ -106,6 +106,27 @@
       "section 3": "We appreciate your understanding and patience and look forward to providing you with an improved eBridge experience soon.",
       "section 4": ["Thank you for your support!", "The eBridge Team"],
       "section 5": "For any issues, join our Telegram group for support: "
-    }
+    },
+    "Please Notice": "Notice",
+    "have reached the daily limit": "{{tokenSymbol}} transfers from {{fromChain}} to {{toChain}} have reached the daily limit, which will reset at 00:00 (UTC) each day. Please try again after the reset.",
+    "have a daily limit and your current transaction": "{{tokenSymbol}} transfers from {{fromChain}} to {{toChain}} have a daily limit and your current transaction exceeds the remaining quota of {{amount}} {{tokenSymbol}}. The limit will reset at 00:00 (UTC) each day. Please try again after the reset or consider transferring a smaller amount.",
+    "have a maximum capacity and your current transaction exceeds the available capacity": "{{tokenSymbol}} transfers from {{fromChain}} to {{toChain}} have a maximum capacity and your current transaction exceeds the available capacity of {{amount}} {{tokenSymbol}}. The capacity will be refilled in {{time}} minutes. Please try again after that.",
+    "Your current transaction exceeds the capacity and can't be processed": "{{tokenSymbol}} transfers from {{fromChain}} to {{toChain}} have a maximum capacity of {{amount}} {{tokenSymbol}}. Your current transaction exceeds the capacity and can't be processed. Please consider transferring a smaller amount.",
+    "eBridge limit rules": "About eBridge's transfer/rate limits.",
+    "eBridge limit rules title": "eBridge's Transfer/Rate Limits",
+    "eBridge daily limit specification": "Daily Transfer Limits",
+    "eBridge daily limit specification desc": "For security purposes, eBridge imposes daily transfer limits for each token in each directions. ",
+    "eBridge rate limits": "Rate Limits",
+    "eBridge rate limits desc": {
+      "section 1": "Token transfers on eBridge benefit from rate limits for additional security. Rate limits comprise maximum capacity and refill rate, which is the speed at which the maximum capacity is refilled after a token transfer has consumed some or all of the available capacity.",
+      "section 2": "The rate limits are enforced at both the source and destination blockchains to ensure the highest level of security. For each supported token, rate limits effectively manage the total volume of tokens that can be transferred within a specified timeframe.",
+      "section 3": "For example, the maximum capacity of USDT transfer from Ethereum to AELF is 100,000 USDT. The refill rate is 167 USDT per second. If 100,000 USDT is transferred in this direction, the entire capacity is consumed. After that, if a user wants to send 1670 USDT, he/she must wait at least 10 seconds as the capacity refills. This ensures that the maximum throughput for this token in this direction is 100,000 USDT every 10 minutes."
+    },
+    "Supported tokens": "Tokens:",
+    "OK": "OK",
+    "About allowance": "About ${{allowance}}",
+    "Rate limit capacity": "Rate limit capacity: {{capacity}}{{token}}",
+    "Rate limit refill rate": "Rate limit refill rate: {{refillRate}}{{token}}/second",
+    "Rate limit refill rate desc": "(up to refillRate{{token}} every {{maximumTimeConsumed}}) minutes"
   }
 }
