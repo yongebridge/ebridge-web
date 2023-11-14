@@ -341,10 +341,8 @@ export async function getSwapId({
   toSymbol: string;
 }) {
   let swapId;
-
   const { address } = getTokenInfoByWhitelist(toChainId, toSymbol) || {};
   const chainId = getChainIdToMap(fromChainId);
-  console.log('bridgeOutContract: ', bridgeOutContract, 'address: ', address, 'chainId: ', chainId);
 
   if (bridgeOutContract?.contractType === 'ELF') {
     swapId = await bridgeOutContract?.callViewMethod('GetSwapIdByToken', [chainId, toSymbol]);

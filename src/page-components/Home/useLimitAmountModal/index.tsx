@@ -66,18 +66,27 @@ export default function useLimitAmountModal() {
     }
 
     if (response) {
-      console.log('getLimitDataByContract response after processing decimals', {
-        remain: divDecimals(response.remain, decimals).toNumber(),
-        maxCapcity: divDecimals(response.maxCapcity, decimals).toNumber(),
-        currentCapcity: divDecimals(response.currentCapcity, decimals).toNumber(),
-        fillRate: divDecimals(response.fillRate, decimals).toNumber(),
-      });
+      console.log(
+        'getLimitDataByContract response after processing decimals \n',
+        JSON.stringify(
+          {
+            remain: divDecimals(response.remain, decimals),
+            maxCapcity: divDecimals(response.maxCapcity, decimals),
+            currentCapcity: divDecimals(response.currentCapcity, decimals),
+            fillRate: divDecimals(response.fillRate, decimals),
+            isEnable: response.isEnable,
+          },
+          null,
+          4,
+        ),
+      );
 
       response = {
         remain: divDecimals(response.remain, decimals),
         maxCapcity: divDecimals(response.maxCapcity, decimals),
         currentCapcity: divDecimals(response.currentCapcity, decimals),
         fillRate: divDecimals(response.fillRate, decimals),
+        isEnable: response.isEnable,
       };
     }
 
@@ -95,56 +104,44 @@ export default function useLimitAmountModal() {
       return;
     }
 
-    console.log('getLimitDataByGQL response after processing decimals', {
-      remain: divDecimals(response.remain, decimals).toNumber(),
-      maxCapcity: divDecimals(response.maxCapcity, decimals).toNumber(),
-      currentCapcity: divDecimals(response.currentCapcity, decimals).toNumber(),
-      fillRate: divDecimals(response.fillRate, decimals).toNumber(),
-    });
+    console.log(
+      'getLimitDataByGQL response after processing decimals\n',
+      JSON.stringify(
+        {
+          remain: divDecimals(response.remain, decimals),
+          maxCapcity: divDecimals(response.maxCapcity, decimals),
+          currentCapcity: divDecimals(response.currentCapcity, decimals),
+          fillRate: divDecimals(response.fillRate, decimals),
+          isEnable: response.isEnable,
+        },
+        null,
+        4,
+      ),
+    );
 
     return {
       remain: divDecimals(response.remain, decimals),
       maxCapcity: divDecimals(response.maxCapcity, decimals),
       currentCapcity: divDecimals(response.currentCapcity, decimals),
       fillRate: divDecimals(response.fillRate, decimals),
+      isEnable: response.isEnable,
     };
   };
 
-  const getElfLimitData = async (type: 'transfer' | 'swap'): Promise<LimitDataProps | undefined> => {
-    const promiseArr = [getLimitDataByContract('swap', toTokenInfo?.decimals)];
-
+  const getElfLimitDataFn = (type: 'transfer' | 'swap'): Array<any> => {
+    const promiseList = [getLimitDataByContract('swap', toTokenInfo?.decimals)];
     if (type === 'transfer') {
-      promiseArr.unshift(getLimitDataByGQL(fromTokenInfo?.decimals));
+      promiseList.push(getLimitDataByGQL(fromTokenInfo?.decimals));
     }
-    const results = await Promise.all(promiseArr);
-
-    if (results.some((item) => !item)) {
-      return;
-    }
-
-    if (type === 'swap') {
-      return results[0];
-    }
-
-    return calculateMinValue(results[0], results[1]);
+    return promiseList;
   };
 
-  const getEvmLimitData = async (type: 'transfer' | 'swap'): Promise<LimitDataProps | undefined> => {
-    const promiseArr = [getLimitDataByGQL(toTokenInfo?.decimals)];
+  const getEvmLimitDataFn = (type: 'transfer' | 'swap'): Array<any> => {
+    const promiseList = [getLimitDataByGQL(toTokenInfo?.decimals)];
     if (type === 'transfer') {
-      promiseArr.push(getLimitDataByContract(type, fromTokenInfo?.decimals));
+      promiseList.push(getLimitDataByContract(type, fromTokenInfo?.decimals));
     }
-    const results = await Promise.all(promiseArr);
-
-    if (results.some((item) => !item)) {
-      return;
-    }
-
-    if (type === 'swap') {
-      return results[0];
-    }
-
-    return calculateMinValue(results[0], results[1]);
+    return promiseList;
   };
 
   const calculateMinValue = (
@@ -172,7 +169,6 @@ export default function useLimitAmountModal() {
     if (!symbol || typeof tokenFormat[symbol] === 'undefined') {
       return;
     }
-
     return input.dp(tokenFormat[symbol]);
   };
 
@@ -255,25 +251,44 @@ export default function useLimitAmountModal() {
     }
 
     const input = new BigNumber(amount);
-    const fn = isELFChain(fromChainId) ? getElfLimitData : getEvmLimitData;
-    const response = await fn(type);
 
-    if (!response) {
+    const promistList = isELFChain(fromChainId) ? getElfLimitDataFn(type) : getEvmLimitDataFn(type);
+    const results: Array<LimitDataProps> = await Promise.all(promistList);
+
+    if (results.some((item) => !item)) {
       return true;
     }
 
+    let limitAndRateData: LimitDataProps;
+    if (results.length === 1) {
+      limitAndRateData = results[0];
+    } else if ((results[0]?.isEnable && results[1]?.isEnable) || (!results[0]?.isEnable && !results[1]?.isEnable)) {
+      limitAndRateData = {
+        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
+        isEnable: results[0]?.isEnable && results[1]?.isEnable,
+      };
+    } else if (results[0]?.isEnable) {
+      limitAndRateData = results[0];
+    } else {
+      limitAndRateData = results[1];
+    }
+
     console.log(
-      'remain: ',
-      response.remain.toNumber(),
-      'maxCapcity: ',
-      response.maxCapcity.toNumber(),
-      'currentCapcity: ',
-      response.currentCapcity.toNumber(),
-      'fillRate: ',
-      response.fillRate.toNumber(),
+      'checkLimitAndRate \n',
+      JSON.stringify(
+        {
+          remain: limitAndRateData.remain.toNumber(),
+          maxCapcity: limitAndRateData.maxCapcity.toNumber(),
+          currentCapcity: limitAndRateData.currentCapcity.toNumber(),
+          fillRate: limitAndRateData.fillRate.toNumber(),
+          isEnable: limitAndRateData.isEnable,
+        },
+        null,
+        4,
+      ),
     );
 
-    if (checkCapacity(input, response) || checkDailyLimit(input, response)) {
+    if (checkCapacity(input, limitAndRateData) || checkDailyLimit(input, limitAndRateData)) {
       setVisible(true);
       return true;
     }
