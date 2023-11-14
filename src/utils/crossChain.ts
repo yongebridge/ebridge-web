@@ -384,6 +384,7 @@ export async function getReceiptLimit({
       maxCapcity: new BigNumber(result[1].tokenCapacity),
       currentCapcity: new BigNumber(result[1].currentTokenAmount),
       fillRate: new BigNumber(result[1].rate),
+      isEnable: result[1].isEnabled,
     };
   } catch (e) {
     console.log('getReceiptLimit error :', e);
@@ -419,6 +420,7 @@ export async function getSwapLimit({
       maxCapcity: new BigNumber(result[1].tokenCapacity),
       currentCapcity: new BigNumber(result[1].currentTokenAmount),
       fillRate: new BigNumber(result[1].rate),
+      isEnable: result[1].isEnabled,
     };
   } catch (e) {
     console.log('getSwapLimit error :', e);

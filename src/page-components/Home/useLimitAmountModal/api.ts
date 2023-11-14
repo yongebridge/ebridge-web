@@ -1,7 +1,10 @@
 import { gql, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { ChainId } from 'types';
+import { LimitDataProps } from './constants';
+import BigNumber from 'bignumber.js';
+import moment from 'moment';
 
-export interface LimitDataByGqlProps {
+interface LimitDataByGqlProps {
   fromChainId: ChainId;
   toChainId: ChainId;
   symbol: string;
@@ -44,7 +47,7 @@ export const getLimitData = async (params: {
   fromChainId: ChainId;
   toChainId: ChainId;
   symbol?: string;
-}): Promise<LimitDataByGqlProps | undefined> => {
+}): Promise<LimitDataProps | undefined> => {
   try {
     const client = creatGqlClient();
     const result = await client.query<{
@@ -67,7 +70,56 @@ export const getLimitData = async (params: {
 
     console.log('getLimitData by gql :', result.data.queryCrossChainLimitInfos.dataList[0]);
 
-    return result.data.queryCrossChainLimitInfos.dataList[0];
+    if (!result?.data?.queryCrossChainLimitInfos?.dataList?.length) {
+      return;
+    }
+
+    const {
+      refreshTime,
+      currentDailyLimit,
+      capacity,
+      currentBucketTokenAmount,
+      refillRate,
+      bucketUpdateTime,
+      defaultDailyLimit,
+      isEnable,
+    } = result.data.queryCrossChainLimitInfos.dataList[0];
+
+    let currentCapcity = new BigNumber(currentBucketTokenAmount);
+    let remain = new BigNumber(currentDailyLimit);
+    const fillRate = new BigNumber(refillRate);
+    const maxCapcity = new BigNumber(capacity);
+
+    const utcRefreshTime = moment(refreshTime);
+    const utcBucketUpdateTime = moment(bucketUpdateTime);
+    const utcNow = moment.utc();
+    const midnightToday = moment(utcNow.format('YYYY-MM-DD'));
+
+    // Updated every day
+    // if (utcRefreshTime.isBefore(midnightToday.subtract(1, 'd'))) {
+    //   remain = new BigNumber(defaultDailyLimit);
+    // }
+
+    // test1 Updated hourly
+    if (utcRefreshTime.isBefore(midnightToday.subtract(1, 'h'))) {
+      remain = new BigNumber(defaultDailyLimit);
+    }
+
+    if (utcBucketUpdateTime.isBefore(utcNow)) {
+      const differenceTime = new BigNumber(
+        moment.duration(utcNow.valueOf() - utcBucketUpdateTime.valueOf()).asSeconds(),
+      );
+      const newCurrentCapcity = fillRate.times(differenceTime).plus(currentCapcity);
+      currentCapcity = BigNumber.min(capacity, newCurrentCapcity);
+    }
+
+    return {
+      fillRate,
+      maxCapcity,
+      remain,
+      currentCapcity,
+      isEnable,
+    };
   } catch (e) {
     console.log('error: ', e);
   }

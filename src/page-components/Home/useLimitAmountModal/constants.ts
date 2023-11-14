@@ -14,4 +14,5 @@ export interface LimitDataProps {
   maxCapcity: BigNumber;
   currentCapcity: BigNumber;
   fillRate: BigNumber;
+  isEnable?: boolean;
 }

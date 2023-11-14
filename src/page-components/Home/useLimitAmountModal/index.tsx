@@ -11,10 +11,10 @@ import { isELFChain } from 'utils/aelfUtils';
 import { getShortNameByChainId } from 'utils/chain';
 import { getReceiptLimit, getSwapLimit, getSwapId } from 'utils/crossChain';
 import { getLimitData } from './api';
-
-import styles from './styles.module.less';
 import { useHomeContext } from '../HomeContext';
 import { divDecimals } from 'utils/calculate';
+
+import styles from './styles.module.less';
 
 export default function useLimitAmountModal() {
   const { t } = useLanguage();
@@ -55,21 +55,24 @@ export default function useLimitAmountModal() {
     let response: LimitDataProps | undefined;
 
     if (type === 'transfer') {
-      const receiptLimit = await getReceiptLimit({
+      response = await getReceiptLimit({
         limitContract,
         address: fromTokenInfo?.address,
         toChainId,
       });
-
-      response = receiptLimit;
     } else {
       const swapId = await getSwapId({ bridgeOutContract, fromChainId, toChainId, toSymbol: toTokenInfo?.symbol });
-      const swapLimit = await getSwapLimit({ limitContract, address: toTokenInfo?.address, fromChainId, swapId });
-
-      response = swapLimit;
+      response = await getSwapLimit({ limitContract, address: toTokenInfo?.address, fromChainId, swapId });
     }
 
     if (response) {
+      console.log('getLimitDataByContract response after processing decimals', {
+        remain: divDecimals(response.remain, decimals).toNumber(),
+        maxCapcity: divDecimals(response.maxCapcity, decimals).toNumber(),
+        currentCapcity: divDecimals(response.currentCapcity, decimals).toNumber(),
+        fillRate: divDecimals(response.fillRate, decimals).toNumber(),
+      });
+
       response = {
         remain: divDecimals(response.remain, decimals),
         maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -77,8 +80,6 @@ export default function useLimitAmountModal() {
         fillRate: divDecimals(response.fillRate, decimals),
       };
     }
-
-    console.log('getLimitDataByContract response 处理过decimals', response);
 
     return response;
   };
@@ -94,18 +95,18 @@ export default function useLimitAmountModal() {
       return;
     }
 
-    console.log('getLimitDataByGQL response 处理过decimals', {
-      remain: divDecimals(new BigNumber(response.currentDailyLimit), decimals),
-      maxCapcity: divDecimals(new BigNumber(response.capacity), decimals),
-      currentCapcity: divDecimals(new BigNumber(response.currentBucketTokenAmount), decimals),
-      fillRate: divDecimals(new BigNumber(response.refillRate), decimals),
+    console.log('getLimitDataByGQL response after processing decimals', {
+      remain: divDecimals(response.remain, decimals).toNumber(),
+      maxCapcity: divDecimals(response.maxCapcity, decimals).toNumber(),
+      currentCapcity: divDecimals(response.currentCapcity, decimals).toNumber(),
+      fillRate: divDecimals(response.fillRate, decimals).toNumber(),
     });
 
     return {
-      remain: divDecimals(new BigNumber(response.currentDailyLimit), decimals),
-      maxCapcity: divDecimals(new BigNumber(response.capacity), decimals),
-      currentCapcity: divDecimals(new BigNumber(response.currentBucketTokenAmount), decimals),
-      fillRate: divDecimals(new BigNumber(response.refillRate), decimals),
+      remain: divDecimals(response.remain, decimals),
+      maxCapcity: divDecimals(response.maxCapcity, decimals),
+      currentCapcity: divDecimals(response.currentCapcity, decimals),
+      fillRate: divDecimals(response.fillRate, decimals),
     };
   };
 
@@ -156,13 +157,13 @@ export default function useLimitAmountModal() {
     const response: LimitDataProps = input1;
 
     if (input1.remain.gt(input2.remain)) {
-      response.remain = input1.remain;
+      response.remain = input2.remain;
     }
 
     if (input1.currentCapcity.gt(input2.currentCapcity)) {
-      response.currentCapcity = input1.currentCapcity;
-      response.fillRate = input1.fillRate;
-      response.maxCapcity = input1.maxCapcity;
+      response.currentCapcity = input2.currentCapcity;
+      response.fillRate = input2.fillRate;
+      response.maxCapcity = input2.maxCapcity;
     }
 
     return response;
@@ -176,11 +177,10 @@ export default function useLimitAmountModal() {
     return input.dp(tokenFormat[symbol]);
   };
 
-  const calculateTime = (input: BigNumber, currentCapcity: BigNumber, fillRate: BigNumber): BigNumber => {
-    return input.minus(currentCapcity).div(fillRate).idiv(60).plus(1);
-  };
+  const calculateTime = (input: BigNumber, currentCapcity: BigNumber, fillRate: BigNumber): BigNumber =>
+    input.minus(currentCapcity).div(fillRate).idiv(60).plus(1);
 
-  const checkDailyLimit = function (input: BigNumber, remain: BigNumber): boolean {
+  const checkDailyLimit = function (input: BigNumber, { remain }: LimitDataProps): boolean {
     if (remain.isZero()) {
       setModalTxt(
         t('have reached the daily limit', {
@@ -210,10 +210,12 @@ export default function useLimitAmountModal() {
 
   const checkCapacity = function (
     input: BigNumber,
-    maxCapcity: BigNumber,
-    currentCapcity: BigNumber,
-    fillRate: BigNumber,
+    { maxCapcity, currentCapcity, fillRate, isEnable }: LimitDataProps,
   ): boolean {
+    if (!isEnable) {
+      return false;
+    }
+
     if (maxCapcity.lt(input)) {
       const amount = formatToken(maxCapcity, fromTokenInfo?.symbol);
       setModalTxt(
@@ -251,27 +253,25 @@ export default function useLimitAmountModal() {
     }
 
     const input = new BigNumber(amount);
-
     const fn = isELFChain(fromChainId) ? getElfLimitData : getEvmLimitData;
     const response = await fn(type);
 
     if (!response) {
       return true;
     }
-    const { remain, maxCapcity, currentCapcity, fillRate } = response;
 
     console.log(
       'remain: ',
-      remain.toNumber(),
+      response.remain.toNumber(),
       'maxCapcity: ',
-      maxCapcity.toNumber(),
+      response.maxCapcity.toNumber(),
       'currentCapcity: ',
-      currentCapcity.toNumber(),
+      response.currentCapcity.toNumber(),
       'fillRate: ',
-      fillRate.toNumber(),
+      response.fillRate.toNumber(),
     );
 
-    if (checkCapacity(input, maxCapcity, currentCapcity, fillRate) || checkDailyLimit(input, remain)) {
+    if (checkCapacity(input, response) || checkDailyLimit(input, response)) {
       setVisible(true);
       return true;
     }
