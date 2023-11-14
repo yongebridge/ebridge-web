@@ -154,19 +154,18 @@ export default function useLimitAmountModal() {
     if (!input1 || !input2) {
       return;
     }
-    const response: LimitDataProps = input1;
 
     if (input1.remain.gt(input2.remain)) {
-      response.remain = input2.remain;
+      input1.remain = input2.remain;
     }
 
     if (input1.currentCapcity.gt(input2.currentCapcity)) {
-      response.currentCapcity = input2.currentCapcity;
-      response.fillRate = input2.fillRate;
-      response.maxCapcity = input2.maxCapcity;
+      input1.currentCapcity = input2.currentCapcity;
+      input1.fillRate = input2.fillRate;
+      input1.maxCapcity = input2.maxCapcity;
     }
 
-    return response;
+    return input1;
   };
 
   const formatToken = (input: BigNumber, symbol?: string) => {
@@ -247,7 +246,10 @@ export default function useLimitAmountModal() {
     return false;
   };
 
-  const checkLimitAndRate = async function (type: 'transfer' | 'swap', amount?: BigNumber | string | number) {
+  const checkLimitAndRate = async function (
+    type: 'transfer' | 'swap',
+    amount?: BigNumber | string | number,
+  ): Promise<boolean> {
     if (!amount) {
       return true;
     }
