@@ -106,9 +106,7 @@ export const getLimitData = async (params: {
     }
 
     if (utcBucketUpdateTime.isBefore(utcNow)) {
-      const differenceTime = new BigNumber(
-        moment.duration(utcNow.valueOf() - utcBucketUpdateTime.valueOf()).asSeconds(),
-      );
+      const differenceTime = new BigNumber(utcNow.valueOf() - utcBucketUpdateTime.valueOf()).idiv(1000);
       const newCurrentCapcity = fillRate.times(differenceTime).plus(currentCapcity);
       currentCapcity = BigNumber.min(capacity, newCurrentCapcity);
     }

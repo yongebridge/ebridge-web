@@ -169,7 +169,7 @@ export default function useLimitAmountModal() {
     if (!symbol || typeof tokenFormat[symbol] === 'undefined') {
       return;
     }
-    return input.dp(tokenFormat[symbol]);
+    return input.dp(tokenFormat[symbol], BigNumber.ROUND_DOWN);
   };
 
   const calculateTime = (input: BigNumber, currentCapcity: BigNumber, fillRate: BigNumber): BigNumber =>
@@ -268,9 +268,21 @@ export default function useLimitAmountModal() {
         isEnable: results[0]?.isEnable && results[1]?.isEnable,
       };
     } else if (results[0]?.isEnable) {
-      limitAndRateData = results[0];
+      limitAndRateData = {
+        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
+        maxCapcity: results[0].maxCapcity,
+        currentCapcity: results[0].currentCapcity,
+        fillRate: results[0].fillRate,
+        isEnable: true,
+      };
     } else {
-      limitAndRateData = results[1];
+      limitAndRateData = {
+        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
+        maxCapcity: results[1].maxCapcity,
+        currentCapcity: results[1].currentCapcity,
+        fillRate: results[1].fillRate,
+        isEnable: true,
+      };
     }
 
     console.log(
