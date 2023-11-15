@@ -128,9 +128,13 @@
     },
     "Supported tokens": "Tokens:",
     "OK": "OK",
-    "About allowance": "About ${{allowance}}",
-    "Rate limit capacity": "Rate limit capacity: {{capacity}}{{token}}",
-    "Rate limit refill rate": "Rate limit refill rate: {{refillRate}}{{token}}/second",
-    "Rate limit refill rate desc": "(up to refillRate{{token}} every {{maximumTimeConsumed}}) minutes"
+    "eBridge limit rules Token": "Token",
+    "eBridge limit rules Allowance": "Daily Transfer Limit",
+    "About allowance": "About {{allowance}} {{tokenSymbol}}",
+    "Rate limit Token": "Token",
+    "Rate limit Attributes": "Rate Limit",
+    "Rate limit capacity": "Maximum capacity: {{capacity}} {{token}}",
+    "Rate limit refill rate": "Refill rate: {{refillRate}} {{token}}/second ",
+    "Rate limit refill rate desc": "(up to {{capacity}} {{token}} every {{maximumTimeConsumed}} minutes)"
   }
 }

@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useLanguage } from 'i18n';
 import { ReceiptRateLimitsInfo } from './contants';
+import { ChainId } from 'types';
 
 import styles from './styles.module.less';
-import { ChainId } from 'types';
+import BigNumber from 'bignumber.js';
 
 export function useReceiptColumns() {
   const { t } = useLanguage();
@@ -11,18 +12,20 @@ export function useReceiptColumns() {
   return useMemo(
     () => [
       {
-        title: 'Token',
+        title: t('eBridge limit rules Token'),
         width: 148,
         key: 'token',
         dataIndex: 'token',
         render: (token: string) => <span className={styles['table-data']}>{token}</span>,
       },
       {
-        title: 'Allowance',
+        title: t('eBridge limit rules Allowance'),
         key: 'allowance',
         dataIndex: 'allowance',
-        render: (allowance: number) => (
-          <span className={styles['table-data']}>{t('About allowance', { allowance })}</span>
+        render: (allowance: number, item: { token: string; allowance: number }) => (
+          <span className={styles['table-data']}>
+            {t('About allowance', { allowance: new BigNumber(allowance).toFormat(), tokenSymbol: item.token })}
+          </span>
         ),
       },
     ],
@@ -36,26 +39,34 @@ export function useSwapColumns() {
   return useMemo(
     () => [
       {
-        title: 'Token',
+        title: t('Rate limit Token'),
         width: 148,
         key: 'token',
         dataIndex: 'token',
         render: (token: string) => <span className={styles['table-data']}>{token}</span>,
       },
       {
-        title: 'Attributes',
+        title: t('Rate limit Attributes'),
         key: 'allowance',
         dataIndex: 'allowance',
-        render: (fromChain: ChainId, { capacity, token, refillRate, maximumTimeConsumed }: ReceiptRateLimitsInfo) => (
-          <span className={styles['table-data']}>
-            {t('Rate limit capacity', { capacity, token })}
-            <br />
-            {t('Rate limit refill rate', { refillRate, token })}
-            <span className={styles['table-data-sub']}>
-              {t('Rate limit refill rate desc', { token, maximumTimeConsumed })}
+        render: (fromChain: ChainId, { capacity, token, refillRate, maximumTimeConsumed }: ReceiptRateLimitsInfo) => {
+          const bigCapacity = new BigNumber(capacity).toFormat();
+          const bigRefillRate = new BigNumber(refillRate).toFormat();
+          return (
+            <span className={styles['table-data']}>
+              {t('Rate limit capacity', { capacity: bigCapacity, token })}
+              <br />
+              {t('Rate limit refill rate', { refillRate: bigRefillRate, token })}
+              <span className={styles['table-data-sub']}>
+                {t('Rate limit refill rate desc', {
+                  token,
+                  maximumTimeConsumed,
+                  capacity: bigCapacity,
+                })}
+              </span>
             </span>
-          </span>
-        ),
+          );
+        },
       },
     ],
     [t],
