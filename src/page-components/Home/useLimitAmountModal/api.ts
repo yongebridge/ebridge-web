@@ -90,8 +90,8 @@ export const getLimitData = async (params: {
     const fillRate = new BigNumber(refillRate);
     const maxCapcity = new BigNumber(capacity);
 
-    const utcRefreshTime = moment(refreshTime);
-    const utcBucketUpdateTime = moment(bucketUpdateTime);
+    const utcRefreshTime = moment(refreshTime).utc();
+    const utcBucketUpdateTime = moment(bucketUpdateTime).utc();
     const utcNow = moment.utc();
     const midnightToday = moment(utcNow.format('YYYY-MM-DD'));
 
@@ -101,7 +101,7 @@ export const getLimitData = async (params: {
     // }
 
     // test1 Updated hourly
-    if (utcRefreshTime.isBefore(utcNow.subtract(1, 'h'))) {
+    if (utcRefreshTime.isBefore(utcNow.clone().subtract(1, 'h'))) {
       remain = new BigNumber(defaultDailyLimit);
     }
 
