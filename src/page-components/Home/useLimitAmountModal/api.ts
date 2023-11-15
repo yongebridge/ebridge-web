@@ -96,12 +96,12 @@ export const getLimitData = async (params: {
     const midnightToday = moment(utcNow.format('YYYY-MM-DD'));
 
     // Updated every day
-    // if (utcRefreshTime.isBefore(midnightToday.subtract(1, 'd'))) {
+    // if (utcRefreshTime.isBefore(midnightToday)) {
     //   remain = new BigNumber(defaultDailyLimit);
     // }
 
     // test1 Updated hourly
-    if (utcRefreshTime.isBefore(midnightToday.subtract(1, 'h'))) {
+    if (utcRefreshTime.isBefore(utcNow.subtract(1, 'h'))) {
       remain = new BigNumber(defaultDailyLimit);
     }
 

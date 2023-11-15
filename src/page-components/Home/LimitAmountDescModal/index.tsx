@@ -103,9 +103,11 @@ export default function LimitAmountDescModal() {
           </Row>
         </Col>
       </Row>
-      <CommonButton type="primary" className={styles['confirm-btn']} onClick={closeModal}>
-        {t('OK')}
-      </CommonButton>
+      <div className={styles['confirm-btn-box']}>
+        <CommonButton type="primary" className={styles['confirm-btn']} onClick={closeModal}>
+          {t('OK')}
+        </CommonButton>
+      </div>
     </CommonModal>
   );
 }

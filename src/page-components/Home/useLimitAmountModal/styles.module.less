@@ -5,6 +5,7 @@
 
 
 .limit-amount-modal {
+  max-width: 492px;
   :global {
     .@{app-prefix}-modal-header {
       .@{app-prefix}-modal-title .@{app-prefix}-col {
@@ -14,7 +15,6 @@
     .@{app-prefix}-modal-body {
       padding: 24px;
       width: unset;
-      max-width: 100%;
     }
   }
   .text {
@@ -24,6 +24,12 @@
     line-height: 22px;
     color: @font-5
   }
+
+  .confirm-btn-box {
+    display: flex;
+    justify-content: center;
+  }
+
   .confirm-btn {
     font-size: 16px;
     height: 48px;

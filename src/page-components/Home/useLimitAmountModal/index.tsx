@@ -20,7 +20,13 @@ export default function useLimitAmountModal() {
   const { t } = useLanguage();
 
   const [visible, setVisible] = useState<boolean>(false);
-  const [modalTxt, setModalTxt] = useState<string>('');
+  const [modalTxt, setModalTxt] = useState<{
+    text1: string;
+    text2: string;
+  }>({
+    text1: '',
+    text2: '',
+  });
 
   const { fromWallet, toWallet } = useWallet();
   const { chainId: fromChainId } = fromWallet || {};
@@ -156,26 +162,28 @@ export default function useLimitAmountModal() {
 
   const checkDailyLimit = function (input: BigNumber, { remain }: LimitDataProps): boolean {
     if (remain.isZero()) {
-      setModalTxt(
-        t('have reached the daily limit', {
+      setModalTxt({
+        text1: t('have reached the daily limit1', {
           fromChain: formChainName,
           toChain: toChainName,
           tokenSymbol: fromTokenInfo?.symbol,
         }),
-      );
+        text2: t('have reached the daily limit2'),
+      });
       return true;
     }
 
     if (remain.lt(input)) {
       const amount = formatToken(remain, fromTokenInfo?.symbol);
-      setModalTxt(
-        t('have a daily limit and your current transaction', {
+      setModalTxt({
+        text1: t('have a daily limit and your current transaction1', {
           fromChain: formChainName,
           toChain: toChainName,
           amount,
           tokenSymbol: fromTokenInfo?.symbol,
         }),
-      );
+        text2: t('have a daily limit and your current transaction2'),
+      });
       return true;
     }
 
@@ -192,29 +200,32 @@ export default function useLimitAmountModal() {
 
     if (maxCapcity.lt(input)) {
       const amount = formatToken(maxCapcity, fromTokenInfo?.symbol);
-      setModalTxt(
-        t(`Your current transaction exceeds the capacity and can't be processed`, {
+      setModalTxt({
+        text1: t(`Your current transaction exceeds the capacity and can't be processed1`, {
           fromChain: formChainName,
           toChain: toChainName,
           amount,
           tokenSymbol: fromTokenInfo?.symbol,
         }),
-      );
+        text2: t(`Your current transaction exceeds the capacity and can't be processed2`),
+      });
       return true;
     }
 
     if (currentCapcity.lt(input)) {
       const amount = formatToken(currentCapcity, fromTokenInfo?.symbol);
       const time = calculateTime(input, currentCapcity, fillRate);
-      setModalTxt(
-        t('have a maximum capacity and your current transaction exceeds the available capacity', {
+      setModalTxt({
+        text1: t('have a maximum capacity and your current transaction exceeds the available capacity1', {
           fromChain: formChainName,
           toChain: toChainName,
           amount,
           tokenSymbol: fromTokenInfo?.symbol,
+        }),
+        text2: t('have a maximum capacity and your current transaction exceeds the available capacity2', {
           time,
         }),
-      );
+      });
       return true;
     }
 
@@ -309,9 +320,11 @@ export default function useLimitAmountModal() {
         className={styles['limit-amount-modal']}>
         <Row gutter={[0, 24]} justify="center">
           <Col span={24} className={styles['text']}>
-            {modalTxt}
+            {modalTxt.text1}
+            <br />
+            {modalTxt.text2}
           </Col>
-          <Col>
+          <Col span={24} className={styles['confirm-btn-box']}>
             <CommonButton type="primary" onClick={closeModal} className={styles['confirm-btn']}>
               {t('OK')}
             </CommonButton>
