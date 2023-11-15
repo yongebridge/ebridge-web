@@ -17,6 +17,15 @@
       flex-direction: column;
       align-items: center;
     }
+    .@{app-prefix}-table {
+      & thead > tr > th, & tbody > tr > td {
+        padding: 9px 12px;
+      }
+
+      & thead > tr > th {
+        background-color: #EDF0FD;
+      }
+    }
   }
 
   .item-title {
@@ -50,6 +59,7 @@
     line-height: 22px;
     color: @font-5;
     vertical-align: middle;
+    display: block;
     &-sub {
       color: @font-3;
     }
