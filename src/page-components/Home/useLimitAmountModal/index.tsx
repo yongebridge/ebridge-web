@@ -144,27 +144,6 @@ export default function useLimitAmountModal() {
     return promiseList;
   };
 
-  const calculateMinValue = (
-    input1: LimitDataProps | undefined,
-    input2: LimitDataProps | undefined,
-  ): LimitDataProps | undefined => {
-    if (!input1 || !input2) {
-      return;
-    }
-
-    if (input1.remain.gt(input2.remain)) {
-      input1.remain = input2.remain;
-    }
-
-    if (input1.currentCapcity.gt(input2.currentCapcity)) {
-      input1.currentCapcity = input2.currentCapcity;
-      input1.fillRate = input2.fillRate;
-      input1.maxCapcity = input2.maxCapcity;
-    }
-
-    return input1;
-  };
-
   const formatToken = (input: BigNumber, symbol?: string) => {
     if (!symbol || typeof tokenFormat[symbol] === 'undefined') {
       return;
@@ -242,6 +221,38 @@ export default function useLimitAmountModal() {
     return false;
   };
 
+  const calculateMinValue = (
+    input1: LimitDataProps | undefined,
+    input2: LimitDataProps | undefined,
+  ): LimitDataProps | undefined => {
+    if (!input1) {
+      return;
+    }
+
+    if (!input2) {
+      return input1;
+    }
+
+    if (input1.remain.gt(input2.remain)) {
+      input1.remain = input2.remain;
+    }
+
+    if (input1.isEnable && input2.isEnable) {
+      if (input1.currentCapcity.gt(input2.currentCapcity)) {
+        input1.currentCapcity = input2.currentCapcity;
+        input1.fillRate = input2.fillRate;
+        input1.maxCapcity = input2.maxCapcity;
+      }
+    } else if (input2.isEnable) {
+      input1.currentCapcity = input2.currentCapcity;
+      input1.fillRate = input2.fillRate;
+      input1.maxCapcity = input2.maxCapcity;
+      input1.isEnable = input2.isEnable;
+    }
+
+    return input1;
+  };
+
   const checkLimitAndRate = async function (
     type: 'transfer' | 'swap',
     amount?: BigNumber | string | number,
@@ -259,30 +270,9 @@ export default function useLimitAmountModal() {
       return true;
     }
 
-    let limitAndRateData: LimitDataProps;
-    if (results.length === 1) {
-      limitAndRateData = results[0];
-    } else if ((results[0]?.isEnable && results[1]?.isEnable) || (!results[0]?.isEnable && !results[1]?.isEnable)) {
-      limitAndRateData = {
-        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
-        isEnable: results[0]?.isEnable && results[1]?.isEnable,
-      };
-    } else if (results[0]?.isEnable) {
-      limitAndRateData = {
-        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
-        maxCapcity: results[0].maxCapcity,
-        currentCapcity: results[0].currentCapcity,
-        fillRate: results[0].fillRate,
-        isEnable: true,
-      };
-    } else {
-      limitAndRateData = {
-        ...(calculateMinValue(results[0], results[1]) as LimitDataProps),
-        maxCapcity: results[1].maxCapcity,
-        currentCapcity: results[1].currentCapcity,
-        fillRate: results[1].fillRate,
-        isEnable: true,
-      };
+    const limitAndRateData = calculateMinValue(results[0], results[1]);
+    if (!limitAndRateData) {
+      return true;
     }
 
     console.log(
