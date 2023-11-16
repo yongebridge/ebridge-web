@@ -106,7 +106,7 @@ function Body({
         className={styles.table}
         columns={isHeterogeneous ? heterogeneousColumns : columns}
         dataSource={list}
-        scroll={list?.length ? { x: true } : {}}
+        scroll={list?.length ? { x: 1000 } : {}}
       />
       <TablePagination
         current={page ?? 1}
