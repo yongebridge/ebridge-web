@@ -3,6 +3,8 @@ import { ChainId } from 'types';
 import { LimitDataProps } from './constants';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
+import { getChainIdToMap, getShortNameByChainId } from 'utils/chain';
+import { isELFChain } from 'utils/aelfUtils';
 
 interface LimitDataByGqlProps {
   fromChainId: ChainId;
@@ -43,9 +45,13 @@ const limitQuery = gql`
   }
 `;
 
-export const getLimitData = async (params: {
-  fromChainId: ChainId;
-  toChainId: ChainId;
+export const getLimitData = async ({
+  fromChainId,
+  toChainId,
+  symbol,
+}: {
+  fromChainId?: ChainId;
+  toChainId?: ChainId;
   symbol?: string;
 }): Promise<LimitDataProps | undefined> => {
   try {
@@ -58,7 +64,9 @@ export const getLimitData = async (params: {
       query: limitQuery,
       variables: {
         dto: {
-          ...params,
+          fromChainId: isELFChain(fromChainId) ? getShortNameByChainId(fromChainId) : getChainIdToMap(fromChainId),
+          toChainId: isELFChain(toChainId) ? getShortNameByChainId(toChainId) : getChainIdToMap(toChainId),
+          symbol,
           skipCount: 0,
         },
       },
