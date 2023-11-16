@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import lodash from 'lodash';
 import CommonButton from 'components/CommonButton';
 import { useWallet } from 'contexts/useWallet/hooks';
 import { useBridgeContract, useBridgeOutContract, useCrossChainContract, useTokenContract } from 'hooks/useContract';
@@ -35,7 +36,7 @@ function Actions() {
   const itemSendChainID = useMemo(() => receiveItem?.fromChainId, [receiveItem?.fromChainId]);
   const fromTokenInfo = useMemo(() => {
     if (!fromChainId) return;
-    const token = selectToken?.[fromChainId];
+    const token = lodash.cloneDeep(selectToken?.[fromChainId]);
     if (token?.isNativeToken) token.address = '';
     return token;
   }, [fromChainId, selectToken]);
