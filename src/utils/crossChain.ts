@@ -15,6 +15,7 @@ import { formatAddress, isIncludesChainId } from 'utils';
 import { FormatTokenList } from 'constants/index';
 import { LimitDataProps } from 'page-components/Home/useLimitAmountModal/constants';
 import BigNumber from 'bignumber.js';
+import { message } from 'antd';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -384,8 +385,9 @@ export async function getReceiptLimit({
       fillRate: new BigNumber(result[1].rate),
       isEnable: result[1].isEnabled,
     };
-  } catch (e) {
-    console.log('getReceiptLimit error :', e);
+  } catch (error: any) {
+    message.error(error.message);
+    console.log('getReceiptLimit error :', error);
   }
 }
 
@@ -420,7 +422,8 @@ export async function getSwapLimit({
       fillRate: new BigNumber(result[1].rate),
       isEnable: result[1].isEnabled,
     };
-  } catch (e) {
-    console.log('getSwapLimit error :', e);
+  } catch (error: any) {
+    message.error(error.message);
+    console.log('getSwapLimit error :', error);
   }
 }
