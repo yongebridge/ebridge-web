@@ -5,15 +5,17 @@ import { ChainId } from 'types';
 
 import styles from './styles.module.less';
 import BigNumber from 'bignumber.js';
+import useMediaQueries from 'hooks/useMediaQueries';
 
 export function useReceiptColumns() {
   const { t } = useLanguage();
+  const isMd = useMediaQueries('md');
 
   return useMemo(
     () => [
       {
         title: t('eBridge limit rules Token'),
-        width: 148,
+        width: isMd ? 86 : 140,
         key: 'token',
         dataIndex: 'token',
         render: (token: string) => <span className={styles['table-data']}>{token}</span>,
@@ -29,18 +31,19 @@ export function useReceiptColumns() {
         ),
       },
     ],
-    [t],
+    [isMd, t],
   );
 }
 
 export function useSwapColumns() {
   const { t } = useLanguage();
+  const isMd = useMediaQueries('md');
 
   return useMemo(
     () => [
       {
         title: t('Rate limit Token'),
-        width: 148,
+        width: isMd ? 86 : 140,
         key: 'token',
         dataIndex: 'token',
         render: (token: string) => <span className={styles['table-data']}>{token}</span>,
@@ -69,6 +72,6 @@ export function useSwapColumns() {
         },
       },
     ],
-    [t],
+    [isMd, t],
   );
 }
