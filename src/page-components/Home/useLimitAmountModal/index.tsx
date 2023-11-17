@@ -144,15 +144,15 @@ export default function useLimitAmountModal() {
     return promiseList;
   };
 
-  const formatToken = (input: BigNumber, symbol?: string) => {
+  const formatToken = (input: BigNumber, symbol?: string): string => {
     if (!symbol || typeof tokenFormat[symbol] === 'undefined') {
-      return;
+      return '';
     }
-    return input.dp(tokenFormat[symbol], BigNumber.ROUND_DOWN);
+    return input.dp(tokenFormat[symbol], BigNumber.ROUND_DOWN).toFormat();
   };
 
-  const calculateTime = (input: BigNumber, currentCapcity: BigNumber, fillRate: BigNumber): BigNumber =>
-    input.minus(currentCapcity).div(fillRate).idiv(60).plus(1);
+  const calculateTime = (input: BigNumber, currentCapcity: BigNumber, fillRate: BigNumber): string =>
+    input.minus(currentCapcity).div(fillRate).idiv(60).plus(1).toFormat();
 
   const checkDailyLimit = function (input: BigNumber, { remain }: LimitDataProps): boolean {
     if (remain.isZero()) {

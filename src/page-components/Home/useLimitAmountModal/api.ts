@@ -104,14 +104,16 @@ export const getLimitData = async ({
     const utcNow = moment.utc();
     const midnightToday = moment(utcNow.format('YYYY-MM-DD'));
 
-    // Updated every day
-    // if (utcRefreshTime.isBefore(midnightToday)) {
-    //   remain = new BigNumber(defaultDailyLimit);
-    // }
-
-    // test1 Updated hourly
-    if (utcRefreshTime.isBefore(utcNow.clone().subtract(1, 'h'))) {
-      remain = new BigNumber(defaultDailyLimit);
+    if (process.env.NEXT_PUBLIC_APP_ENV === 'test1') {
+      // test1 Updated hourly
+      if (utcRefreshTime.isBefore(utcNow.clone().subtract(1, 'h'))) {
+        remain = new BigNumber(defaultDailyLimit);
+      }
+    } else {
+      // Updated every day
+      if (utcRefreshTime.isBefore(midnightToday)) {
+        remain = new BigNumber(defaultDailyLimit);
+      }
     }
 
     if (utcBucketUpdateTime.isBefore(utcNow)) {
