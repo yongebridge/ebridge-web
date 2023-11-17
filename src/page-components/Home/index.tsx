@@ -23,7 +23,6 @@ export default function Home() {
   const { t } = useLanguage();
   const isShowMask = false,
     isLoading = false;
-  // const { isShowMask, isLoading } = useMaskQuery();
   if (isLoading) {
     return <Skeleton paragraph={{ rows: 10 }} />;
   }
@@ -46,7 +45,6 @@ export default function Home() {
           <SelectTokenModal />
           <AddTokenModal />
           {isMd ? <NotificationForPhone /> : <Notification />}
-
           <LimitAmountDescModal />
         </>
       ) : (

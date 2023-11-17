@@ -106,8 +106,7 @@ function Body({
         className={styles.table}
         columns={isHeterogeneous ? heterogeneousColumns : columns}
         dataSource={list}
-        // scroll={list?.length ? { x: 1000 } : {}}
-        scroll={{ x: 1000, scrollToFirstRowOnChange: true }}
+        scroll={{ x: 1000 }}
       />
       <TablePagination
         current={page ?? 1}
@@ -119,7 +118,7 @@ function Body({
   );
 }
 
-function HeterogeneousHistory() {
+function useHeterogeneousHistory() {
   const [state, setState] = useSetState<State>(DefaultListState);
   const { page } = state;
   const [selectState, setSelect] = useSetState<State>();
@@ -157,21 +156,22 @@ function HeterogeneousHistory() {
     if (preFromAccount !== fromAccount || preToAccount !== toAccount) setState(DefaultListState);
   }, [fromAccount, preFromAccount, preToAccount, setState, toAccount]);
   useInterval(getReceiveList, 10000, [getReceiveList]);
-  return (
-    <Body
-      networkList={NetworkList}
-      isHeterogeneous
-      state={state}
-      selectState={selectState}
-      setSelect={setSelect}
-      setState={setState}
-    />
+  return useMemo(
+    () => ({
+      isHeterogeneous: true,
+      networkList: NetworkList,
+      state,
+      selectState,
+      setSelect,
+      setState,
+    }),
+    [selectState, setSelect, setState, state],
   );
 }
 
 const isomorphismNetworkList = NetworkList.filter((i) => isELFChain(i.info.chainId));
 
-function HomogeneousHistory() {
+function useHomogeneousHistory() {
   const [state, setState] = useSetState<State>(DefaultListState);
   const { page } = state;
   const [selectState, setSelect] = useSetState<State>();
@@ -209,14 +209,17 @@ function HomogeneousHistory() {
     if (preFromAddress !== fromAddress) setState(DefaultListState);
   }, [fromAddress, preFromAddress, setState]);
   useInterval(getReceiveList, 10000, [getReceiveList]);
-  return (
-    <Body
-      networkList={isomorphismNetworkList}
-      state={state}
-      selectState={selectState}
-      setSelect={setSelect}
-      setState={setState}
-    />
+
+  return useMemo(
+    () => ({
+      isHeterogeneous: false,
+      networkList: isomorphismNetworkList,
+      state,
+      selectState,
+      setSelect,
+      setState,
+    }),
+    [selectState, setSelect, setState, state],
   );
 }
 
@@ -224,19 +227,23 @@ export default function History() {
   const [{ historyType }, setActiveKey] = useUrlSearchState();
 
   const { t } = useLanguage();
+
+  const heterogeneousData = useHeterogeneousHistory();
+  const homogeneousData = useHomogeneousHistory();
+
+  const tableData = useMemo(
+    () => (historyType === CrossChainType.heterogeneous ? heterogeneousData : homogeneousData),
+    [heterogeneousData, historyType, homogeneousData],
+  );
   return (
     <div className={styles.history}>
       <Tabs
         defaultActiveKey={CrossChainType.heterogeneous}
         activeKey={CrossChainType[historyType as CrossChainType] ? historyType : undefined}
         onChange={(v) => setActiveKey({ historyType: v })}>
-        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous}>
-          <HeterogeneousHistory />
-        </Tabs.TabPane>
+        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous} />
         {!isPortkey() && (
-          <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous}>
-            <HomogeneousHistory />
-          </Tabs.TabPane>
+          <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous} />
         )}
         <div className="tip-icon">
           <CommonPopover className="cursor-pointer" content={<Content />} placement="topRight">
@@ -244,6 +251,16 @@ export default function History() {
           </CommonPopover>
         </div>
       </Tabs>
+      <div className={styles['table-box']}>
+        <Body
+          networkList={tableData.networkList}
+          isHeterogeneous={tableData.isHeterogeneous}
+          state={tableData.state}
+          selectState={tableData.selectState}
+          setSelect={tableData.setSelect}
+          setState={tableData.setState}
+        />
+      </div>
     </div>
   );
 }
