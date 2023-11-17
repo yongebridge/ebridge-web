@@ -40,7 +40,7 @@ export default function LimitAmountDescModal() {
 
   return (
     <CommonModal
-      title={t('eBridge limit rules')}
+      title={t('eBridge limit rules title')}
       visible={limitAmountDescModal}
       onCancel={closeModal}
       className={styles['select-amount-desc-modal']}>

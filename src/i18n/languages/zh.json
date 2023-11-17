@@ -126,7 +126,7 @@
     "OK": "好的",
     "eBridge limit rules Token": "代幣",
     "eBridge limit rules Allowance": "日限額",
-    "About allowance": "約{{allowance}} {{tokenSymbol}}",
+    "About allowance": "{{allowance}} {{tokenSymbol}}",
     "Rate limit Token": "代幣",
     "Rate limit Attributes": "限速",
     "Rate limit capacity": "最大容量： {{capacity}} {{token}}",
