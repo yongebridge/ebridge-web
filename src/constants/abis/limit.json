@@ -1,4 +1,4 @@
-{
+[
   {
     "inputs": [],
     "name": "BucketOverfilled",
@@ -75,6 +75,201 @@
     ],
     "name": "OwnershipTransferred",
     "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "targetChainId",
+        "type": "string"
+      }
+    ],
+    "name": "getCurrentReceiptTokenBucketState",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint128",
+            "name": "currentTokenAmount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint32",
+            "name": "lastUpdatedTime",
+            "type": "uint32"
+          },
+          {
+            "internalType": "bool",
+            "name": "isEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint128",
+            "name": "tokenCapacity",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "rate",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct RateLimiter.TokenBucket",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fromChainId",
+        "type": "string"
+      }
+    ],
+    "name": "getCurrentSwapTokenBucketState",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint128",
+            "name": "currentTokenAmount",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint32",
+            "name": "lastUpdatedTime",
+            "type": "uint32"
+          },
+          {
+            "internalType": "bool",
+            "name": "isEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint128",
+            "name": "tokenCapacity",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "rate",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct RateLimiter.TokenBucket",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "targetChainId",
+        "type": "string"
+      }
+    ],
+    "name": "GetReceiptBucketMinWaitSeconds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "fromChainId",
+        "type": "string"
+      }
+    ],
+    "name": "GetSwapBucketMinWaitSeconds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "bucketId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bool",
+            "name": "isEnabled",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint128",
+            "name": "tokenCapacity",
+            "type": "uint128"
+          },
+          {
+            "internalType": "uint128",
+            "name": "rate",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct RateLimiter.TokenBucketConfig[]",
+        "name": "configs",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "SetTokenBucketConfig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -174,239 +369,6 @@
         "type": "string"
       }
     ],
-    "name": "getCurrentReceiptTokenBucketState",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "currentTokenAmount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastUpdatedTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "bool",
-            "name": "isEnabled",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint128",
-            "name": "tokenCapacity",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "rate",
-            "type": "uint128"
-          }
-        ],
-        "internalType": "struct RateLimiter.TokenBucket",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "targetChainIds",
-        "type": "string[]"
-      }
-    ],
-    "name": "getCurrentReceiptTokenBucketStates",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "currentTokenAmount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastUpdatedTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "bool",
-            "name": "isEnabled",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint128",
-            "name": "tokenCapacity",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "rate",
-            "type": "uint128"
-          }
-        ],
-        "internalType": "struct RateLimiter.TokenBucket[]",
-        "name": "_tokenBuckets",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "fromChainId",
-        "type": "string"
-      }
-    ],
-    "name": "getCurrentSwapTokenBucketState",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "currentTokenAmount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastUpdatedTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "bool",
-            "name": "isEnabled",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint128",
-            "name": "tokenCapacity",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "rate",
-            "type": "uint128"
-          }
-        ],
-        "internalType": "struct RateLimiter.TokenBucket",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "internalType": "string[]",
-        "name": "fromChainIds",
-        "type": "string[]"
-      }
-    ],
-    "name": "getCurrentSwapTokenBucketStates",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "currentTokenAmount",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastUpdatedTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "bool",
-            "name": "isEnabled",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint128",
-            "name": "tokenCapacity",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "rate",
-            "type": "uint128"
-          }
-        ],
-        "internalType": "struct RateLimiter.TokenBucket[]",
-        "name": "_tokenBuckets",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "targetChainId",
-        "type": "string"
-      }
-    ],
-    "name": "getReceiptBucketMinWaitSeconds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "targetChainId",
-        "type": "string"
-      }
-    ],
     "name": "getReceiptDailyLimit",
     "outputs": [
       {
@@ -430,35 +392,6 @@
         "internalType": "struct DailyLimiter.DailyLimitTokenInfo",
         "name": "",
         "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "fromChainId",
-        "type": "string"
-      }
-    ],
-    "name": "getSwapBucketMinWaitSeconds",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -576,41 +509,6 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "bucketId",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bool",
-            "name": "isEnabled",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint128",
-            "name": "tokenCapacity",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "rate",
-            "type": "uint128"
-          }
-        ],
-        "internalType": "struct RateLimiter.TokenBucketConfig[]",
-        "name": "configs",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "setTokenBucketConfig",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
@@ -621,4 +519,4 @@
     "stateMutability": "nonpayable",
     "type": "function"
   }
-}
+]
