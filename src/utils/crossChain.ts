@@ -351,8 +351,6 @@ export async function getSwapId({
     swapId = await bridgeOutContract?.callViewMethod('getSwapId', [address, chainId]);
   }
 
-  console.log('swapId: ', swapId);
-
   return swapId;
 }
 
@@ -368,15 +366,12 @@ export async function getReceiptLimit({
   try {
     const result = await Promise.all([
       limitContract?.callViewMethod('getReceiptDailyLimit', [address, getChainIdToMap(toChainId)]),
-      limitContract?.callViewMethod('GetCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
+      limitContract?.callViewMethod('getCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
     ]);
 
     if (result[0].error || result[1].error) {
       throw new Error(result[0].error || result[1].error);
     }
-
-    console.log('getReceiptDailyLimit: ', result[0]);
-    console.log('GetCurrentReceiptTokenBucketState: ', result[1]);
 
     return {
       remain: new BigNumber(result[0].tokenAmount),
@@ -405,15 +400,12 @@ export async function getSwapLimit({
   try {
     const result = await Promise.all([
       limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
-      limitContract?.callViewMethod('GetCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
+      limitContract?.callViewMethod('getCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
     ]);
 
     if (result[0].error || result[1].error) {
       throw new Error(result[0].error || result[1].error);
     }
-
-    console.log('getSwapDailyLimit: ', result[0]);
-    console.log('GetCurrentSwapTokenBucketState: ', result[1]);
 
     return {
       remain: new BigNumber(result[0].tokenAmount),

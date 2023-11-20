@@ -77,8 +77,6 @@ export const getLimitData = async ({
       throw new Error(result.error.message);
     }
 
-    console.log('getLimitData by gql :', result.data.queryCrossChainLimitInfos.dataList[0]);
-
     if (!result?.data?.queryCrossChainLimitInfos?.dataList?.length) {
       return;
     }
