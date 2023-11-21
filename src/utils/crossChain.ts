@@ -375,21 +375,21 @@ export async function getReceiptLimit({
 
   const { address } = getTokenInfoByWhitelist(fromChainId, fromSymbol) || {};
   try {
-    const result = await Promise.all([
+    const [receiptDailyLimit, receiptTokenBucket] = await Promise.all([
       limitContract?.callViewMethod('getReceiptDailyLimit', [address, getChainIdToMap(toChainId)]),
       limitContract?.callViewMethod('getCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
     ]);
 
-    if (result[0].error || result[1].error) {
-      throw new Error(result[0].error || result[1].error);
+    if (receiptDailyLimit.error || receiptTokenBucket.error) {
+      throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
 
     return {
-      remain: new BigNumber(result[0].tokenAmount),
-      maxCapcity: new BigNumber(result[1].tokenCapacity),
-      currentCapcity: new BigNumber(result[1].currentTokenAmount),
-      fillRate: new BigNumber(result[1].rate),
-      isEnable: result[1].isEnabled,
+      remain: new BigNumber(receiptDailyLimit.tokenAmount),
+      maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
+      currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
+      fillRate: new BigNumber(receiptTokenBucket.rate),
+      isEnable: receiptTokenBucket.isEnabled,
     };
   } catch (error: any) {
     message.error(error.message);
@@ -416,21 +416,21 @@ export async function getSwapLimit({
 
   const { address } = getTokenInfoByWhitelist(toChainId, toSymbol) || {};
   try {
-    const result = await Promise.all([
+    const [swapDailyLimit, swapTokenBucket] = await Promise.all([
       limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
       limitContract?.callViewMethod('getCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
     ]);
 
-    if (result[0].error || result[1].error) {
-      throw new Error(result[0].error || result[1].error);
+    if (swapDailyLimit.error || swapTokenBucket.error) {
+      throw new Error(swapDailyLimit.error || swapTokenBucket.error);
     }
 
     return {
-      remain: new BigNumber(result[0].tokenAmount),
-      maxCapcity: new BigNumber(result[1].tokenCapacity),
-      currentCapcity: new BigNumber(result[1].currentTokenAmount),
-      fillRate: new BigNumber(result[1].rate),
-      isEnable: result[1].isEnabled,
+      remain: new BigNumber(swapDailyLimit.tokenAmount),
+      maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
+      currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
+      fillRate: new BigNumber(swapTokenBucket.rate),
+      isEnable: swapTokenBucket.isEnabled,
     };
   } catch (error: any) {
     message.error(error.message);

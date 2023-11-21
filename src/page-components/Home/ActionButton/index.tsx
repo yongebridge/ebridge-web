@@ -62,7 +62,7 @@ function Actions() {
     CrossFeeToken === fromTokenInfo?.symbol ? undefined : CrossFeeToken,
   );
 
-  const [limitAmoutModal, checkLimitAndRate] = useLimitAmountModal();
+  const [limitAmountModal, checkLimitAndRate] = useLimitAmountModal();
 
   const onCrossChainReceive = useLockCallback(async () => {
     if (!receiveItem) return message.error(t('record does not exist'));
@@ -369,7 +369,7 @@ function Actions() {
           setToConfirmModal(false);
         }}
       />
-      {limitAmoutModal}
+      {limitAmountModal}
     </>
   );
 }

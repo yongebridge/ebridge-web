@@ -1,4 +1,4 @@
-import { gql, ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { ChainId } from 'types';
 import { LimitDataProps } from './constants';
 import BigNumber from 'bignumber.js';
@@ -6,6 +6,7 @@ import moment from 'moment';
 import { getChainIdToMap, getShortNameByChainId } from 'utils/chain';
 import { isELFChain } from 'utils/aelfUtils';
 import { message } from 'antd';
+import { requestGql } from 'api';
 
 interface LimitDataByGqlProps {
   fromChainId: ChainId;
@@ -56,7 +57,9 @@ export const getLimitData = async ({
   toSymbol?: string;
 }): Promise<LimitDataProps | undefined> => {
   try {
-    const client = creatGqlClient();
+    const client = requestGql({
+      uri: '/AElfIndexer_eBridge/EbridgeIndexerPluginSchema/graphql',
+    });
     const result = await client.query<{
       queryCrossChainLimitInfos: {
         dataList: Array<LimitDataByGqlProps>;
@@ -131,23 +134,4 @@ export const getLimitData = async ({
     message.error(error.message);
     console.log('error: ', error);
   }
-};
-
-const creatGqlClient = () => {
-  return new ApolloClient({
-    cache: new InMemoryCache(),
-    queryDeduplication: false,
-    defaultOptions: {
-      watchQuery: {
-        fetchPolicy: 'cache-and-network',
-      },
-      query: {
-        fetchPolicy: 'network-only',
-      },
-      // ...defaultOptions,
-    },
-    link: new HttpLink({
-      uri: '/AElfIndexer_eBridge/EbridgeIndexerPluginSchema/graphql',
-    }),
-  });
 };
