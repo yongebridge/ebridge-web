@@ -21,8 +21,7 @@ export interface LimitDataProps {
 export interface ICrossInfo {
   fromChainId?: ChainId;
   toChainId?: ChainId;
-  toSymbol?: string;
   fromDecimals?: number;
   toDecimals?: number;
-  fromSymbol?: string;
+  symbol?: string;
 }

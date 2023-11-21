@@ -16,6 +16,7 @@ import { divDecimals } from 'utils/calculate';
 
 import styles from './styles.module.less';
 import { CrossChainItem } from 'types/api';
+import { ChainId } from 'types';
 
 const calculateMinValue = (
   input1: LimitDataProps | undefined,
@@ -90,15 +91,13 @@ export default function useLimitAmountModal() {
   const limitContract = useLimitContract(fromChainId, toChainId);
   const bridgeOutContract = useBridgeOutContract(toChainId, toWallet?.isPortkey);
 
-  const fromTokenInfo = useMemo(() => {
-    if (!fromChainId) return;
-    return selectToken?.[fromChainId];
-  }, [fromChainId, selectToken]);
-
-  const toTokenInfo = useMemo(() => {
-    if (!toChainId) return;
-    return selectToken?.[toChainId];
-  }, [toChainId, selectToken]);
+  const getTokenInfo = useCallback(
+    (chainId?: ChainId) => {
+      if (!chainId) return;
+      return selectToken?.[chainId];
+    },
+    [selectToken],
+  );
 
   const getLimitDataByContract = useCallback(
     async function (
@@ -156,29 +155,25 @@ export default function useLimitAmountModal() {
   );
 
   const checkDailyLimit = useCallback(
-    function (
-      input: BigNumber,
-      { remain }: LimitDataProps,
-      { fromChainId, toChainId, fromSymbol }: ICrossInfo,
-    ): boolean {
+    function (input: BigNumber, { remain }: LimitDataProps, { fromChainId, toChainId, symbol }: ICrossInfo): boolean {
       if (remain.isZero()) {
         setModalTxt(
           t('have reached the daily limit', {
             fromChain: getShortNameByChainId(fromChainId),
             toChain: getShortNameByChainId(toChainId),
-            tokenSymbol: fromSymbol,
+            tokenSymbol: symbol,
           }),
         );
         return true;
       }
 
       if (remain.lt(input)) {
-        const amount = formatToken(remain, fromSymbol);
+        const amount = formatToken(remain, symbol);
         setModalTxt(
           t('have a daily limit and your current transaction', {
             fromChain: getShortNameByChainId(fromChainId),
             toChain: getShortNameByChainId(toChainId),
-            tokenSymbol: fromSymbol,
+            tokenSymbol: symbol,
             amount,
           }),
         );
@@ -194,19 +189,19 @@ export default function useLimitAmountModal() {
     function (
       input: BigNumber,
       { maxCapcity, currentCapcity, fillRate, isEnable }: LimitDataProps,
-      { fromChainId, toChainId, fromSymbol }: ICrossInfo,
+      { fromChainId, toChainId, symbol }: ICrossInfo,
     ): boolean {
       if (!isEnable) {
         return false;
       }
 
       if (maxCapcity.lt(input)) {
-        const amount = formatToken(maxCapcity, fromSymbol);
+        const amount = formatToken(maxCapcity, symbol);
         setModalTxt(
           t(`Your current transaction exceeds the capacity and can't be processed`, {
             fromChain: getShortNameByChainId(fromChainId),
             toChain: getShortNameByChainId(toChainId),
-            tokenSymbol: fromSymbol,
+            tokenSymbol: symbol,
             amount,
           }),
         );
@@ -214,13 +209,13 @@ export default function useLimitAmountModal() {
       }
 
       if (currentCapcity.lt(input)) {
-        const amount = formatToken(currentCapcity, fromSymbol);
+        const amount = formatToken(currentCapcity, symbol);
         const time = calculateTime(input, currentCapcity, fillRate);
         setModalTxt(
           t('have a maximum capacity and your current transaction exceeds the available capacity', {
             fromChain: getShortNameByChainId(fromChainId),
             toChain: getShortNameByChainId(toChainId),
-            tokenSymbol: fromSymbol,
+            tokenSymbol: symbol,
             amount,
             time,
           }),
@@ -248,22 +243,24 @@ export default function useLimitAmountModal() {
       let crossInfo: ICrossInfo;
 
       if (type === 'transfer') {
+        const fromTokenInfo = getTokenInfo(fromChainId);
+        const toTokenInfo = getTokenInfo(toChainId);
         crossInfo = {
-          fromChainId: fromChainId,
           toChainId: toChainId,
-          toSymbol: toTokenInfo?.symbol,
+          symbol: fromTokenInfo?.symbol,
           toDecimals: toTokenInfo?.decimals,
+          fromChainId: fromChainId,
           fromDecimals: fromTokenInfo?.decimals,
-          fromSymbol: fromTokenInfo?.symbol,
         };
       } else {
+        const fromTokenInfo = getTokenInfo(receiveItem?.fromChainId);
+        const toTokenInfo = getTokenInfo(receiveItem?.toChainId);
         crossInfo = {
           fromChainId: receiveItem?.fromChainId,
           toChainId: receiveItem?.toChainId,
-          toSymbol: receiveItem?.receiveToken?.symbol,
-          fromDecimals: receiveItem?.transferToken?.decimals,
-          toDecimals: receiveItem?.receiveToken?.decimals,
-          fromSymbol: receiveItem?.transferToken?.symbol,
+          symbol: receiveItem?.transferToken?.symbol,
+          toDecimals: toTokenInfo?.decimals,
+          fromDecimals: fromTokenInfo?.decimals,
         };
       }
 
@@ -288,16 +285,7 @@ export default function useLimitAmountModal() {
 
       return false;
     },
-    [
-      checkCapacity,
-      checkDailyLimit,
-      fromChainId,
-      fromTokenInfo,
-      getElfLimitDataFn,
-      getEvmLimitDataFn,
-      toChainId,
-      toTokenInfo,
-    ],
+    [checkCapacity, checkDailyLimit, fromChainId, getElfLimitDataFn, getEvmLimitDataFn, getTokenInfo, toChainId],
   );
 
   const closeModal = () => setVisible(false);
