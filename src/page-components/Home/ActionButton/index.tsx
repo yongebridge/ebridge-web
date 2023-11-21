@@ -25,7 +25,7 @@ function Actions() {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
   const [toConfirmModal, setToConfirmModal] = useState<boolean>(false);
   const [
-    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress },
+    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress, crossFee },
     { dispatch, addReceivedList },
   ] = useHomeContext();
   const { chainId: fromChainId, account: fromAccount, library } = fromWallet || {};
@@ -40,12 +40,12 @@ function Actions() {
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
 
-  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address);
-  const sendCrossChainContract = useCrossChainContract(itemSendChainID);
-  const receiveTokenContract = useTokenContract(itemToChainID);
-  const sendTokenContract = useTokenContract(itemSendChainID);
-  const bridgeContract = useBridgeContract(fromChainId);
-  const bridgeOutContract = useBridgeOutContract(toChainId);
+  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address, fromWallet?.isPortkey);
+  const sendCrossChainContract = useCrossChainContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const receiveTokenContract = useTokenContract(itemToChainID, undefined, toWallet?.isPortkey);
+  const sendTokenContract = useTokenContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const bridgeContract = useBridgeContract(fromChainId, fromWallet?.isPortkey);
+  const bridgeOutContract = useBridgeOutContract(toChainId, toWallet?.isPortkey);
 
   const [fromTokenAllowance, getAllowance] = useAllowance(
     tokenContract,
@@ -138,31 +138,32 @@ function Actions() {
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
       toChainId,
       to: toChecked && toAddress ? toAddress : (toAccount as string),
+      crossFee,
     };
     if (tokenContract) {
       params.tokenContract = tokenContract;
     }
     try {
       const req = await (fromTokenInfo.isNativeToken ? LockToken : CreateReceipt)(params);
-
-      if (!req.error) dispatch(setFrom(''));
+      if (!req?.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
-      message.error(error.message);
+      error?.message && message.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [
-    bridgeContract,
-    dispatch,
-    fromAccount,
-    fromChainId,
-    fromInput,
     fromTokenInfo,
-    library,
-    toAccount,
-    toChecked,
-    toAddress,
+    fromAccount,
+    bridgeContract,
     toChainId,
+    fromChainId,
+    toChecked,
+    toAccount,
+    toAddress,
+    dispatch,
+    library,
+    fromInput,
+    crossFee,
     tokenContract,
   ]);
   const onSwapToken = useCallback(async () => {

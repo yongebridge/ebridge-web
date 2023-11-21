@@ -6,17 +6,18 @@ import Copy from '../../components/Copy';
 import CommonLink from '../../components/CommonLink';
 import { useModal } from 'contexts/useModal';
 import { basicModalView } from 'contexts/useModal/actions';
-import { useAEflConnect } from 'hooks/web3';
-import { useMobile } from 'contexts/useStore/hooks';
 import { isELFChain } from 'utils/aelfUtils';
 import WalletIcon from 'components/WalletIcon';
 import { SUPPORTED_WALLETS } from 'constants/wallets';
+import { getConnection } from 'walletConnectors/utils';
+import { useChainDispatch } from 'contexts/useChain';
+import { setSelectERCWallet } from 'contexts/useChain/actions';
 
 function AccountCard() {
   const [{ accountWallet }, { dispatch }] = useModal();
-  const { connector, account, chainId, deactivate, aelfInstance } = accountWallet || {};
-  const connect = useAEflConnect();
-  const isMobile = useMobile();
+  const chainDispatch = useChainDispatch();
+
+  const { connector, account, chainId, deactivate, aelfInstance, walletType } = accountWallet || {};
   const filter = useCallback(
     (k: string) => {
       const isMetaMask = !!window.ethereum?.isMetaMask;
@@ -26,6 +27,10 @@ function AccountCard() {
     },
     [connector],
   );
+  const connection = useMemo(() => {
+    if (!connector || typeof connector === 'string') return;
+    return getConnection(connector);
+  }, [connector]);
   const formatConnectorName = useMemo(() => {
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter((k) => filter(k))
@@ -34,24 +39,35 @@ function AccountCard() {
   }, [filter]);
   const onDisconnect = useCallback(() => {
     if (typeof connector !== 'string') {
-      connector?.deactivate ? connector.deactivate() : connector?.resetState();
+      connection?.connector?.deactivate?.();
+      connection?.connector?.resetState?.();
+      chainDispatch(setSelectERCWallet(undefined));
     } else {
       deactivate?.();
     }
-    dispatch(basicModalView.setWalletModal(true, chainId));
-  }, [connector, deactivate, dispatch, chainId]);
+    dispatch(
+      basicModalView.setWalletModal(true, {
+        walletWalletType: walletType,
+        walletChainType: walletType === 'ERC' ? 'ERC' : 'ELF',
+        walletChainId: chainId,
+      }),
+    );
+  }, [connector, dispatch, walletType, chainId, connection?.connector, chainDispatch, deactivate]);
 
   const changeWallet = useCallback(async () => {
     try {
-      if (typeof chainId !== 'string') return dispatch(basicModalView.setWalletModal(true, chainId));
-      await deactivate?.();
-      dispatch(basicModalView.setAccountModal(false));
-      connect();
+      return dispatch(
+        basicModalView.setWalletModal(true, {
+          walletWalletType: walletType,
+          walletChainType: walletType === 'ERC' ? 'ERC' : 'ELF',
+          walletChainId: chainId,
+        }),
+      );
     } catch (error: any) {
       console.debug(`connection error: ${error}`);
       message.error(`connection error: ${error.message}`);
     }
-  }, [chainId, connect, deactivate, dispatch]);
+  }, [chainId, dispatch, walletType]);
   const isELF = isELFChain(chainId);
   return (
     <>

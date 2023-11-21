@@ -10,7 +10,7 @@ import useInterval from './useInterval';
 export function useCrossFee() {
   const { fromWallet, toWallet } = useWallet();
   const { chainId: fromChainId } = fromWallet || {};
-  const bridgeContract = useBridgeContract(fromChainId);
+  const bridgeContract = useBridgeContract(fromChainId, fromWallet?.isPortkey);
   const { chainId: toChainId } = toWallet || {};
   const [fee, setFee] = useState<string>();
   const getFeeByChainId = useCallback(async () => {

@@ -1,5 +1,5 @@
 import { Connector } from '@web3-react/types';
-import { ALL_SUPPORTED_CHAIN_IDS } from 'constants/chain';
+import { ALL_SUPPORTED_CHAIN_IDS, SupportedChainId } from 'constants/chain';
 import storages from 'constants/storages';
 import { eventBus } from 'utils';
 import {
@@ -8,6 +8,11 @@ import {
   networkConnection,
   walletConnectConnection,
 } from 'walletConnectors';
+import { isELFChain } from './aelfUtils';
+import { NetworkType } from 'types';
+import { ChainId } from 'types';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
+import { message } from 'antd';
 
 type Info = {
   chainId: number | string;
@@ -85,18 +90,63 @@ export function isChainAllowed(connector: Connector, chainId: number) {
       return false;
   }
 }
-export const switchChain = async (info: Info, connector?: Connector | string, isActive?: boolean) => {
+
+function getChainIdFromFormattedString(item: string): number | null {
+  const splitItem = item.startsWith('eip155:') ? item.split(':') : [];
+  return splitItem.length > 1 && !isNaN(Number(splitItem[1])) ? Number(splitItem[1]) : null;
+}
+export function getSupportedChainIdsFromWalletConnectSession(session?: any): SupportedChainId[] {
+  if (!session?.namespaces) return [];
+
+  const eip155Keys = Object.keys(session.namespaces);
+  const namespaces = Object.values(session.namespaces);
+
+  // Collect all arrays into one for unified processing
+  const allItems = [
+    ...eip155Keys,
+    ...namespaces.flatMap((namespace: any) => namespace.chains),
+    ...namespaces.flatMap((namespace: any) => namespace.accounts),
+  ];
+
+  // Process all items to extract chainIds
+  const allChainIds = allItems
+    .map((item) => {
+      if (typeof item === 'string') {
+        return getChainIdFromFormattedString(item);
+      }
+      // Check if the item is a number
+      return isNaN(Number(item)) ? null : Number(item);
+    })
+    .filter((item) => item !== null); // Filter out any null values
+
+  return Array.from(new Set(allChainIds)) as SupportedChainId[];
+}
+export const switchChain = async (
+  info: NetworkType['info'] & Info,
+  connector?: Connector | string,
+  isWeb3Active?: boolean,
+  web3ChainId?: ChainId,
+) => {
   const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
   if (typeof chainId === 'string') {
     eventBus.emit(storages.userELFChainId, info.chainId);
     return true;
   }
+  if (!isELFChain(info.chainId) && web3ChainId === info.chainId) return;
   eventBus.emit(storages.userERCChainId, info.chainId);
   if (!connector || typeof connector === 'string') return;
-  if (isActive) {
+  if (isWeb3Active) {
     if (!isChainAllowed(connector, chainId)) {
       throw new Error(`Chain ${chainId} not supported for connector (${typeof connector})`);
-    } else if (connector === walletConnectConnection.connector || connector === networkConnection.connector) {
+    } else if (connector === walletConnectConnection.connector) {
+      if (
+        !getSupportedChainIdsFromWalletConnectSession((connector as WalletConnect).provider?.session).includes(chainId)
+      ) {
+        message.error(`Unsupported ${chainName} by your wallet`);
+      } else {
+        await connector.activate(chainId);
+      }
+    } else if (connector === networkConnection.connector) {
       await connector.activate(chainId);
     } else {
       const addChainParameter = {
@@ -109,7 +159,7 @@ export const switchChain = async (info: Info, connector?: Connector | string, is
       };
       await connector.activate(addChainParameter);
       // fix disconnect metamask
-      if (connector === injectedConnection.connector) connector.connectEagerly?.();
+      if (connector === injectedConnection.connector && !window.ethereum?.selectedAddress) connector.connectEagerly?.();
     }
   } else {
     // unlink metamask

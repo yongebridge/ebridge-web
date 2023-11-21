@@ -37,6 +37,7 @@ export type HomeState = {
   fromBalance?: { balance: BigNumber; show: BigNumber; token: TokenInfo };
   actionLoading?: boolean;
   crossMin?: number;
+  crossFee?: string;
 };
 
 export const DestroyModal = {

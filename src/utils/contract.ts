@@ -9,6 +9,8 @@ import { getDefaultProvider } from './provider';
 import { sleep } from 'utils';
 import { AElfDappBridge } from '@aelf-react/types';
 import { checkAElfBridge } from './checkAElfBridge';
+import { IAElfChain } from '@portkey/provider-types';
+import { IContract } from '@portkey/types';
 export interface AbiType {
   internalType?: string;
   name?: string;
@@ -41,6 +43,7 @@ export interface ContractProps {
   aelfContract?: any;
   aelfInstance?: AElfDappBridge;
   viewContract?: any;
+  portkeyChain?: IAElfChain;
 }
 
 interface ErrorMsg {
@@ -75,12 +78,17 @@ type CallSendMethod = (
 export type ContractBasicErrorMsg = ErrorMsg;
 export class ContractBasic {
   public address?: string;
-  public callContract: WB3ContractBasic | AElfContractBasic;
+  public callContract: WB3ContractBasic | AElfContractBasic | PortkeyContractBasic;
   public contractType: ChainType;
+  // public isPortkey?: boolean;
   constructor(options: ContractProps) {
     this.address = options.contractAddress;
     const isELF = isELFChain(options.chainId);
-    this.callContract = isELF ? new AElfContractBasic(options) : new WB3ContractBasic(options);
+    this.callContract = options.portkeyChain
+      ? new PortkeyContractBasic(options)
+      : isELF
+      ? new AElfContractBasic(options)
+      : new WB3ContractBasic(options);
     this.contractType = isELF ? 'ELF' : 'ERC';
   }
 
@@ -89,7 +97,7 @@ export class ContractBasic {
     paramsOption,
     callOptions = { defaultBlock: 'latest' },
   ) => {
-    if (this.callContract instanceof AElfContractBasic)
+    if (this.callContract instanceof AElfContractBasic || this.callContract instanceof PortkeyContractBasic)
       return this.callContract.callViewMethod(functionName, paramsOption);
 
     return this.callContract.callViewMethod(functionName, paramsOption, callOptions);
@@ -97,12 +105,12 @@ export class ContractBasic {
 
   public callSendMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
     console.log(paramsOption, '++++paramsOption');
-    if (this.callContract instanceof AElfContractBasic)
+    if (this.callContract instanceof AElfContractBasic || this.callContract instanceof PortkeyContractBasic)
       return this.callContract.callSendMethod(functionName, paramsOption, sendOptions);
     return this.callContract.callSendMethod(functionName, account, paramsOption, sendOptions);
   };
   public callSendPromiseMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
-    if (this.callContract instanceof AElfContractBasic)
+    if (this.callContract instanceof AElfContractBasic || this.callContract instanceof PortkeyContractBasic)
       return this.callContract.callSendPromiseMethod(functionName, paramsOption);
 
     return this.callContract.callSendPromiseMethod(functionName, account, paramsOption, sendOptions);
@@ -316,5 +324,78 @@ export class AElfContractBasic {
     } catch (e) {
       return { error: e };
     }
+  };
+}
+
+export class PortkeyContractBasic {
+  public contract?: IContract;
+  public provider?: provider;
+  public chainId: ChainId;
+  public portkeyChain?: IAElfChain;
+  public methods?: any;
+  public address: string;
+  constructor(options: ContractProps) {
+    const { provider, contractAddress, chainId } = options;
+    this.portkeyChain = options.portkeyChain;
+    this.contract = this.portkeyChain?.getContract(options.contractAddress);
+    this.address = contractAddress;
+    this.provider = provider;
+    this.chainId = chainId as ChainId;
+    this.getFileDescriptorsSet(this.address);
+  }
+
+  getFileDescriptorsSet = async (address: string) => {
+    try {
+      this.methods = await getContractMethods(this.chainId, address);
+    } catch (error) {
+      throw new Error(JSON.stringify(error) + 'address:' + address + 'Contract:' + 'getContractMethods');
+    }
+  };
+  checkMethods = async () => {
+    if (!this.methods) await this.getFileDescriptorsSet(this.address);
+  };
+  public callViewMethod: AElfCallViewMethod = async (functionName, paramsOption) => {
+    const contract = this.contract;
+    if (!contract) return { error: { code: 401, message: 'Contract init error1' } };
+    try {
+      await this.checkMethods();
+      const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());
+      const inputType = this.methods[functionNameUpper];
+
+      const req = await contract.callViewMethod(functionNameUpper, transformArrayToMap(inputType, paramsOption));
+      console.log(req, transformArrayToMap(inputType, paramsOption), functionNameUpper, '=======callViewMethod');
+
+      if (req.error) return req;
+
+      return req?.data || req;
+    } catch (e) {
+      return { error: e };
+    }
+  };
+
+  public callSendMethod: AElfCallSendMethod = async (functionName, paramsOption, sendOptions) => {
+    const contract = this.contract;
+
+    if (!contract) return { error: { code: 401, message: 'Contract init error2' } };
+    const { onMethod = 'receipt', ...options } = sendOptions || {};
+
+    try {
+      await this.checkMethods();
+      const functionNameUpper = functionName.replace(functionName[0], functionName[0].toLocaleUpperCase());
+      const inputType = this.methods[functionNameUpper];
+      console.log(transformArrayToMap(inputType, paramsOption), paramsOption, functionNameUpper, '=callSendMethod');
+      const req = await contract.callSendMethod(functionNameUpper, '', transformArrayToMap(inputType, paramsOption), {
+        onMethod,
+        ...options,
+      });
+      if (req.error) return req;
+      return req?.data || req;
+    } catch (error: any) {
+      if (error.message) return { error };
+      return { error: { message: error.Error || error.Status } };
+    }
+  };
+  public callSendPromiseMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
+    throw new Error('Method not implemented.');
   };
 }

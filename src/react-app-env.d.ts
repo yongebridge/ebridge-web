@@ -1,6 +1,7 @@
 /// <reference types="react-scripts" />
 interface Window {
   ethereum?: {
+    selectedAddress?: string;
     isMetaMask?: true;
     isCoinbaseWallet?: true;
     on?: (...args: unknown[]) => void;

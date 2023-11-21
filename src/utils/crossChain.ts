@@ -8,11 +8,11 @@ import AElf from 'aelf-sdk';
 import { AElfTransaction, TransactionResult } from '@aelf-react/types';
 import { checkApprove } from 'contracts';
 import type { provider } from 'web3-core';
-import { CrossFeeToken, REQ_CODE } from 'constants/misc';
+import { CrossFeeToken, REQ_CODE, ZERO } from 'constants/misc';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
 import { formatAddress, isIncludesChainId } from 'utils';
-import { FormatTokenList, IS_MAINNET } from 'constants/index';
+import { FormatTokenList } from 'constants/index';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -205,6 +205,7 @@ export async function CreateReceipt({
   toChainId,
   to,
   tokenContract,
+  crossFee,
 }: {
   bridgeContract: ContractBasic;
   library: provider;
@@ -214,6 +215,7 @@ export async function CreateReceipt({
   toChainId: ChainId;
   to: string;
   tokenContract: ContractBasic;
+  crossFee?: string;
 }) {
   const toAddress = formatAddress(to);
   const fromELFChain = bridgeContract.contractType === 'ELF';
@@ -223,22 +225,32 @@ export async function CreateReceipt({
       CrossFeeToken,
       account,
       bridgeContract.address || '',
-      amount,
+      timesDecimals(crossFee, 8).toFixed(0),
       undefined,
       fromELFChain ? tokenContract : undefined,
     );
-    if (req !== REQ_CODE.Success) return req;
+    if (req !== REQ_CODE.Success) throw req;
+  }
+  let checkAmount = amount;
+  if (fromToken === CrossFeeToken) {
+    if (crossFee) {
+      // fee ELF decimals 8
+      crossFee = timesDecimals(crossFee, 8).toFixed(0);
+    }
+    checkAmount = ZERO.plus(amount)
+      .plus(crossFee || 0)
+      .toFixed(0);
   }
   const req = await checkApprove(
     library,
     fromToken,
     account,
     bridgeContract.address || '',
-    amount,
+    checkAmount,
     undefined,
     fromELFChain ? tokenContract : undefined,
   );
-  if (req !== REQ_CODE.Success) return req;
+  if (req !== REQ_CODE.Success) throw req;
   if (fromELFChain) {
     return bridgeContract.callSendMethod('createReceipt', account, [
       fromToken,

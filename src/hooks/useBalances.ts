@@ -17,7 +17,7 @@ export const useBalances = (
   const [balanceMap, setBalanceMap] = useState<{ [key: string]: BigNumber }>();
   const { library, chainId, account: owner } = wallet || {};
   const account = useMemo(() => targetAddress || owner, [targetAddress, owner]);
-  const tokenContract = useTokenContract(chainId);
+  const tokenContract = useTokenContract(chainId, undefined, wallet?.isPortkey);
   const tokensList = useMemo(() => (Array.isArray(tokens) ? tokens : [tokens]), [tokens]);
   const onGetBalance = useCallback(async () => {
     if (!account) return setBalanceMap(undefined);
