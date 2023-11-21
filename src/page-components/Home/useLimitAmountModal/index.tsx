@@ -43,7 +43,7 @@ const calculateMinValue = (
 
   if (input1.isEnable && input2.isEnable) {
     if (input1.maxCapcity.gt(input2.maxCapcity)) {
-      input1.currentCapcity = input2.currentCapcity;
+      input1.maxCapcity = input2.maxCapcity;
     }
   } else if (input2.isEnable) {
     input1.maxCapcity = input2.maxCapcity;

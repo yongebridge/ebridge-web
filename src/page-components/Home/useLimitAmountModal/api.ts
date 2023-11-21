@@ -50,11 +50,11 @@ const limitQuery = gql`
 export const getLimitData = async ({
   fromChainId,
   toChainId,
-  toSymbol,
+  symbol,
 }: {
   fromChainId?: ChainId;
   toChainId?: ChainId;
-  toSymbol?: string;
+  symbol?: string;
 }): Promise<LimitDataProps | undefined> => {
   try {
     const client = requestGql({
@@ -70,7 +70,7 @@ export const getLimitData = async ({
         dto: {
           fromChainId: isELFChain(fromChainId) ? getShortNameByChainId(fromChainId) : getChainIdToMap(fromChainId),
           toChainId: isELFChain(toChainId) ? getShortNameByChainId(toChainId) : getChainIdToMap(toChainId),
-          symbol: toSymbol,
+          symbol: symbol,
           skipCount: 0,
         },
       },
