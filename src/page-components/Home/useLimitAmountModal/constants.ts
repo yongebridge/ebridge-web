@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { ChainId } from 'types';
 
 export const tokenFormat: { [key: string]: number } = {
   ETH: 6,
@@ -15,4 +16,13 @@ export interface LimitDataProps {
   currentCapcity: BigNumber;
   fillRate: BigNumber;
   isEnable?: boolean;
+}
+
+export interface ICrossInfo {
+  fromChainId?: ChainId;
+  toChainId?: ChainId;
+  toSymbol?: string;
+  fromDecimals?: number;
+  toDecimals?: number;
+  fromSymbol?: string;
 }

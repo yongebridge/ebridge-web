@@ -185,7 +185,7 @@ function Actions() {
     if (!(toAccount && toChainId && bridgeOutContract)) return;
     dispatch(setActionLoading(true));
     try {
-      if (await checkLimitAndRate('swap', receiveItem.transferAmount)) {
+      if (await checkLimitAndRate('swap', null, receiveItem)) {
         dispatch(setActionLoading(false));
         return;
       }

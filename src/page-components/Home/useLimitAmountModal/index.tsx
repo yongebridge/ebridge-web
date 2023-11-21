@@ -4,7 +4,7 @@ import CommonModal from 'components/CommonModal';
 import CommonButton from 'components/CommonButton';
 import { useLanguage } from 'i18n';
 import BigNumber from 'bignumber.js';
-import { LimitDataProps, tokenFormat } from './constants';
+import { ICrossInfo, LimitDataProps, tokenFormat } from './constants';
 import { useBridgeOutContract, useLimitContract } from 'hooks/useContract';
 import { useWallet } from 'contexts/useWallet/hooks';
 import { isELFChain } from 'utils/aelfUtils';
@@ -15,6 +15,7 @@ import { useHomeContext } from '../HomeContext';
 import { divDecimals } from 'utils/calculate';
 
 import styles from './styles.module.less';
+import { CrossChainItem } from 'types/api';
 
 export default function useLimitAmountModal() {
   const { t } = useLanguage();
@@ -46,23 +47,19 @@ export default function useLimitAmountModal() {
 
   const getLimitDataByContract = async function (
     type: 'transfer' | 'swap',
+    crossInfo: ICrossInfo,
     decimals?: number,
   ): Promise<LimitDataProps | undefined> {
-    if (!bridgeOutContract || !fromChainId || !toChainId || !toTokenInfo?.symbol) {
-      return;
-    }
-
     let response: LimitDataProps | undefined;
 
     if (type === 'transfer') {
       response = await getReceiptLimit({
         limitContract,
-        address: fromTokenInfo?.address,
-        toChainId,
+        ...crossInfo,
       });
     } else {
-      const swapId = await getSwapId({ bridgeOutContract, fromChainId, toChainId, toSymbol: toTokenInfo?.symbol });
-      response = await getSwapLimit({ limitContract, address: toTokenInfo?.address, fromChainId, swapId });
+      const swapId = await getSwapId({ bridgeOutContract, ...crossInfo });
+      response = await getSwapLimit({ limitContract, ...crossInfo, swapId });
     }
 
     if (response) {
@@ -93,12 +90,8 @@ export default function useLimitAmountModal() {
     return response;
   };
 
-  const getLimitDataByGQL = async (decimals?: number): Promise<LimitDataProps | undefined> => {
-    const response = await getLimitData({
-      fromChainId: fromChainId,
-      toChainId: toChainId,
-      symbol: fromTokenInfo?.symbol,
-    });
+  const getLimitDataByGQL = async (crossInfo: ICrossInfo, decimals?: number): Promise<LimitDataProps | undefined> => {
+    const response = await getLimitData(crossInfo);
 
     if (!response) {
       return;
@@ -128,18 +121,18 @@ export default function useLimitAmountModal() {
     };
   };
 
-  const getElfLimitDataFn = (type: 'transfer' | 'swap'): Array<any> => {
-    const promiseList = [getLimitDataByContract('swap', toTokenInfo?.decimals)];
+  const getElfLimitDataFn = (type: 'transfer' | 'swap', crossInfo: ICrossInfo): Array<any> => {
+    const promiseList = [getLimitDataByContract('swap', crossInfo, crossInfo.toDecimals)];
     if (type === 'transfer') {
-      promiseList.push(getLimitDataByGQL(fromTokenInfo?.decimals));
+      promiseList.push(getLimitDataByGQL(crossInfo, crossInfo?.fromDecimals));
     }
     return promiseList;
   };
 
-  const getEvmLimitDataFn = (type: 'transfer' | 'swap'): Array<any> => {
-    const promiseList = [getLimitDataByGQL(toTokenInfo?.decimals)];
+  const getEvmLimitDataFn = (type: 'transfer' | 'swap', crossInfo: ICrossInfo): Array<any> => {
+    const promiseList = [getLimitDataByGQL(crossInfo, crossInfo?.toDecimals)];
     if (type === 'transfer') {
-      promiseList.push(getLimitDataByContract(type, fromTokenInfo?.decimals));
+      promiseList.push(getLimitDataByContract(type, crossInfo, crossInfo?.fromDecimals));
     }
     return promiseList;
   };
@@ -255,15 +248,40 @@ export default function useLimitAmountModal() {
 
   const checkLimitAndRate = async function (
     type: 'transfer' | 'swap',
-    amount?: BigNumber | string | number,
+    amount?: BigNumber | string | number | null,
+    receiveItem?: CrossChainItem,
   ): Promise<boolean> {
-    if (!amount) {
+    if ((!amount && type === 'transfer') || (type === 'swap' && !receiveItem)) {
       return true;
     }
 
-    const input = new BigNumber(amount);
+    const input = new BigNumber(amount || receiveItem?.receiveAmount || '');
 
-    const promistList = isELFChain(fromChainId) ? getElfLimitDataFn(type) : getEvmLimitDataFn(type);
+    let crossInfo: ICrossInfo;
+
+    if (type === 'transfer') {
+      crossInfo = {
+        fromChainId: fromChainId,
+        toChainId: toChainId,
+        toSymbol: toTokenInfo?.symbol,
+        toDecimals: toTokenInfo?.decimals,
+        fromDecimals: fromTokenInfo?.decimals,
+        fromSymbol: fromTokenInfo?.symbol,
+      };
+    } else {
+      crossInfo = {
+        fromChainId: receiveItem?.fromChainId,
+        toChainId: receiveItem?.toChainId,
+        toSymbol: receiveItem?.receiveToken?.symbol,
+        fromDecimals: receiveItem?.transferToken?.decimals,
+        toDecimals: receiveItem?.receiveToken?.decimals,
+        fromSymbol: receiveItem?.transferToken?.symbol,
+      };
+    }
+
+    const promistList = isELFChain(fromChainId)
+      ? getElfLimitDataFn(type, crossInfo)
+      : getEvmLimitDataFn(type, crossInfo);
     const results: Array<LimitDataProps> = await Promise.all(promistList);
 
     if (results.some((item) => !item)) {

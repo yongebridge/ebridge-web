@@ -337,10 +337,14 @@ export async function getSwapId({
   toSymbol,
 }: {
   bridgeOutContract?: ContractBasic;
-  toChainId: ChainId;
-  fromChainId: ChainId;
-  toSymbol: string;
+  toChainId?: ChainId;
+  fromChainId?: ChainId;
+  toSymbol?: string;
 }) {
+  if (!bridgeOutContract || !toChainId || !fromChainId || !toSymbol) {
+    return;
+  }
+
   let swapId;
   const { address } = getTokenInfoByWhitelist(toChainId, toSymbol) || {};
   const chainId = getChainIdToMap(fromChainId);
@@ -356,13 +360,20 @@ export async function getSwapId({
 
 export async function getReceiptLimit({
   limitContract,
-  address,
   toChainId,
+  fromSymbol,
+  fromChainId,
 }: {
   limitContract?: ContractBasic;
-  address?: string;
   toChainId?: ChainId;
+  fromSymbol?: string;
+  fromChainId?: ChainId;
 }): Promise<LimitDataProps | undefined> {
+  if (!limitContract || !toChainId || !fromChainId || !fromSymbol) {
+    return;
+  }
+
+  const { address } = getTokenInfoByWhitelist(fromChainId, fromSymbol) || {};
   try {
     const result = await Promise.all([
       limitContract?.callViewMethod('getReceiptDailyLimit', [address, getChainIdToMap(toChainId)]),
@@ -388,15 +399,22 @@ export async function getReceiptLimit({
 
 export async function getSwapLimit({
   limitContract,
-  address,
   fromChainId,
   swapId,
+  toChainId,
+  toSymbol,
 }: {
   limitContract?: ContractBasic;
-  address?: string;
   fromChainId?: ChainId;
+  toChainId?: ChainId;
   swapId?: string;
+  toSymbol?: string;
 }): Promise<LimitDataProps | undefined> {
+  if (!limitContract || !toChainId || !toSymbol || !fromChainId || !swapId) {
+    return;
+  }
+
+  const { address } = getTokenInfoByWhitelist(toChainId, toSymbol) || {};
   try {
     const result = await Promise.all([
       limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
