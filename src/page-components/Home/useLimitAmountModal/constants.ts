@@ -16,6 +16,8 @@ export interface LimitDataProps {
   currentCapcity: BigNumber;
   fillRate: BigNumber;
   isEnable?: boolean;
+  checkMaxCapcity?: boolean;
+  checkCurrentCapcity?: boolean;
 }
 
 export interface ICrossInfo {

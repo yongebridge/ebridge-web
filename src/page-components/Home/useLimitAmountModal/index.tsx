@@ -27,24 +27,30 @@ const calculateMinValue = (
   }
 
   if (!input2) {
+    if (input1.isEnable) {
+      input1.checkMaxCapcity = true;
+      input1.checkCurrentCapcity = true;
+    }
     return input1;
   }
+
+  input1.checkMaxCapcity = true;
+  input1.checkCurrentCapcity = true;
 
   if (input1.remain.gt(input2.remain)) {
     input1.remain = input2.remain;
   }
 
   if (input1.isEnable && input2.isEnable) {
-    if (input1.currentCapcity.gt(input2.currentCapcity)) {
+    if (input1.maxCapcity.gt(input2.maxCapcity)) {
       input1.currentCapcity = input2.currentCapcity;
-      input1.fillRate = input2.fillRate;
-      input1.maxCapcity = input2.maxCapcity;
     }
   } else if (input2.isEnable) {
-    input1.currentCapcity = input2.currentCapcity;
-    input1.fillRate = input2.fillRate;
     input1.maxCapcity = input2.maxCapcity;
-    input1.isEnable = input2.isEnable;
+    input1.checkCurrentCapcity = false;
+  } else if (!input1.isEnable) {
+    input1.checkMaxCapcity = false;
+    input1.checkCurrentCapcity = false;
   }
 
   return input1;
@@ -66,6 +72,21 @@ const getLimitDataByGQL = async (crossInfo: ICrossInfo, decimals?: number): Prom
   if (!response) {
     return;
   }
+
+  console.log(
+    'getLimitDataByGQL response after processing decimals\n',
+    JSON.stringify(
+      {
+        remain: divDecimals(response.remain, decimals),
+        maxCapcity: divDecimals(response.maxCapcity, decimals),
+        currentCapcity: divDecimals(response.currentCapcity, decimals),
+        fillRate: divDecimals(response.fillRate, decimals),
+        isEnable: response.isEnable,
+      },
+      null,
+      4,
+    ),
+  );
 
   return {
     remain: divDecimals(response.remain, decimals),
@@ -118,6 +139,20 @@ export default function useLimitAmountModal() {
       }
 
       if (response) {
+        console.log(
+          'getLimitDataByContract response after processing decimals \n',
+          JSON.stringify(
+            {
+              remain: divDecimals(response.remain, decimals),
+              maxCapcity: divDecimals(response.maxCapcity, decimals),
+              currentCapcity: divDecimals(response.currentCapcity, decimals),
+              fillRate: divDecimals(response.fillRate, decimals),
+              isEnable: response.isEnable,
+            },
+            null,
+            4,
+          ),
+        );
         response = {
           remain: divDecimals(response.remain, decimals),
           maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -136,7 +171,7 @@ export default function useLimitAmountModal() {
     (type: 'transfer' | 'swap', crossInfo: ICrossInfo): Array<any> => {
       const promiseList = [getLimitDataByContract('swap', crossInfo, crossInfo.toDecimals)];
       if (type === 'transfer') {
-        promiseList.push(getLimitDataByGQL(crossInfo, crossInfo?.fromDecimals));
+        promiseList.unshift(getLimitDataByGQL(crossInfo, crossInfo?.fromDecimals));
       }
       return promiseList;
     },
@@ -147,7 +182,7 @@ export default function useLimitAmountModal() {
     (type: 'transfer' | 'swap', crossInfo: ICrossInfo): Array<any> => {
       const promiseList = [getLimitDataByGQL(crossInfo, crossInfo?.toDecimals)];
       if (type === 'transfer') {
-        promiseList.push(getLimitDataByContract(type, crossInfo, crossInfo?.fromDecimals));
+        promiseList.unshift(getLimitDataByContract(type, crossInfo, crossInfo?.fromDecimals));
       }
       return promiseList;
     },
@@ -188,14 +223,10 @@ export default function useLimitAmountModal() {
   const checkCapacity = useCallback(
     function (
       input: BigNumber,
-      { maxCapcity, currentCapcity, fillRate, isEnable }: LimitDataProps,
+      { maxCapcity, currentCapcity, fillRate, checkMaxCapcity, checkCurrentCapcity }: LimitDataProps,
       { fromChainId, toChainId, symbol }: ICrossInfo,
     ): boolean {
-      if (!isEnable) {
-        return false;
-      }
-
-      if (maxCapcity.lt(input)) {
+      if (maxCapcity.lt(input) && checkMaxCapcity) {
         const amount = formatToken(maxCapcity, symbol);
         setModalTxt(
           t(`Your current transaction exceeds the capacity and can't be processed`, {
@@ -208,7 +239,7 @@ export default function useLimitAmountModal() {
         return true;
       }
 
-      if (currentCapcity.lt(input)) {
+      if (currentCapcity.lt(input) && checkCurrentCapcity) {
         const amount = formatToken(currentCapcity, symbol);
         const time = calculateTime(input, currentCapcity, fillRate);
         setModalTxt(
@@ -277,6 +308,21 @@ export default function useLimitAmountModal() {
       if (!limitAndRateData) {
         return true;
       }
+
+      console.log(
+        'checkLimitAndRate \n',
+        JSON.stringify(
+          {
+            remain: limitAndRateData.remain.toNumber(),
+            maxCapcity: limitAndRateData.maxCapcity.toNumber(),
+            currentCapcity: limitAndRateData.currentCapcity.toNumber(),
+            fillRate: limitAndRateData.fillRate.toNumber(),
+            isEnable: limitAndRateData.isEnable,
+          },
+          null,
+          4,
+        ),
+      );
 
       if (checkCapacity(input, limitAndRateData, crossInfo) || checkDailyLimit(input, limitAndRateData, crossInfo)) {
         setVisible(true);
