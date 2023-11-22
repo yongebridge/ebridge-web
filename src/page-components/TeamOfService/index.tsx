@@ -12,7 +12,7 @@ function TeamOfService() {
         <Col>
           <Row gutter={[0, 8]}>
             <Col>
-              {`This website-hosted interface (the "Site") is provided by eBridge Team ("eBridge ", "we", "our", or "us").The Site provides users with an informational interface relating to a decentralized protocol on theeBridge application that allows users to bridge, stake, and pool certain digital assets (the "Protocol"),subject to the latest features and functions published on the site. The Site is one, but not theexclusive, means of constructing data inputs for purposes of accessing the Protocol. These Terms of Use("Terms") explain the terms and conditions by which you may access and use the Site. By accessing or usingthe Site, you signify that you have read, understand, and agree to be bound by these Terms in theirentirety. If you do not agree, you are not authorized to access or use the Site and should not use theSite.`}
+              {`This website-hosted interface (the "Site") is provided by eBridge Team ("eBridge ", "we", "our", or "us"). The Site provides users with an informational interface relating to a decentralized protocol on the eBridge application that allows users to bridge, stake, and pool certain digital assets  (the "Protocol"), subject to the latest features and functions published on the site. The Site is one, but not the exclusive, means of constructing data inputs for purposes of accessing the Protocol. These Terms of Use ("Terms") explain the terms and conditions by which you may access and use the Site. By accessing or using the Site, you signify that you have read, understand, and agree to be bound by these Terms in their entirety. If you do not agree, you are not authorized to access or use the Site and should not use the Site.`}
             </Col>
             <Col className="font-family-medium">
               {`PLEASE NOTE: THE "DISPUTE RESOLUTION" SECTION OF THESE TERMS CONTAINS AN ARBITRATION CLAUSE THAT REQUIRES DISPUTES TO BE ARBITRATED ON AN INDIVIDUAL BASIS, AND PROHIBITS CLASS ACTION CLAIMS. IT AFFECTS HOW DISPUTES BETWEEN YOU AND THE eBridge ARE RESOLVED. BY ACCEPTING THESE TERMS, YOU AGREE TO BE BOUND BY THIS ARBITRATION PROVISION. PLEASE READ IT CAREFULLY.`}
@@ -202,7 +202,7 @@ function TeamOfService() {
               <a target="_blank" href="mailto:ebridge.exchange@gmail.com" rel="noreferrer">
                 ebridge.exchange@gmail.com
               </a>
-              {` so that we can attempt to resolve it without resorting to formal dispute resolution. If we aren't able to reach an informal resolution within sixty days of your email, then you and we both agree to resolve the potential dispute according to the process set forth below`}
+              {` so that we can attempt to resolve it without resorting to formal dispute resolution. If we aren't able to reach an informal resolution within sixty days of your email, then you and we both agree to resolve the potential dispute according to the process set forth below.`}
             </Col>
             <Col>
               {`You further agree that any claim or controversy arising out of or relating to the Site, these Terms, or any other acts or omissions for which you may contend that we are liable, including (but not limited to) any claim or controversy as to arbitrability ("Dispute"), shall be finally and exclusively submitted to the jurisdiction of the courts of the British Virgin Islands for the resolution.`}
