@@ -3,7 +3,7 @@ import zh_HK from 'antd/lib/locale/zh_HK';
 const LANGUAGE = 'I18N_LANGUAGE';
 const LOCAL_LANGUAGE = [
   { language: 'en', title: 'English' },
-  { language: 'zh', title: '繁体中文' },
+  { language: 'zh', title: '繁體中文' },
 ];
 const LOCAL_LANGUAGE_LIST = LOCAL_LANGUAGE.map((i) => i.language);
 const DEFAULT_LANGUAGE = LOCAL_LANGUAGE_LIST[0];
