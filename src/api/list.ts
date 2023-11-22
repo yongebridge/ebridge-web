@@ -23,6 +23,8 @@ export const BASE_APIS = {
 const CrossApiList = {
   getCrossChainTransfers: '/api/app/cross-chain-transfers',
   getCrossChainIndexing: '/api/app/cross-chain-indexing/progress',
+  getDailyLimits: 'api/app/limiter/dailyLimits',
+  getRateLimits: 'api/app/limiter/rateLimits',
 };
 
 const CMSApiList = {

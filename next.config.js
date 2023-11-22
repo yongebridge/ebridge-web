@@ -33,6 +33,9 @@ const nextConfig = {
   //   config.resolve.alias['bn.js'] = path.resolve(process.cwd(), 'node_modules', 'bn.js');
   //   return config;
   // },
+  compiler: {
+    removeConsole: false,
+  },
   async rewrites() {
     return getRewrites();
   },
