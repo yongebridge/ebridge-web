@@ -269,7 +269,7 @@ export default function useLimitAmountModal() {
         return true;
       }
 
-      const input = new BigNumber(amount || receiveItem?.receiveAmount || '');
+      const input = new BigNumber(amount || receiveItem?.transferAmount || 0);
 
       let crossInfo: ICrossInfo;
 
@@ -323,6 +323,8 @@ export default function useLimitAmountModal() {
           4,
         ),
       );
+
+      console.log('input amount: ', input);
 
       if (checkCapacity(input, limitAndRateData, crossInfo) || checkDailyLimit(input, limitAndRateData, crossInfo)) {
         setVisible(true);
