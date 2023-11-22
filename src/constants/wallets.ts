@@ -30,11 +30,11 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'NIGHT ELF',
     href: null,
   },
-  // PORTKEY: {
-  //   connector: 'PORTKEY',
-  //   name: 'PORTKEY',
-  //   iconType: 'portkey',
-  //   description: 'PORTKEY',
-  //   href: null,
-  // },
+  PORTKEY: {
+    connector: 'PORTKEY',
+    name: 'PORTKEY',
+    iconType: 'portkey',
+    description: 'PORTKEY',
+    href: null,
+  },
 };
