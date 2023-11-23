@@ -21,7 +21,9 @@ import LimitAmountDescModal from './LimitAmountDescModal';
 export default function Home() {
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
-  const { isShowMask, isLoading } = useMaskQuery();
+  // const { isShowMask, isLoading } = useMaskQuery();
+  const isShowMask = false,
+    isLoading = false;
   if (isLoading) {
     return <Skeleton paragraph={{ rows: 10 }} />;
   }
