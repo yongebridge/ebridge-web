@@ -12,6 +12,7 @@ import { SUPPORTED_WALLETS } from 'constants/wallets';
 import { getConnection } from 'walletConnectors/utils';
 import { useChainDispatch } from 'contexts/useChain';
 import { setSelectERCWallet } from 'contexts/useChain/actions';
+import { clearWCStorageByDisconnect } from 'utils/localStorage';
 
 function AccountCard() {
   const [{ accountWallet }, { dispatch }] = useModal();
@@ -37,11 +38,17 @@ function AccountCard() {
       .map((k) => SUPPORTED_WALLETS[k].name)[0];
     return `Connected with ${name}`;
   }, [filter]);
-  const onDisconnect = useCallback(() => {
+  const onDisconnect = useCallback(async () => {
     if (typeof connector !== 'string') {
-      connection?.connector?.deactivate?.();
-      connection?.connector?.resetState?.();
-      chainDispatch(setSelectERCWallet(undefined));
+      try {
+        await connection?.connector?.deactivate?.();
+        await connection?.connector?.resetState?.();
+      } catch (error) {
+        console.log('error: ', error);
+      } finally {
+        chainDispatch(setSelectERCWallet(undefined));
+        clearWCStorageByDisconnect();
+      }
     } else {
       deactivate?.();
     }
