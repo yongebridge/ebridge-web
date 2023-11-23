@@ -17,6 +17,7 @@ import { divDecimals } from 'utils/calculate';
 import styles from './styles.module.less';
 import { CrossChainItem } from 'types/api';
 import { ChainId } from 'types';
+import { getDecimalByWhitelist, getTokenInfoByWhitelist } from 'utils/whitelist';
 
 const calculateMinValue = (
   input1: LimitDataProps | undefined,
@@ -73,6 +74,21 @@ const getLimitDataByGQL = async (crossInfo: ICrossInfo, decimals?: number): Prom
     return;
   }
 
+  console.log(
+    'getLimitDataByGQL response after processing decimals\n',
+    JSON.stringify(
+      {
+        remain: divDecimals(response.remain, decimals),
+        maxCapcity: divDecimals(response.maxCapcity, decimals),
+        currentCapcity: divDecimals(response.currentCapcity, decimals),
+        fillRate: divDecimals(response.fillRate, decimals),
+        isEnable: response.isEnable,
+      },
+      null,
+      4,
+    ),
+  );
+
   return {
     remain: divDecimals(response.remain, decimals),
     maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -124,6 +140,20 @@ export default function useLimitAmountModal() {
       }
 
       if (response) {
+        console.log(
+          'getLimitDataByContract response after processing decimals \n',
+          JSON.stringify(
+            {
+              remain: divDecimals(response.remain, decimals),
+              maxCapcity: divDecimals(response.maxCapcity, decimals),
+              currentCapcity: divDecimals(response.currentCapcity, decimals),
+              fillRate: divDecimals(response.fillRate, decimals),
+              isEnable: response.isEnable,
+            },
+            null,
+            4,
+          ),
+        );
         response = {
           remain: divDecimals(response.remain, decimals),
           maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -255,8 +285,8 @@ export default function useLimitAmountModal() {
           fromDecimals: fromTokenInfo?.decimals,
         };
       } else {
-        const fromTokenInfo = getTokenInfo(receiveItem?.fromChainId);
-        const toTokenInfo = getTokenInfo(receiveItem?.toChainId);
+        const fromTokenInfo = getTokenInfoByWhitelist(receiveItem?.fromChainId, receiveItem?.transferToken?.symbol);
+        const toTokenInfo = getTokenInfoByWhitelist(receiveItem?.toChainId, receiveItem?.transferToken?.symbol);
         crossInfo = {
           fromChainId: receiveItem?.fromChainId,
           toChainId: receiveItem?.toChainId,
@@ -264,6 +294,8 @@ export default function useLimitAmountModal() {
           toDecimals: toTokenInfo?.decimals,
           fromDecimals: fromTokenInfo?.decimals,
         };
+
+        console.log('fromTokenInfo: ', fromTokenInfo, 'toTokenInfo: ', toTokenInfo);
       }
 
       const promistList = isELFChain(fromChainId)
@@ -279,6 +311,23 @@ export default function useLimitAmountModal() {
       if (!limitAndRateData) {
         return true;
       }
+
+      console.log(
+        'checkLimitAndRate \n',
+        JSON.stringify(
+          {
+            remain: limitAndRateData.remain.toNumber(),
+            maxCapcity: limitAndRateData.maxCapcity.toNumber(),
+            currentCapcity: limitAndRateData.currentCapcity.toNumber(),
+            fillRate: limitAndRateData.fillRate.toNumber(),
+            isEnable: limitAndRateData.isEnable,
+          },
+          null,
+          4,
+        ),
+      );
+
+      console.log('input amount: ', input);
 
       if (checkCapacity(input, limitAndRateData, crossInfo) || checkDailyLimit(input, limitAndRateData, crossInfo)) {
         setVisible(true);
