@@ -224,7 +224,7 @@ function useHomogeneousHistory() {
 }
 
 export default function History() {
-  const [{ historyType }, setActiveKey] = useUrlSearchState();
+  const [{ historyType = CrossChainType.heterogeneous }, setActiveKey] = useUrlSearchState();
 
   const { t } = useLanguage();
 
