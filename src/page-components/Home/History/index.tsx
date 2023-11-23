@@ -251,16 +251,18 @@ export default function History() {
           </CommonPopover>
         </div>
       </Tabs>
-      <div className={styles['table-box']}>
-        <Body
-          networkList={tableData.networkList}
-          isHeterogeneous={tableData.isHeterogeneous}
-          state={tableData.state}
-          selectState={tableData.selectState}
-          setSelect={tableData.setSelect}
-          setState={tableData.setState}
-        />
-      </div>
+      {!(isPortkey() && historyType === CrossChainType.homogeneous) && (
+        <div className={styles['table-box']}>
+          <Body
+            networkList={tableData.networkList}
+            isHeterogeneous={tableData.isHeterogeneous}
+            state={tableData.state}
+            selectState={tableData.selectState}
+            setSelect={tableData.setSelect}
+            setState={tableData.setState}
+          />
+        </div>
+      )}
     </div>
   );
 }
