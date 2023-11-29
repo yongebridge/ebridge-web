@@ -74,21 +74,6 @@ const getLimitDataByGQL = async (crossInfo: ICrossInfo, decimals?: number): Prom
     return;
   }
 
-  console.log(
-    'getLimitDataByGQL response after processing decimals\n',
-    JSON.stringify(
-      {
-        remain: divDecimals(response.remain, decimals),
-        maxCapcity: divDecimals(response.maxCapcity, decimals),
-        currentCapcity: divDecimals(response.currentCapcity, decimals),
-        fillRate: divDecimals(response.fillRate, decimals),
-        isEnable: response.isEnable,
-      },
-      null,
-      4,
-    ),
-  );
-
   return {
     remain: divDecimals(response.remain, decimals),
     maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -140,20 +125,6 @@ export default function useLimitAmountModal() {
       }
 
       if (response) {
-        console.log(
-          'getLimitDataByContract response after processing decimals \n',
-          JSON.stringify(
-            {
-              remain: divDecimals(response.remain, decimals),
-              maxCapcity: divDecimals(response.maxCapcity, decimals),
-              currentCapcity: divDecimals(response.currentCapcity, decimals),
-              fillRate: divDecimals(response.fillRate, decimals),
-              isEnable: response.isEnable,
-            },
-            null,
-            4,
-          ),
-        );
         response = {
           remain: divDecimals(response.remain, decimals),
           maxCapcity: divDecimals(response.maxCapcity, decimals),
@@ -294,8 +265,6 @@ export default function useLimitAmountModal() {
           toDecimals: toTokenInfo?.decimals,
           fromDecimals: fromTokenInfo?.decimals,
         };
-
-        console.log('fromTokenInfo: ', fromTokenInfo, 'toTokenInfo: ', toTokenInfo);
       }
 
       const promistList = isELFChain(fromChainId)
@@ -311,23 +280,6 @@ export default function useLimitAmountModal() {
       if (!limitAndRateData) {
         return true;
       }
-
-      console.log(
-        'checkLimitAndRate \n',
-        JSON.stringify(
-          {
-            remain: limitAndRateData.remain.toNumber(),
-            maxCapcity: limitAndRateData.maxCapcity.toNumber(),
-            currentCapcity: limitAndRateData.currentCapcity.toNumber(),
-            fillRate: limitAndRateData.fillRate.toNumber(),
-            isEnable: limitAndRateData.isEnable,
-          },
-          null,
-          4,
-        ),
-      );
-
-      console.log('input amount: ', input);
 
       if (checkCapacity(input, limitAndRateData, crossInfo) || checkDailyLimit(input, limitAndRateData, crossInfo)) {
         setVisible(true);

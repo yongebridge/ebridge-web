@@ -380,8 +380,6 @@ export async function getReceiptLimit({
       limitContract?.callViewMethod('getCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
     ]);
 
-    console.log('receiptDailyLimit data: ', receiptDailyLimit, '\n receiptTokenBucket data: ', receiptTokenBucket);
-
     if (receiptDailyLimit.error || receiptTokenBucket.error) {
       throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
@@ -422,8 +420,6 @@ export async function getSwapLimit({
       limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
       limitContract?.callViewMethod('getCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
     ]);
-
-    console.log('swapDailyLimit data: ', swapDailyLimit, '\n swapTokenBucket data: ', swapTokenBucket);
 
     if (swapDailyLimit.error || swapTokenBucket.error) {
       throw new Error(swapDailyLimit.error || swapTokenBucket.error);
