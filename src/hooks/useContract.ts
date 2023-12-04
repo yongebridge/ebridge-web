@@ -1,4 +1,4 @@
-import { BRIDGE_IN_ABI, BRIDGE_OUT_ABI, ERC20_ABI } from 'constants/abis';
+import { BRIDGE_IN_ABI, BRIDGE_OUT_ABI, ERC20_ABI, LIMIT_ABI } from 'constants/abis';
 import { useCallback, useEffect, useMemo } from 'react';
 import { AelfInstancesKey, ChainId } from 'types';
 import { getAElf, getWallet, isELFChain } from 'utils/aelfUtils';
@@ -80,28 +80,6 @@ export async function getELFContract(
   });
 }
 
-// export function useAElfContract(contractAddress: string, chainId?: ChainId) {
-//   const [contracts, setContracts] = useState<ContractBasic>();
-//   const { account, aelfInstances } = useAElf();
-//   const aelfInstance = useMemo(() => aelfInstances?.[chainId as AelfInstancesKey], [aelfInstances, chainId]);
-//   const getContract = useCallback(async () => {
-//     if (!chainId || !aelfInstance) return;
-//     try {
-//       const contract = await getELFContract(contractAddress, aelfInstance, account, chainId);
-//       setContracts(contract);
-//     } catch (error) {
-//       await sleep(1000);
-//       getContract();
-//       console.error(error, '====getContract', contractAddress);
-//     }
-//   }, [aelfInstance, chainId, contractAddress, account]);
-
-//   useEffect(() => {
-//     getContract();
-//   }, [getContract]);
-
-//   return contracts;
-// }
 export function useAElfContract(contractAddress: string, chainId?: ChainId) {
   const { account, aelfInstances } = useAElf();
   const [contracts, { dispatch }] = useAElfContractContext();
@@ -214,4 +192,12 @@ export function useBridgeOutContract(chainId?: ChainId, isPortkey?: boolean) {
     return ERCChainConstants.constants?.BRIDGE_CONTRACT_OUT;
   }, [chainId]);
   return useContract(contractAddress || '', BRIDGE_OUT_ABI, chainId, isPortkey);
+}
+
+export function useLimitContract(fromChainId?: ChainId, toChainId?: ChainId) {
+  return useERCContract(
+    ERCChainConstants.constants.LIMIT_CONTRACT || '',
+    LIMIT_ABI,
+    isELFChain(fromChainId) ? toChainId : fromChainId,
+  );
 }

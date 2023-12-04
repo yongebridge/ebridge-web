@@ -15,6 +15,7 @@ type AElfOwnConstants = {
   CROSS_CHAIN_CONTRACT?: string;
   BRIDGE_CONTRACT?: string;
   BRIDGE_CONTRACT_OUT?: string;
+  LIMIT_CONTRACT?: string;
 };
 
 type Constants = ChainConstantsType & AElfOwnConstants;

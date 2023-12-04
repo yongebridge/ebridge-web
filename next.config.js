@@ -33,6 +33,9 @@ const nextConfig = {
   //   config.resolve.alias['bn.js'] = path.resolve(process.cwd(), 'node_modules', 'bn.js');
   //   return config;
   // },
+  compiler: {
+    removeConsole: false,
+  },
   async rewrites() {
     return getRewrites();
   },
@@ -60,4 +63,7 @@ const productionConfig = {
   resolve: {},
 };
 
-module.exports = withPlugins(plugins, ANALYZE === 'true' || NODE_ENV === 'production' ? productionConfig : nextConfig);
+module.exports = withPlugins(
+  plugins,
+  ANALYZE === 'true' || process.env.NEXT_PUBLIC_APP_ENV === 'mainnet' ? productionConfig : nextConfig,
+);
