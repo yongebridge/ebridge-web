@@ -8,7 +8,7 @@ export function useCrossChainType() {
   const fromChainId = fromWallet?.chainId;
   const toChainId = toWallet?.chainId;
   return useMemo(() => {
-    if (isELFChain(fromChainId) && isELFChain(toChainId)) return CrossChainType.Homogeneous;
-    return CrossChainType.Heterogeneous;
+    if (isELFChain(fromChainId) && isELFChain(toChainId)) return CrossChainType.homogeneous;
+    return CrossChainType.heterogeneous;
   }, [fromChainId, toChainId]);
 }

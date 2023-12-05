@@ -1,12 +1,13 @@
 export const CHAIN_INFO = {
   chainId: 'AELF',
-  exploreUrl: 'https://explorer-test.aelf.io/',
-  rpcUrl: 'http://192.168.66.191:8000',
+  exploreUrl: 'https://explorer.aelf.io/',
+  // rpcUrl: 'https://aelf-public-node.aelf.io',
+  rpcUrl: 'https://explorer.aelf.io/chain',
 };
 
 export const TOKEN_CONTRACT = 'JRmBduh4nXWi1aXgdUsj5gJrzeZb2LxmrAbf7W99faZSvoAaE';
 export const CROSS_CHAIN_CONTRACT = '2SQ9LeGZYSWmfJcYuQkDQxgd3HzwjamAaaL4Tge2eFSXw2cseq';
-export const BRIDGE_CONTRACT = '2RHf2fxsnEaM3wb6N1yGqPupNZbcCY98LgWbGSFWmWzgEs5Sjo';
+export const BRIDGE_CONTRACT = '2dKF3svqDXrYtA5mYwKfADiHajo37mLZHPHVVuGbEDoD9jSgE8';
 
 const EXPAND_CONTRACTS: any = {};
 [TOKEN_CONTRACT].map((i) => {

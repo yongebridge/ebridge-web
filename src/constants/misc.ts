@@ -21,17 +21,12 @@ export const prefixCls = process.env.NEXT_PUBLIC_PREFIX;
 
 export const MaxUint256 = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
 
-export const CrossChainTime = {
-  homogeneous: '150s',
-  heterogeneous: '100s',
-};
-
 export const CrossFeeToken = 'ELF';
 export const CrossFeeTokenDecimals = 8;
 
 export const crossTokenMin: any = {
   ELF: 0,
-  BNB: 0,
-  ETH: 0,
+  WBNB: 0,
+  WETH: 0,
   USDT: 0,
 };

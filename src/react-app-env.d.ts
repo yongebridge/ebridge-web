@@ -1,6 +1,7 @@
 /// <reference types="react-scripts" />
 interface Window {
   ethereum?: {
+    selectedAddress?: string;
     isMetaMask?: true;
     isCoinbaseWallet?: true;
     on?: (...args: unknown[]) => void;
@@ -8,6 +9,7 @@ interface Window {
     autoRefreshOnNetworkChange?: boolean;
     request?: (...args: unknown[]) => void;
     chainId?: number;
+    providerMap?: any;
   };
   web3?: any;
   plus?: any;

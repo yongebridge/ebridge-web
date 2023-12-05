@@ -36,3 +36,4 @@ yarn-error.log*
 
 # shell
 *.sh
+.eslintcache

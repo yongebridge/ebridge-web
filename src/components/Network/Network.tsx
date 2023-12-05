@@ -7,6 +7,7 @@ import IconFont from 'components/IconFont';
 import styles from './styles.module.less';
 import clsx from 'clsx';
 import useMediaQueries from 'hooks/useMediaQueries';
+
 export default function Network({
   networkList,
   overlayClassName,
@@ -34,10 +35,12 @@ export default function Network({
       />
     );
   }, [chainId, networkList, onChange]);
+
   const iconProps = useMemo(() => {
     if (!chainId) return undefined;
     return getIconByChainId(chainId);
   }, [chainId]);
+
   const isXS = useMediaQueries('xs');
   const name = getNameByChainId(chainId);
   const isLong = name?.length > 10;
@@ -50,9 +53,9 @@ export default function Network({
       else props.marginRight = 10;
     }
     return (
-      <Row className="flex-row-center" style={{ fontSize: props.nameSize }}>
+      <Row className="flex-row-center network-row" style={{ fontSize: props.nameSize }}>
         <IconFont type={iconProps?.type || ''} style={{ marginRight: props.marginRight }} />
-        {name || 'Wrong Network'}
+        <div className="network-name">{name || 'Wrong Network'}</div>
       </Row>
     );
   }, [iconProps?.type, isLong, isXS, name]);

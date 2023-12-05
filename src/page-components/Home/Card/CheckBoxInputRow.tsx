@@ -15,6 +15,7 @@ export interface CheckBoxInputProps {
   onCheckStatusTrigger?: (e: CheckboxChangeEvent) => void;
   onInputChange?: (e: any) => void;
   className?: InputProps['className'];
+  maxLength?: number;
 }
 
 export default function CheckBoxInputRow({
@@ -23,6 +24,7 @@ export default function CheckBoxInputRow({
   onCheckStatusTrigger,
   onInputChange,
   className: propsClassName,
+  maxLength = 100,
 }: CheckBoxInputProps) {
   const [checked, setChecked] = useState<boolean>(!!propsChecked);
   const [value, setValue] = useState<string>(propsValue || '');
@@ -56,6 +58,7 @@ export default function CheckBoxInputRow({
               setValue(e.target.value);
               onInputChange?.(e);
             }}
+            maxLength={maxLength}
           />
         </Row>
       )}

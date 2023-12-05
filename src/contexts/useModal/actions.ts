@@ -1,14 +1,14 @@
 import { basicActions } from 'contexts/utils';
-import type { ChainId, Web3Type } from 'types';
+import type { ChainId, ChainType, WalletType, Web3Type } from 'types';
 
-export enum modalActions {
+export enum ModalActions {
   setWalletModal = 'SET_WALLET_MODAL',
   setAccountModal = 'SET_ACCOUNT_MODAL',
   setNetWorkDrawer = 'SET_NETWORK_DRAWER',
   destroy = 'DESTROY',
 }
 
-export type modalState = {
+export type ModalState = {
   walletModal?: boolean;
   netWorkDrawer?: boolean;
   accountModal?: boolean;
@@ -16,28 +16,34 @@ export type modalState = {
   walletChainId?: ChainId;
   accountWallet?: Web3Type;
   walletWallet?: Web3Type;
+  accountWalletType?: WalletType;
+  walletWalletType?: WalletType;
+  walletChainType?: ChainType;
 };
 
 export const basicModalView = {
-  setWalletModal: (walletModal: boolean, walletChainId?: ChainId) => {
-    const obj: any = { walletModal };
-    if (walletChainId) {
-      obj.walletChainId = walletChainId;
+  setWalletModal: (
+    walletModal: boolean,
+    options?: { walletWalletType?: WalletType; walletChainType?: ChainType; walletChainId?: ChainId },
+  ) => {
+    let obj: any = { walletModal };
+    if (walletModal) {
+      obj = { ...obj, ...options };
       obj.destroy = true;
     }
-    return basicActions(modalActions['setWalletModal'], obj);
+    return basicActions(ModalActions['setWalletModal'], obj);
   },
 
-  setAccountModal: (accountModal: boolean, accountChainId?: ChainId) => {
-    const obj: any = { accountModal };
-    if (accountChainId) {
-      obj.accountChainId = accountChainId;
+  setAccountModal: (accountModal: boolean, options?: { accountWalletType?: WalletType; accountChainId?: ChainId }) => {
+    let obj: any = { accountModal };
+    if (accountModal) {
+      obj = { ...obj, ...options };
       obj.destroy = true;
     }
-    return basicActions(modalActions['setAccountModal'], obj);
+    return basicActions(ModalActions['setAccountModal'], obj);
   },
-  setNetWorkDrawer: (netWorkDrawer: boolean) => basicActions(modalActions['setNetWorkDrawer'], { netWorkDrawer }),
-  modalDestroy: () => basicActions(modalActions['destroy']),
+  setNetWorkDrawer: (netWorkDrawer: boolean) => basicActions(ModalActions['setNetWorkDrawer'], { netWorkDrawer }),
+  modalDestroy: () => basicActions(ModalActions['destroy']),
 };
 
 export const { setWalletModal, setAccountModal, setNetWorkDrawer, modalDestroy } = basicModalView;

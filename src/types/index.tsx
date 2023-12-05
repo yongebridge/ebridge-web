@@ -3,11 +3,14 @@ import type { AElfDappBridge } from '@aelf-react/types';
 import type { Web3ContextType } from '@web3-react/core';
 import type { AElfContextType } from '@aelf-react/core/dist/types';
 import { AElfNodes } from 'constants/aelf';
-import { CHAIN_NAME } from 'constants/chainInfo';
+import { CHAIN_NAME } from 'constants/index';
 import type { Connector } from '@web3-react/types';
+import { Accounts } from '@portkey/provider-types';
 
 export type ChainId = keyof typeof CHAIN_NAME;
 export type ChainType = 'ERC' | 'ELF';
+
+export type WalletType = 'PORTKEY' | 'NIGHTELF' | 'ERC';
 
 export type NetworkType = {
   title: string;
@@ -30,6 +33,9 @@ export type Web3Type = {
   connector?: Web3ContextType['connector'] | string;
   deactivate?: AElfContextType['deactivate'];
   aelfInstances?: { [key in AelfInstancesKey]: AElfDappBridge };
+  isPortkey?: boolean;
+  walletType?: WalletType;
+  accounts?: Accounts;
 };
 export type TokenInfo = {
   decimals: number;
@@ -40,11 +46,12 @@ export type TokenInfo = {
   issuer?: string;
   isBurnable?: boolean;
   totalSupply?: number;
+  isNativeToken?: boolean;
 };
 
 export enum CrossChainType {
-  'Homogeneous' = 'homogeneous',
-  'Heterogeneous' = 'heterogeneous',
+  homogeneous = 'homogeneous',
+  heterogeneous = 'heterogeneous',
 }
 
 export interface WalletInfo {

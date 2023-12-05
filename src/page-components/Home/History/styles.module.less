@@ -7,7 +7,7 @@
   padding: 20px 32px 15px;
   background: @bg-2;
   box-shadow: 0 5px 12px 4px @shadow-2;
-  margin-bottom: 160px;
+  margin-bottom: 114px;
   :global {
     .@{app-prefix}-table-container .@{app-prefix}-table-content {
       &::-webkit-scrollbar {
@@ -114,6 +114,9 @@
     }
   }
 }
+.table-box {
+  position: relative;
+}
 .pagination {
   bottom: -65px;
   position: absolute;
@@ -164,6 +167,7 @@
   line-height: 12px;
   color: @font-7;
   .progress {
+    width: 120px;
     :global {
       .@{app-prefix}-progress-success-bg,
       .@{app-prefix}-progress-bg {
@@ -214,6 +218,7 @@
   .history {
     margin-top: 40px;
     padding: 20px 16px 15px;
+    margin-bottom: 82px;
     :global {
       .@{app-prefix}-tabs-top {
         .tip-icon {

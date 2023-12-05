@@ -20,9 +20,12 @@ import { useLanguage } from 'i18n';
 import useMediaQueries from 'hooks/useMediaQueries';
 import { ZERO } from 'constants/misc';
 import { isAddress } from 'utils';
+import { useWalletContext } from 'contexts/useWallet';
 
 export function FromCard() {
   const [{ selectToken, fromInput, fromBalance, crossMin }, { dispatch }] = useHomeContext();
+  const [{ fromOptions }] = useWalletContext();
+
   const { fromWallet, changing } = useWallet();
   const { chainId, account } = fromWallet || {};
   const { token, show } = fromBalance || {};
@@ -46,7 +49,7 @@ export function FromCard() {
       })}>
       <FromHeader />
       <Row>
-        <WalletRow isForm wallet={fromWallet} />
+        <WalletRow isForm wallet={fromWallet} chainType={fromOptions?.chainType} />
         <InputRow
           className={clsx({ [styles['red-input']]: !changing && showError })}
           value={fromInput}
@@ -71,6 +74,7 @@ export function FromCard() {
 
 export function ToCard() {
   const { toWallet, changing, isHomogeneous } = useWallet();
+  const [{ toOptions }] = useWalletContext();
   const { account, chainId } = toWallet || {};
   const [{ selectToken, toInput, receiveList, receiveId, toChecked, toAddress }, { dispatch }] = useHomeContext();
   const token = chainId ? selectToken?.[chainId] : undefined;
@@ -80,7 +84,7 @@ export function ToCard() {
     <div className={clsx(styles.card, { [animation.admin2]: changing })}>
       <ToHeader />
       <Row>
-        <WalletRow wallet={toWallet} />
+        <WalletRow wallet={toWallet} chainType={toOptions?.chainType} />
         <InputRow
           value={sliceDecimals(toInput, token?.decimals ?? 6)}
           onChange={(e) => dispatch(setTo(parseInputChange(e.target.value, min, token?.decimals)))}

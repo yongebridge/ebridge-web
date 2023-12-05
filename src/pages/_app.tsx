@@ -2,20 +2,27 @@ import type { AppProps } from 'next/app';
 import '../styles/globals.less';
 import '../styles/common.less';
 import '../styles/antd.less';
+import '../utils/sentry';
+// import '../utils/vconsole';
+
 import Header from 'components/Header';
 import dynamic from 'next/dynamic';
-import PageHead from 'components/PageHead';
+import { DefaultHead } from 'components/PageHead';
+import { isPortkey } from 'utils/portkey';
+import Footer from 'components/Footer';
+import ScrollToTop from 'components/ScrollToTop';
 const Provider = dynamic(import('components/Provider'), { ssr: false });
-// import '../utils/vconsole';
 export default function APP({ Component, pageProps }: AppProps) {
   return (
     <>
-      <PageHead title={'eBridge'} />
+      <DefaultHead />
+      <ScrollToTop />
       <Provider>
-        <Header />
+        {!isPortkey() && <Header />}
         <div className="page-component">
           <div className="bg-body">
             <Component {...pageProps} />
+            <Footer />
           </div>
         </div>
       </Provider>

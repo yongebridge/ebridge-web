@@ -1,12 +1,13 @@
 export const CHAIN_INFO = {
   chainId: 'tDVV',
-  exploreUrl: 'https://explorer.aelf.io/',
-  rpcUrl: 'http://192.168.66.230:8000',
+  exploreUrl: 'https://tdvv-explorer.aelf.io/',
+  // rpcUrl: 'https://tdvv-public-node.aelf.io',
+  rpcUrl: 'https://tdvv-explorer.aelf.io/chain',
 };
 
 export const TOKEN_CONTRACT = '7RzVGiuVWkvL4VfVHdZfQF2Tri3sgLe9U991bohHFfSRZXuGX';
 export const CROSS_CHAIN_CONTRACT = '2snHc8AMh9QMbCAa7XXmdZZVM5EBZUUPDdLjemwUJkBnL6k8z9';
-export const BRIDGE_CONTRACT = '2AsEepqiFCRDnepVheYYN5LK7nvM2kUoXgk2zLKu1Zneh8fwmF';
+export const BRIDGE_CONTRACT = 'GZs6wyPDfz3vdEmgVd3FyrQfaWSXo9uRvc7Fbp5KSLKwMAANd';
 
 const EXPAND_CONTRACTS: any = {};
 [TOKEN_CONTRACT].map((i) => {

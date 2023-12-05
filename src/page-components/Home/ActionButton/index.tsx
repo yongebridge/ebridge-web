@@ -1,10 +1,11 @@
 import clsx from 'clsx';
+import lodash from 'lodash';
 import CommonButton from 'components/CommonButton';
 import { useWallet } from 'contexts/useWallet/hooks';
 import { useBridgeContract, useBridgeOutContract, useCrossChainContract, useTokenContract } from 'hooks/useContract';
 import { useCallback, useMemo, useState } from 'react';
 import styles from './styles.module.less';
-import { CrossChainTransfer, CrossChainReceive, CreateReceipt, SwapToken } from 'utils/crossChain';
+import { CrossChainTransfer, CrossChainReceive, CreateReceipt, SwapToken, LockToken } from 'utils/crossChain';
 import { useHomeContext } from '../HomeContext';
 import { txMessage } from 'utils/message';
 import { timesDecimals } from 'utils/calculate';
@@ -20,12 +21,13 @@ import { isELFChain } from 'utils/aelfUtils';
 import { ACTIVE_CHAIN } from 'constants/index';
 import { formatAddress, isAddress } from 'utils';
 import CheckToFillAddressModal from './CheckToFillAddressModal';
+import useLimitAmountModal from '../useLimitAmountModal';
 
 function Actions() {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
   const [toConfirmModal, setToConfirmModal] = useState<boolean>(false);
   const [
-    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress },
+    { selectToken, fromInput, receiveItem, fromBalance, actionLoading, crossMin, toChecked, toAddress, crossFee },
     { dispatch, addReceivedList },
   ] = useHomeContext();
   const { chainId: fromChainId, account: fromAccount, library } = fromWallet || {};
@@ -34,16 +36,18 @@ function Actions() {
   const itemSendChainID = useMemo(() => receiveItem?.fromChainId, [receiveItem?.fromChainId]);
   const fromTokenInfo = useMemo(() => {
     if (!fromChainId) return;
-    return selectToken?.[fromChainId];
+    const token = lodash.cloneDeep(selectToken?.[fromChainId]);
+    if (token?.isNativeToken) token.address = '';
+    return token;
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
 
-  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address);
-  const sendCrossChainContract = useCrossChainContract(itemSendChainID);
-  const receiveTokenContract = useTokenContract(itemToChainID);
-  const sendTokenContract = useTokenContract(itemSendChainID);
-  const bridgeContract = useBridgeContract(fromChainId);
-  const bridgeOutContract = useBridgeOutContract(toChainId);
+  const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address, fromWallet?.isPortkey);
+  const sendCrossChainContract = useCrossChainContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const receiveTokenContract = useTokenContract(itemToChainID, undefined, toWallet?.isPortkey);
+  const sendTokenContract = useTokenContract(itemSendChainID, undefined, fromWallet?.isPortkey);
+  const bridgeContract = useBridgeContract(fromChainId, fromWallet?.isPortkey);
+  const bridgeOutContract = useBridgeOutContract(toChainId, toWallet?.isPortkey);
 
   const [fromTokenAllowance, getAllowance] = useAllowance(
     tokenContract,
@@ -58,12 +62,16 @@ function Actions() {
     CrossFeeToken === fromTokenInfo?.symbol ? undefined : CrossFeeToken,
   );
 
+  const [limitAmountModal, checkLimitAndRate] = useLimitAmountModal();
+
   const onCrossChainReceive = useLockCallback(async () => {
     if (!receiveItem) return message.error(t('record does not exist'));
     try {
       if (!(receiveTokenContract && sendCrossChainContract && sendTokenContract && itemSendChainID && itemToChainID))
         return;
+
       dispatch(setActionLoading(true));
+
       const req = await CrossChainReceive({
         sendChainID: itemSendChainID,
         receiveItem,
@@ -121,41 +129,55 @@ function Actions() {
         bridgeContract &&
         toChainId &&
         fromChainId &&
-        tokenContract &&
         ((toChecked && (toAccount || isAddress(toAddress, toChainId))) || toAccount)
       )
     )
       return;
+
     dispatch(setActionLoading(true));
+
+    const params: any = {
+      library,
+      fromToken: fromTokenInfo?.address || fromTokenInfo?.symbol,
+      account: fromAccount,
+      bridgeContract,
+      amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
+      toChainId,
+      to: toChecked && toAddress ? toAddress : (toAccount as string),
+      crossFee,
+    };
+
+    if (await checkLimitAndRate('transfer', fromInput)) {
+      dispatch(setActionLoading(false));
+      return;
+    }
+
+    if (tokenContract) {
+      params.tokenContract = tokenContract;
+    }
+
     try {
-      const req = await CreateReceipt({
-        library,
-        fromToken: fromTokenInfo?.address || fromTokenInfo?.symbol,
-        account: fromAccount,
-        bridgeContract,
-        amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
-        toChainId,
-        to: toChecked && toAddress ? toAddress : (toAccount as string),
-        tokenContract,
-      });
-      if (!req.error) dispatch(setFrom(''));
+      const req = await (fromTokenInfo.isNativeToken ? LockToken : CreateReceipt)(params);
+      if (!req?.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
-      message.error(error.message);
+      error?.message && message.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [
-    bridgeContract,
-    dispatch,
-    fromAccount,
-    fromChainId,
-    fromInput,
     fromTokenInfo,
-    library,
-    toAccount,
-    toChecked,
-    toAddress,
+    fromAccount,
+    bridgeContract,
     toChainId,
+    fromChainId,
+    toChecked,
+    toAccount,
+    toAddress,
+    dispatch,
+    library,
+    fromInput,
+    crossFee,
+    checkLimitAndRate,
     tokenContract,
   ]);
   const onSwapToken = useCallback(async () => {
@@ -163,19 +185,35 @@ function Actions() {
     if (!(toAccount && toChainId && bridgeOutContract)) return;
     dispatch(setActionLoading(true));
     try {
-      console.log(receiveItem, '=====receiveItem');
+      if (await checkLimitAndRate('swap', null, receiveItem)) {
+        dispatch(setActionLoading(false));
+        return;
+      }
 
       const req = await SwapToken({ bridgeOutContract, receiveItem, toAccount });
       if (!req.error) {
         addReceivedList(receiveItem.id);
         dispatch(setReceiveId(undefined));
       }
-      txMessage({ req, chainId: toChainId });
+      const { status, transactionHash } = req.error?.receipt || {};
+      if (status === false && transactionHash) {
+        txMessage({
+          req: {
+            ...req,
+            TransactionId: transactionHash,
+            isTransactionHash: true,
+          },
+          chainId: toChainId,
+        });
+      } else {
+        txMessage({ req, chainId: toChainId });
+      }
     } catch (error: any) {
+      console.log(error, '======test=error');
       message.error(error.message);
     }
     dispatch(setActionLoading(false));
-  }, [addReceivedList, bridgeOutContract, dispatch, receiveItem, t, toAccount, toChainId]);
+  }, [addReceivedList, bridgeOutContract, checkLimitAndRate, dispatch, receiveItem, t, toAccount, toChainId]);
   const onApprove = useCallback(
     async (symbol?: string) => {
       if (!fromAccount || !fromChainId || !tokenContract) return;
@@ -331,6 +369,7 @@ function Actions() {
           setToConfirmModal(false);
         }}
       />
+      {limitAmountModal}
     </>
   );
 }

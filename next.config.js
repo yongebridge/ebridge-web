@@ -1,13 +1,14 @@
 /* eslint-disable */
 /** @type {import('next').NextConfig} */
+const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV } = process.env;
 const withLess = require('next-with-less');
 const withPlugins = require('next-compose-plugins');
-const { NEXT_PUBLIC_PREFIX, ANALYZE, NODE_ENV } = process.env;
-const rewrites = require('./rewrites');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: ANALYZE === 'true',
 });
-const path = require('path');
+const { rewriteConstants, getRewrites, rewriteEnv } = require('./rewriteENV');
+rewriteEnv();
+rewriteConstants();
 const plugins = [
   [withBundleAnalyzer],
   [
@@ -27,12 +28,16 @@ const plugins = [
 
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: false,
   // webpack(config) {
   //   config.resolve.alias['bn.js'] = path.resolve(process.cwd(), 'node_modules', 'bn.js');
   //   return config;
   // },
+  compiler: {
+    removeConsole: false,
+  },
   async rewrites() {
-    return rewrites;
+    return getRewrites();
   },
   images: {
     domains: ['raw.githubusercontent.com'],
@@ -41,7 +46,7 @@ const nextConfig = {
 
 const productionConfig = {
   ...nextConfig,
-  // swcMinify: true,
+  swcMinify: false,
   compiler: {
     removeConsole: {
       exclude: ['error'],
@@ -58,4 +63,7 @@ const productionConfig = {
   resolve: {},
 };
 
-module.exports = withPlugins(plugins, ANALYZE === 'true' || NODE_ENV === 'production' ? productionConfig : nextConfig);
+module.exports = withPlugins(
+  plugins,
+  ANALYZE === 'true' || process.env.NEXT_PUBLIC_APP_ENV === 'mainnet' ? productionConfig : nextConfig,
+);

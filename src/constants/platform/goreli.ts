@@ -1,7 +1,9 @@
 export const CHAIN_INFO = {
   chainId: 5,
   exploreUrl: 'https://goerli.etherscan.io/',
-  rpcUrl: 'https://goerli.infura.io/v3/ec0fa04ecdc94894b23a773cff776d05',
+  rpcUrl: 'https://goerli.infura.io/v3/fce90b852ec6426eb706bc1a6dcd35a6',
 };
-export const BRIDGE_CONTRACT = '0xA9108fe07529eAadDA93259BDadF3277DF69c797';
-export const BRIDGE_CONTRACT_OUT = '0x212ee426AdB62489f5b310E88Fab38353beeD1b1';
+
+export const BRIDGE_CONTRACT = '0xd6A2BbDB1d23155A78aeB3dEB8a4df0d96AB007D';
+export const BRIDGE_CONTRACT_OUT = '0x8E0cF442690a9395C42623F6503Ab926c739f59E';
+export const LIMIT_CONTRACT = '';

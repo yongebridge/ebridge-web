@@ -1,19 +1,20 @@
 import { BasicActions } from 'contexts/utils';
-import { useAElf, useWeb3 } from 'hooks/web3';
+import { useAElf, usePortkey, useWeb3 } from 'hooks/web3';
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
-import { modalActions, modalState } from './actions';
+import { ModalActions, ModalState } from './actions';
+import { formatPortkeyWallet } from 'contexts/useWallet/utils';
 
 const INITIAL_STATE = {};
 const ModalContext = createContext<any>(INITIAL_STATE);
 
-export function useModal(): [modalState, BasicActions<modalActions>] {
+export function useModal(): [ModalState, BasicActions<ModalActions>] {
   return useContext(ModalContext);
 }
 
 //reducer
-function reducer(state: modalState, { type, payload }: { type: modalActions; payload: any }) {
+function reducer(state: ModalState, { type, payload }: { type: ModalActions; payload: any }) {
   switch (type) {
-    case modalActions.destroy: {
+    case ModalActions.destroy: {
       return {};
     }
     default: {
@@ -25,18 +26,44 @@ function reducer(state: modalState, { type, payload }: { type: modalActions; pay
 }
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch]: [modalState, BasicActions<modalActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
-  const { walletChainId, accountChainId } = state;
+  const [state, dispatch]: [ModalState, BasicActions<ModalActions>['dispatch']] = useReducer(reducer, INITIAL_STATE);
+  const { accountWalletType, walletWalletType, walletChainId, accountChainId } = state;
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
+  const portkeyWallet = usePortkey();
   const [walletWallet, accountWallet] = useMemo(() => {
-    const walletWallet = typeof walletChainId === 'string' ? aelfWallet : web3Wallet;
-    if (!walletWallet.chainId) walletWallet.chainId = walletChainId;
-    const accountWallet = typeof accountChainId === 'string' ? aelfWallet : web3Wallet;
-    if (!accountWallet.chainId) accountWallet.chainId = accountChainId;
+    let accountWallet, walletWallet;
+    switch (accountWalletType) {
+      case 'ERC':
+        accountWallet = web3Wallet;
+        break;
+      case 'PORTKEY':
+        accountWallet = formatPortkeyWallet(portkeyWallet, accountChainId as any);
+        break;
+      case 'NIGHTELF':
+        accountWallet = aelfWallet;
+        break;
+      default:
+        break;
+    }
+
+    switch (walletWalletType) {
+      case 'ERC':
+        walletWallet = web3Wallet;
+        break;
+      case 'PORTKEY':
+        walletWallet = formatPortkeyWallet(portkeyWallet, walletChainId as any);
+        break;
+      case 'NIGHTELF':
+        walletWallet = aelfWallet;
+        break;
+      default:
+        break;
+    }
+
     return [walletWallet, accountWallet];
-  }, [accountChainId, aelfWallet, walletChainId, web3Wallet]);
+  }, [accountChainId, accountWalletType, aelfWallet, portkeyWallet, walletChainId, walletWalletType, web3Wallet]);
   return (
     <ModalContext.Provider
       value={useMemo(
