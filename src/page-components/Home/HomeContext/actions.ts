@@ -20,6 +20,8 @@ export enum HomeActionsEnum {
   default = 'DEFAULT',
   destroyModal = 'DESTROY_MODAL',
   destroyState = 'DESTROY_STATE',
+  setLimitAmountModal = 'SET_LIMIT_AMOUNT_MODAL',
+  setLimitAmountDescModal = 'SET_LIMIT_AMOUNT_DESC_MODAL',
 }
 
 export type HomeState = {
@@ -37,6 +39,9 @@ export type HomeState = {
   fromBalance?: { balance: BigNumber; show: BigNumber; token: TokenInfo };
   actionLoading?: boolean;
   crossMin?: number;
+  crossFee?: string;
+  limitAmountModal?: boolean;
+  limitAmountDescModal?: boolean;
 };
 
 export const DestroyModal = {
@@ -82,6 +87,10 @@ export const HomeActions = {
   setReceiveId: (receiveId?: string) => basicActions(HomeActionsEnum['setReceiveId'], { receiveId }),
   setHomeState: (state: HomeState) => basicActions(HomeActionsEnum['default'], state),
   homeDestroy: () => basicActions(HomeActionsEnum['destroy']),
+  setLimitAmountModal: (limitAmountModal: boolean) =>
+    basicActions(HomeActionsEnum['setLimitAmountModal'], { limitAmountModal }),
+  setLimitAmountDescModal: (limitAmountDescModal: boolean) =>
+    basicActions(HomeActionsEnum['setLimitAmountDescModal'], { limitAmountDescModal }),
 };
 
 export const {
@@ -98,4 +107,6 @@ export const {
   setAddModal,
   homeDestroy,
   setHomeState,
+  setLimitAmountModal,
+  setLimitAmountDescModal,
 } = HomeActions;

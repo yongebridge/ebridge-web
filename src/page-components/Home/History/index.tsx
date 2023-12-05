@@ -19,6 +19,7 @@ import { Content, NetworkSelect, StatusSelect, TablePagination } from './compone
 import styles from './styles.module.less';
 import CommonTable from 'components/CommonTable';
 import { useLanguage } from 'i18n';
+import { isPortkey } from 'utils/portkey';
 type State = {
   fromChainId?: ChainId;
   toChainId?: ChainId;
@@ -117,7 +118,7 @@ function Body({
   );
 }
 
-function HeterogeneousHistory() {
+function useHeterogeneousHistory() {
   const [state, setState] = useSetState<State>(DefaultListState);
   const { page } = state;
   const [selectState, setSelect] = useSetState<State>();
@@ -155,21 +156,22 @@ function HeterogeneousHistory() {
     if (preFromAccount !== fromAccount || preToAccount !== toAccount) setState(DefaultListState);
   }, [fromAccount, preFromAccount, preToAccount, setState, toAccount]);
   useInterval(getReceiveList, 10000, [getReceiveList]);
-  return (
-    <Body
-      networkList={NetworkList}
-      isHeterogeneous
-      state={state}
-      selectState={selectState}
-      setSelect={setSelect}
-      setState={setState}
-    />
+  return useMemo(
+    () => ({
+      isHeterogeneous: true,
+      networkList: NetworkList,
+      state,
+      selectState,
+      setSelect,
+      setState,
+    }),
+    [selectState, setSelect, setState, state],
   );
 }
 
 const isomorphismNetworkList = NetworkList.filter((i) => isELFChain(i.info.chainId));
 
-function HomogeneousHistory() {
+function useHomogeneousHistory() {
   const [state, setState] = useSetState<State>(DefaultListState);
   const { page } = state;
   const [selectState, setSelect] = useSetState<State>();
@@ -207,39 +209,60 @@ function HomogeneousHistory() {
     if (preFromAddress !== fromAddress) setState(DefaultListState);
   }, [fromAddress, preFromAddress, setState]);
   useInterval(getReceiveList, 10000, [getReceiveList]);
-  return (
-    <Body
-      networkList={isomorphismNetworkList}
-      state={state}
-      selectState={selectState}
-      setSelect={setSelect}
-      setState={setState}
-    />
+
+  return useMemo(
+    () => ({
+      isHeterogeneous: false,
+      networkList: isomorphismNetworkList,
+      state,
+      selectState,
+      setSelect,
+      setState,
+    }),
+    [selectState, setSelect, setState, state],
   );
 }
 
 export default function History() {
-  const [{ historyType }, setActiveKey] = useUrlSearchState();
+  const [{ historyType = CrossChainType.heterogeneous }, setActiveKey] = useUrlSearchState();
 
   const { t } = useLanguage();
+
+  const heterogeneousData = useHeterogeneousHistory();
+  const homogeneousData = useHomogeneousHistory();
+
+  const tableData = useMemo(
+    () => (historyType === CrossChainType.heterogeneous ? heterogeneousData : homogeneousData),
+    [heterogeneousData, historyType, homogeneousData],
+  );
   return (
     <div className={styles.history}>
       <Tabs
         defaultActiveKey={CrossChainType.heterogeneous}
         activeKey={CrossChainType[historyType as CrossChainType] ? historyType : undefined}
         onChange={(v) => setActiveKey({ historyType: v })}>
-        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous}>
-          <HeterogeneousHistory />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous}>
-          <HomogeneousHistory />
-        </Tabs.TabPane>
+        <Tabs.TabPane tab={t('Heterogeneous Chain Cross-Chain History')} key={CrossChainType.heterogeneous} />
+        {!isPortkey() && (
+          <Tabs.TabPane tab={t('Homogeneous Chain Cross-Chain History')} key={CrossChainType.homogeneous} />
+        )}
         <div className="tip-icon">
           <CommonPopover className="cursor-pointer" content={<Content />} placement="topRight">
             <IconFont type="QuestionCircleOutlined" />
           </CommonPopover>
         </div>
       </Tabs>
+      {!(isPortkey() && historyType === CrossChainType.homogeneous) && (
+        <div className={styles['table-box']}>
+          <Body
+            networkList={tableData.networkList}
+            isHeterogeneous={tableData.isHeterogeneous}
+            state={tableData.state}
+            selectState={tableData.selectState}
+            setSelect={tableData.setSelect}
+            setState={tableData.setState}
+          />
+        </div>
+      )}
     </div>
   );
 }

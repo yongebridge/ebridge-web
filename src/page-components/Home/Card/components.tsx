@@ -5,11 +5,11 @@ import CommonPopover from 'components/CommonPopover';
 import IconFont from 'components/IconFont';
 import TokenLogo from 'components/TokenLogo';
 import { useWallet } from 'contexts/useWallet/hooks';
-import { useCrossFee } from 'hooks/useCrossFee';
 import { useLanguage } from 'i18n';
 import { Trans } from 'react-i18next';
 import { ChainId } from 'types';
 import styles from './styles.module.less';
+import { useHomeContext } from '../HomeContext';
 export function Content() {
   return (
     <div className={clsx(styles['popover-content'])}>
@@ -33,7 +33,7 @@ export function Content() {
   );
 }
 export function FromHeader() {
-  const crossFee = useCrossFee();
+  const [{ crossFee }] = useHomeContext();
   const { isHomogeneous } = useWallet();
   return (
     <div className={clsx('flex-row-between', styles['title-row'])}>

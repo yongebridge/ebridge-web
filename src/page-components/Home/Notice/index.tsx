@@ -8,9 +8,12 @@ import { Trans } from 'react-i18next';
 import { isELFChain } from 'utils/aelfUtils';
 import { getCrossChainTime } from 'utils/time';
 import styles from './styles.module.less';
+import { useHomeContext } from '../HomeContext';
+import { setLimitAmountDescModal } from '../HomeContext/actions';
 
 function Homogeneous() {
   const { t } = useLanguage();
+  // const [, { dispatch }] = useHomeContext();
   const { toWallet, fromWallet } = useWallet();
   const { chainId: toChainId } = toWallet || {};
   const { chainId: fromChainId } = fromWallet || {};
@@ -25,9 +28,9 @@ function Homogeneous() {
 function Heterogeneous() {
   const { t } = useLanguage();
   const { isHomogeneous, toWallet, fromWallet } = useWallet();
+  const [, { dispatch }] = useHomeContext();
   const { chainId: toChainId } = toWallet || {};
   const { chainId: fromChainId } = fromWallet || {};
-  // const [{ crossMin, selectToken }] = useHomeContext();
   const isHeterogeneousCrossInChain = useMemo(
     () => !isHomogeneous && isELFChain(toChainId),
     [isHomogeneous, toChainId],
@@ -43,14 +46,26 @@ function Heterogeneous() {
             <p>{t('The minimum crosschain amount is', { amount: crossMin, symbol: selectToken?.symbol })}</p>
           )} */}
           <p>{t('The cross-chain transaction fee will be covered by AELF')}</p>
+          <p>
+            <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
+              {t('eBridge limit rules')}
+            </a>
+          </p>
         </>
       ) : (
-        <p>
-          {t(
-            'Estimated time of sending tokens is time. Please select Receipt ID and receive the token(s) transferred',
-            { time },
-          )}
-        </p>
+        <>
+          <p>
+            {t(
+              'Estimated time of sending tokens is time. Please select Receipt ID and receive the token(s) transferred',
+              { time },
+            )}
+          </p>
+          <p>
+            <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
+              {t('eBridge limit rules')}
+            </a>
+          </p>
+        </>
       )}
     </>
   );

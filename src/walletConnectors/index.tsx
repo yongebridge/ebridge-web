@@ -1,6 +1,6 @@
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
-import { WalletConnect } from '@web3-react/walletconnect';
+import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { SupportedChainId } from 'constants/chain';
@@ -29,9 +29,9 @@ export interface Connection {
 }
 
 export const BACKFILLABLE_WALLETS = [
-  ConnectionType.COINBASE_WALLET,
-  ConnectionType.WALLET_CONNECT,
   ConnectionType.INJECTED,
+  ConnectionType.WALLET_CONNECT,
+  ConnectionType.COINBASE_WALLET,
 ];
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`);
@@ -55,8 +55,16 @@ export const [walletConnect, walletConnectHooks] = initializeConnector<WalletCon
     new WalletConnect({
       actions,
       options: {
-        rpc: NETWORK_URLS,
-        qrcode: true,
+        rpcMap: NETWORK_URLS,
+        projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
+        showQrModal: true,
+        chains: [DEFAULT_ERC_CHAIN],
+        optionalChains: Object.keys(NETWORK_URLS).map((i) => Number(i)),
+        qrModalOptions: {
+          themeVariables: {
+            '--wcm-z-index': '9999',
+          },
+        },
       },
       onError,
     }),

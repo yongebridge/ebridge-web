@@ -28,10 +28,14 @@ const plugins = [
 
 const nextConfig = {
   reactStrictMode: false,
+  swcMinify: false,
   // webpack(config) {
   //   config.resolve.alias['bn.js'] = path.resolve(process.cwd(), 'node_modules', 'bn.js');
   //   return config;
   // },
+  compiler: {
+    removeConsole: false,
+  },
   async rewrites() {
     return getRewrites();
   },
@@ -42,7 +46,7 @@ const nextConfig = {
 
 const productionConfig = {
   ...nextConfig,
-  // swcMinify: true,
+  swcMinify: false,
   compiler: {
     removeConsole: {
       exclude: ['error'],
@@ -59,4 +63,7 @@ const productionConfig = {
   resolve: {},
 };
 
-module.exports = withPlugins(plugins, ANALYZE === 'true' || NODE_ENV === 'production' ? productionConfig : nextConfig);
+module.exports = withPlugins(
+  plugins,
+  ANALYZE === 'true' || process.env.NEXT_PUBLIC_APP_ENV === 'mainnet' ? productionConfig : nextConfig,
+);

@@ -1,5 +1,5 @@
 import { basicActions } from 'contexts/utils';
-import type { ChainId, Web3Type } from 'types';
+import type { ChainId, ChainType, WalletType, Web3Type } from 'types';
 
 export enum ModalActions {
   setWalletModal = 'SET_WALLET_MODAL',
@@ -16,22 +16,28 @@ export type ModalState = {
   walletChainId?: ChainId;
   accountWallet?: Web3Type;
   walletWallet?: Web3Type;
+  accountWalletType?: WalletType;
+  walletWalletType?: WalletType;
+  walletChainType?: ChainType;
 };
 
 export const basicModalView = {
-  setWalletModal: (walletModal: boolean, walletChainId?: ChainId) => {
-    const obj: any = { walletModal };
-    if (walletChainId) {
-      obj.walletChainId = walletChainId;
+  setWalletModal: (
+    walletModal: boolean,
+    options?: { walletWalletType?: WalletType; walletChainType?: ChainType; walletChainId?: ChainId },
+  ) => {
+    let obj: any = { walletModal };
+    if (walletModal) {
+      obj = { ...obj, ...options };
       obj.destroy = true;
     }
     return basicActions(ModalActions['setWalletModal'], obj);
   },
 
-  setAccountModal: (accountModal: boolean, accountChainId?: ChainId) => {
-    const obj: any = { accountModal };
-    if (accountChainId) {
-      obj.accountChainId = accountChainId;
+  setAccountModal: (accountModal: boolean, options?: { accountWalletType?: WalletType; accountChainId?: ChainId }) => {
+    let obj: any = { accountModal };
+    if (accountModal) {
+      obj = { ...obj, ...options };
       obj.destroy = true;
     }
     return basicActions(ModalActions['setAccountModal'], obj);

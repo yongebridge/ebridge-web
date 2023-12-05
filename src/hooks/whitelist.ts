@@ -39,7 +39,6 @@ export function useCurrentWhitelist() {
 
 export function useUserAddedToken(symbol?: string): CurrentWhitelistItem | false {
   const activeWhitelist = useActiveWhitelist();
-
   const { fromWallet, toWallet } = useWallet();
   const fromChainId = fromWallet?.chainId;
   const toChainId = toWallet?.chainId;

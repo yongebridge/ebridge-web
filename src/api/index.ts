@@ -1,3 +1,4 @@
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { BASE_APIS, BASE_REQ_TYPES, DEFAULT_METHOD, EXPAND_APIS, EXPAND_REQ_TYPES } from './list';
 import myServer from './server';
 import { IBaseRequest } from './types';
@@ -19,4 +20,23 @@ Object.entries(EXPAND_APIS).forEach(([key, value]) => {
 
 const request: BASE_REQ_TYPES & EXPAND_REQ_TYPES = Object.assign({}, myServer.base, myServer);
 
-export { baseRequest, request };
+const requestGql = ({ uri }: { uri: string }) => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    queryDeduplication: false,
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      },
+      query: {
+        fetchPolicy: 'network-only',
+      },
+      // ...defaultOptions,
+    },
+    link: new HttpLink({
+      uri,
+    }),
+  });
+};
+
+export { baseRequest, request, requestGql };

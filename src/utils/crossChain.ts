@@ -8,11 +8,14 @@ import AElf from 'aelf-sdk';
 import { AElfTransaction, TransactionResult } from '@aelf-react/types';
 import { checkApprove } from 'contracts';
 import type { provider } from 'web3-core';
-import { CrossFeeToken, REQ_CODE } from 'constants/misc';
+import { CrossFeeToken, REQ_CODE, ZERO } from 'constants/misc';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
 import { formatAddress, isIncludesChainId } from 'utils';
-import { FormatTokenList, IS_MAINNET } from 'constants/index';
+import { FormatTokenList } from 'constants/index';
+import { LimitDataProps } from 'page-components/Home/useLimitAmountModal/constants';
+import BigNumber from 'bignumber.js';
+import { message } from 'antd';
 export async function CrossChainTransfer({
   contract,
   account,
@@ -205,6 +208,7 @@ export async function CreateReceipt({
   toChainId,
   to,
   tokenContract,
+  crossFee,
 }: {
   bridgeContract: ContractBasic;
   library: provider;
@@ -214,6 +218,7 @@ export async function CreateReceipt({
   toChainId: ChainId;
   to: string;
   tokenContract: ContractBasic;
+  crossFee?: string;
 }) {
   const toAddress = formatAddress(to);
   const fromELFChain = bridgeContract.contractType === 'ELF';
@@ -223,22 +228,32 @@ export async function CreateReceipt({
       CrossFeeToken,
       account,
       bridgeContract.address || '',
-      amount,
+      timesDecimals(crossFee, 8).toFixed(0),
       undefined,
       fromELFChain ? tokenContract : undefined,
     );
-    if (req !== REQ_CODE.Success) return req;
+    if (req !== REQ_CODE.Success) throw req;
+  }
+  let checkAmount = amount;
+  if (fromToken === CrossFeeToken) {
+    if (crossFee) {
+      // fee ELF decimals 8
+      crossFee = timesDecimals(crossFee, 8).toFixed(0);
+    }
+    checkAmount = ZERO.plus(amount)
+      .plus(crossFee || 0)
+      .toFixed(0);
   }
   const req = await checkApprove(
     library,
     fromToken,
     account,
     bridgeContract.address || '',
-    amount,
+    checkAmount,
     undefined,
     fromELFChain ? tokenContract : undefined,
   );
-  if (req !== REQ_CODE.Success) return req;
+  if (req !== REQ_CODE.Success) throw req;
   if (fromELFChain) {
     return bridgeContract.callSendMethod('createReceipt', account, [
       fromToken,
@@ -313,4 +328,112 @@ export async function SwapToken({
   }
   if (swapId.error) return swapId;
   return bridgeOutContract?.callSendMethod('swapToken', toAccount, [swapId, receiptId, originAmount, toAddress]);
+}
+
+export async function getSwapId({
+  bridgeOutContract,
+  toChainId,
+  fromChainId,
+  symbol,
+}: {
+  bridgeOutContract?: ContractBasic;
+  toChainId?: ChainId;
+  fromChainId?: ChainId;
+  symbol?: string;
+}) {
+  if (!bridgeOutContract || !toChainId || !fromChainId || !symbol) {
+    return;
+  }
+
+  let swapId;
+  const { address } = getTokenInfoByWhitelist(toChainId, symbol) || {};
+  const chainId = getChainIdToMap(fromChainId);
+
+  if (bridgeOutContract?.contractType === 'ELF') {
+    swapId = await bridgeOutContract?.callViewMethod('GetSwapIdByToken', [chainId, symbol]);
+  } else {
+    swapId = await bridgeOutContract?.callViewMethod('getSwapId', [address, chainId]);
+  }
+
+  return swapId;
+}
+
+export async function getReceiptLimit({
+  limitContract,
+  toChainId,
+  fromChainId,
+  symbol,
+}: {
+  limitContract?: ContractBasic;
+  toChainId?: ChainId;
+  fromChainId?: ChainId;
+  symbol?: string;
+}): Promise<LimitDataProps | undefined> {
+  if (!limitContract || !toChainId || !fromChainId || !symbol) {
+    return;
+  }
+
+  const { address } = getTokenInfoByWhitelist(fromChainId, symbol) || {};
+  try {
+    const [receiptDailyLimit, receiptTokenBucket] = await Promise.all([
+      limitContract?.callViewMethod('getReceiptDailyLimit', [address, getChainIdToMap(toChainId)]),
+      limitContract?.callViewMethod('getCurrentReceiptTokenBucketState', [address, getChainIdToMap(toChainId)]),
+    ]);
+
+    if (receiptDailyLimit.error || receiptTokenBucket.error) {
+      throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
+    }
+
+    return {
+      remain: new BigNumber(receiptDailyLimit.tokenAmount),
+      maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
+      currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
+      fillRate: new BigNumber(receiptTokenBucket.rate),
+      isEnable: receiptTokenBucket.isEnabled,
+    };
+  } catch (error: any) {
+    message.error(error.message);
+    console.log('getReceiptLimit error :', error);
+  }
+}
+
+export async function getSwapLimit({
+  limitContract,
+  fromChainId,
+  swapId,
+  toChainId,
+  symbol,
+}: {
+  limitContract?: ContractBasic;
+  fromChainId?: ChainId;
+  toChainId?: ChainId;
+  swapId?: string;
+  symbol?: string;
+}): Promise<LimitDataProps | undefined> {
+  if (!limitContract || !toChainId || !symbol || !fromChainId || !swapId) {
+    return;
+  }
+
+  const { address } = getTokenInfoByWhitelist(toChainId, symbol) || {};
+  try {
+    const [swapDailyLimit, swapTokenBucket] = await Promise.all([
+      limitContract?.callViewMethod('getSwapDailyLimit', [swapId]),
+      limitContract?.callViewMethod('getCurrentSwapTokenBucketState', [address, getChainIdToMap(fromChainId)]),
+    ]);
+
+    if (swapDailyLimit.error || swapTokenBucket.error) {
+      throw new Error(swapDailyLimit.error || swapTokenBucket.error);
+    }
+
+    return {
+      remain: new BigNumber(swapDailyLimit.tokenAmount),
+      maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
+      currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
+      fillRate: new BigNumber(swapTokenBucket.rate),
+      isEnable: swapTokenBucket.isEnabled,
+    };
+  } catch (error: any) {
+    message.error(error.message);
+    console.log('getSwapLimit error :', error);
+  }
 }

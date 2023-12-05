@@ -7,6 +7,9 @@ export function getDecimalByWhitelist(chainId: ChainId, symbol: string) {
 export function getAddressByWhitelist(chainId: ChainId, symbol: string) {
   return (DefaultWhitelistMap as any)[symbol]?.[chainId].address;
 }
-export function getTokenInfoByWhitelist(chainId: ChainId, symbol: string): undefined | TokenInfo {
+export function getTokenInfoByWhitelist(chainId?: ChainId, symbol?: string): undefined | TokenInfo {
+  if (!chainId || !symbol) {
+    return;
+  }
   return (DefaultWhitelistMap as any)[symbol]?.[chainId];
 }

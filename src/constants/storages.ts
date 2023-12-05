@@ -1,6 +1,6 @@
 const storages = {
   useChain: 'use-chain',
-  useWallet: 'use-wallet',
+  useWallet: 'use-wallet-1',
   useWhitelist: 'use-white-list',
   userERCChainId: 'user-erc-chain-id',
   userELFChainId: 'user-elf-chain-id',
