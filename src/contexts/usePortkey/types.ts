@@ -1,6 +1,7 @@
 import { AElfAddress } from '@aelf-react/types';
 import { Accounts, ChainIds, IPortkeyProvider, NetworkType } from '@portkey/provider-types';
 import type { ReactNode, Dispatch } from 'react';
+import { ChainId } from 'types';
 
 export enum Actions {
   ACTIVATE = 'ACTIVATE',
@@ -49,6 +50,7 @@ export interface PortkeyContextType extends PortkeyContextState {
   deactivate: () => Promise<true>;
   // try eagerly connection
   connectEagerly: (nodes?: PortkeyReactProviderProps['nodes']) => Promise<true>;
+  checkWalletConnect: (chainId: ChainId) => Promise<boolean>;
 }
 
 export type ReducerAction = {

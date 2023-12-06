@@ -152,27 +152,27 @@ export const CrossChainTimeList = [
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '4minutes',
+    time: '4',
   },
   {
     fromChainId: SupportedChainId.MAINNET,
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '25minutes',
+    time: '40',
   },
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedChainId.MAINNET],
-    time: '25minutes',
+    time: '40',
   },
   {
     fromChainId: SupportedChainId.BSC_MAINNET,
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '5minutes',
+    time: '10',
   },
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedChainId.BSC_MAINNET],
-    time: '5minutes',
+    time: '10',
   },
 ];
 

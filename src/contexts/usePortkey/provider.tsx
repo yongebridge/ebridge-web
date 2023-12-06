@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useR
 import { Actions, PortkeyContextState, PortkeyContextType, PortkeyReactProviderProps, ReducerAction } from './types';
 import {
   Accounts,
+  ChainId,
   ChainIds,
   MethodsBase,
   MethodsWallet,
@@ -137,6 +138,20 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
     provider.removeListener(NotificationEvents.CONNECTED, connected);
     provider.removeListener(NotificationEvents.DISCONNECTED, disconnected);
   }, [accountsChanged, chainChanged, connected, disconnected, networkChanged, provider]);
+  const checkWalletConnect = useCallback(
+    async (chainId: ChainId) => {
+      if (!provider) {
+        return false;
+      }
+      const syncStatus = await provider.request({
+        method: MethodsWallet.GET_WALLET_MANAGER_SYNC_STATUS,
+        payload: { chainId },
+      });
+
+      return syncStatus;
+    },
+    [provider],
+  );
   useEffect(() => {
     if (!provider) return;
     initListener();
@@ -147,11 +162,11 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   }, [initListener, provider, removeListener]);
   return useMemo(
     () => (
-      <PortkeyContext.Provider value={{ ...state, activate, deactivate, connectEagerly } as any}>
+      <PortkeyContext.Provider value={{ ...state, activate, deactivate, connectEagerly, checkWalletConnect } as any}>
         {children}
       </PortkeyContext.Provider>
     ),
-    [state, activate, deactivate, connectEagerly, children],
+    [state, activate, deactivate, connectEagerly, checkWalletConnect, children],
   );
 }
 

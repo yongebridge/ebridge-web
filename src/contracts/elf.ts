@@ -4,6 +4,7 @@ import { LANG_MAX, REQ_CODE } from 'constants/misc';
 import { timesDecimals } from 'utils/calculate';
 import { message } from 'antd';
 import { isUserDenied } from 'utils/provider';
+import CommonMessage from 'components/CommonMessage';
 // elf
 export const getELFChainBalance = async (tokenContract: ContractBasic, symbol: string, account: string) => {
   const balance = await tokenContract.callViewMethod('GetBalance', {
@@ -67,11 +68,11 @@ export const checkELFApprove = async (
     account,
     contractUseAmount,
     pivotBalance,
-    symbol: symbol, // TODO lpTokenAddress ? getLPSymbol(symbol) : symbol,
+    symbol: symbol,
   });
   if (typeof approveResult !== 'boolean' && approveResult.error) {
-    message.error('Approval Failed');
-    message.error(approveResult.error.message);
+    CommonMessage.error('Approval Failed');
+    CommonMessage.error(approveResult.error.message);
     if (isUserDenied(approveResult.error.message)) return REQ_CODE.UserDenied;
     return REQ_CODE.Fail;
   }

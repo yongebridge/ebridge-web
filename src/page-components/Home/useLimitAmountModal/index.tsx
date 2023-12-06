@@ -17,7 +17,7 @@ import { divDecimals } from 'utils/calculate';
 import styles from './styles.module.less';
 import { CrossChainItem } from 'types/api';
 import { ChainId } from 'types';
-import { getDecimalByWhitelist, getTokenInfoByWhitelist } from 'utils/whitelist';
+import { getTokenInfoByWhitelist } from 'utils/whitelist';
 
 const calculateMinValue = (
   input1: LimitDataProps | undefined,

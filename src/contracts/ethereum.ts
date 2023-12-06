@@ -8,6 +8,7 @@ import { ERC20_ABI } from 'constants/abis';
 import { message } from 'antd';
 import { MaxUint256, REQ_CODE } from 'constants/misc';
 import { getDefaultProvider, isUserDenied } from 'utils/provider';
+import CommonMessage from 'components/CommonMessage';
 // ethereum
 export const getContract = (provider: provider, address: string) => {
   const web3 = new Web3(provider);
@@ -85,8 +86,8 @@ export const checkErcApprove = async (
     pivotBalance,
   });
   if (typeof approveResult !== 'boolean' && approveResult.error) {
-    message.error('Check allowance and Approved failed');
-    message.error(approveResult.error.message);
+    CommonMessage.error('Check allowance and Approved failed');
+    CommonMessage.error(approveResult.error.message);
     if (isUserDenied(approveResult.error.message)) return REQ_CODE.UserDenied;
     return REQ_CODE.Fail;
   }

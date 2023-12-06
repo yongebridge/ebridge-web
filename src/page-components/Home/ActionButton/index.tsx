@@ -12,7 +12,6 @@ import { timesDecimals } from 'utils/calculate';
 import { setActionLoading, setFrom, setReceiveId } from '../HomeContext/actions';
 import { Trans } from 'react-i18next';
 import { CrossFeeToken, LANG_MAX, MaxUint256, ZERO } from 'constants/misc';
-import { message } from 'antd';
 import { useLanguage } from 'i18n';
 import useLockCallback from 'hooks/useLockCallback';
 import { useUpdateEffect } from 'react-use';
@@ -22,6 +21,8 @@ import { ACTIVE_CHAIN } from 'constants/index';
 import { formatAddress, isAddress } from 'utils';
 import CheckToFillAddressModal from './CheckToFillAddressModal';
 import useLimitAmountModal from '../useLimitAmountModal';
+import CommonMessage from 'components/CommonMessage';
+import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
 
 function Actions() {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
@@ -64,8 +65,10 @@ function Actions() {
 
   const [limitAmountModal, checkLimitAndRate] = useLimitAmountModal();
 
+  const { checkPortketConnect } = useCheckPortkeyStatus();
+
   const onCrossChainReceive = useLockCallback(async () => {
-    if (!receiveItem) return message.error(t('record does not exist'));
+    if (!receiveItem) return CommonMessage.error(t('record does not exist'));
     try {
       if (!(receiveTokenContract && sendCrossChainContract && sendTokenContract && itemSendChainID && itemToChainID))
         return;
@@ -85,7 +88,7 @@ function Actions() {
         dispatch(setReceiveId(undefined));
       }
     } catch (error: any) {
-      message.error(error.message);
+      CommonMessage.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [
@@ -101,9 +104,15 @@ function Actions() {
   ]);
   const onCrossChainTransfer = useLockCallback(async () => {
     if (!(fromChainId && toChainId)) return;
+
     const token = selectToken?.[fromChainId] || selectToken?.[toChainId];
     if (!(tokenContract && fromAccount && toAccount && token && fromInput)) return;
     dispatch(setActionLoading(true));
+
+    if (!(await checkPortketConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
+      dispatch(setActionLoading(false));
+      return;
+    }
     try {
       const req = await CrossChainTransfer({
         contract: tokenContract,
@@ -116,7 +125,7 @@ function Actions() {
       if (!req.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: token.decimals });
     } catch (error: any) {
-      message.error(error.message);
+      CommonMessage.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [dispatch, fromAccount, fromChainId, fromInput, selectToken, toAccount, toChainId, tokenContract]);
@@ -147,6 +156,11 @@ function Actions() {
       crossFee,
     };
 
+    if (!(await checkPortketConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
+      dispatch(setActionLoading(false));
+      return;
+    }
+
     if (await checkLimitAndRate('transfer', fromInput)) {
       dispatch(setActionLoading(false));
       return;
@@ -161,7 +175,7 @@ function Actions() {
       if (!req?.error) dispatch(setFrom(''));
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
-      error?.message && message.error(error.message);
+      error?.message && CommonMessage.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [
@@ -177,11 +191,12 @@ function Actions() {
     library,
     fromInput,
     crossFee,
+    checkPortketConnect,
     checkLimitAndRate,
     tokenContract,
   ]);
   const onSwapToken = useCallback(async () => {
-    if (!receiveItem) return message.error(t('record does not exist'));
+    if (!receiveItem) return CommonMessage.error(t('record does not exist'));
     if (!(toAccount && toChainId && bridgeOutContract)) return;
     dispatch(setActionLoading(true));
     try {
@@ -210,7 +225,7 @@ function Actions() {
       }
     } catch (error: any) {
       console.log(error, '======test=error');
-      message.error(error.message);
+      CommonMessage.error(error.message);
     }
     dispatch(setActionLoading(false));
   }, [addReceivedList, bridgeOutContract, checkLimitAndRate, dispatch, receiveItem, t, toAccount, toChainId]);
@@ -232,7 +247,7 @@ function Actions() {
         }
         txMessage({ req: approveResult, chainId: fromChainId });
       } catch (error: any) {
-        message.error(error.message);
+        CommonMessage.error(error.message);
       }
       dispatch(setActionLoading(false));
     },

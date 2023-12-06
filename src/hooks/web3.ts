@@ -11,6 +11,7 @@ import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { Accounts } from '@portkey/provider-types';
 import { setSelectELFWallet } from 'contexts/useChain/actions';
+import CommonMessage from 'components/CommonMessage';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
   const chainDispatch = useChainDispatch();
@@ -28,7 +29,7 @@ export function useAEflConnect() {
           status
             .filter((i) => !!i)
             .forEach((i, k) => {
-              if (i && i.error) message.error(`${Object.keys(bridges)[k]} getChainStatus error`);
+              if (i && i.error) CommonMessage.error(`${Object.keys(bridges)[k]} getChainStatus error`);
             });
         }
         chainDispatch(setSelectELFWallet('NIGHTELF'));

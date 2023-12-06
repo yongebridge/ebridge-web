@@ -10,6 +10,7 @@ import { getCrossChainTime } from 'utils/time';
 import styles from './styles.module.less';
 import { useHomeContext } from '../HomeContext';
 import { setLimitAmountDescModal } from '../HomeContext/actions';
+import { getChainIdToMap } from 'utils/chain';
 
 function Homogeneous() {
   const { t } = useLanguage();
@@ -21,7 +22,7 @@ function Homogeneous() {
   return (
     <>
       <p>{t('Estimated time of homogeneous cross-chain arrival is2', { time })}</p>
-      <p>{t('Tokens will arrive automatically after being sent. Please check them in your wallet')}</p>
+      <p>{t('Tokens will arrive automatically after being sent')}</p>
     </>
   );
 }
@@ -41,10 +42,11 @@ function Heterogeneous() {
       {isHeterogeneousCrossInChain ? (
         <>
           <p>{t('Estimated time of arrival in AELF is', { time })}</p>
-          <p>{t('Tokens will arrive automatically after being sent. Please check them in your wallet')}</p>
-          {/* {!!crossMin && (
-            <p>{t('The minimum crosschain amount is', { amount: crossMin, symbol: selectToken?.symbol })}</p>
-          )} */}
+          <p>
+            {t('Tokens will arrive automatically after being sent. Please check them in your wallet', {
+              fromChain: getChainIdToMap(fromChainId),
+            })}
+          </p>
           <p>{t('The cross-chain transaction fee will be covered by AELF')}</p>
           <p>
             <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
@@ -60,6 +62,7 @@ function Heterogeneous() {
               { time },
             )}
           </p>
+          <p>{t('Once the token is sent cross-chain', { toChain: getChainIdToMap(toChainId) })}</p>
           <p>
             <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
               {t('eBridge limit rules')}
