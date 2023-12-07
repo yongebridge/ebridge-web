@@ -39,7 +39,7 @@
     "Estimated time of heterogenous cross-chain arrival is": "Estimated time of heterogenous cross-chain arrival is {{time}}",
     "Estimated time of homogeneous cross-chain arrival is": "The estimated time of internal cross-chain transaction is {{time}}",
     "Estimated time of homogeneous cross-chain arrival is2": "The estimated time of internal cross-chain transaction is {{time}} minutes.",
-    "Estimated time of arrival in AELF is": "Estimated time of arriva is {{time}} minutes.",
+    "Estimated time of arrival in AELF is": "Estimated time of arrival is {{time}} minutes.",
     "Cross Chain time": "Estimated time of heterogenous cross-chain arrival is {{heterogeneous}}",
     "Tokens will arrive automatically after being sent. Please check them in your wallet": "You only need to pay for transaction fees generated on {{fromChain}} as fees on aelf will be covered by eBridge.",
     "Tokens will arrive automatically after being sent": "Please allow some time for tokens to be shown automatically in your wallet.",
