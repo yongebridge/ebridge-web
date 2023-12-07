@@ -138,6 +138,7 @@
     "Synchronising data on the chain 1": "Synchronising data on the {{chainType}}...",
     "Synchronising data on the chain 2": "Please wait 5-10 minutes before initiating a new transaction.",
     "main chain": "MainChain",
-    "side chain": "SideChain"
+    "side chain": "SideChain",
+    "Request rejected. eBridge needs your permission to continue": "Request rejected. eBridge needs your permission to continue."
   }
 }
