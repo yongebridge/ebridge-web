@@ -15,7 +15,6 @@ import { formatAddress, isIncludesChainId } from 'utils';
 import { FormatTokenList } from 'constants/index';
 import { LimitDataProps } from 'page-components/Home/useLimitAmountModal/constants';
 import BigNumber from 'bignumber.js';
-import { message } from 'antd';
 import CommonMessage from 'components/CommonMessage';
 export async function CrossChainTransfer({
   contract,

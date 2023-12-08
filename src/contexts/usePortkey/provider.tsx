@@ -138,7 +138,7 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
     provider.removeListener(NotificationEvents.CONNECTED, connected);
     provider.removeListener(NotificationEvents.DISCONNECTED, disconnected);
   }, [accountsChanged, chainChanged, connected, disconnected, networkChanged, provider]);
-  const checkWalletConnect = useCallback(
+  const getWalletManagerStatus = useCallback(
     async (chainId: ChainId) => {
       if (!provider) {
         return false;
@@ -162,11 +162,12 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   }, [initListener, provider, removeListener]);
   return useMemo(
     () => (
-      <PortkeyContext.Provider value={{ ...state, activate, deactivate, connectEagerly, checkWalletConnect } as any}>
+      <PortkeyContext.Provider
+        value={{ ...state, activate, deactivate, connectEagerly, getWalletManagerStatus } as any}>
         {children}
       </PortkeyContext.Provider>
     ),
-    [state, activate, deactivate, connectEagerly, checkWalletConnect, children],
+    [state, activate, deactivate, connectEagerly, getWalletManagerStatus, children],
   );
 }
 

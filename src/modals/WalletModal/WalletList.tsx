@@ -1,4 +1,4 @@
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { basicModalView } from 'contexts/useModal/actions';

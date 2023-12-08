@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { ContractBasic } from '../utils/contract';
 import { LANG_MAX, REQ_CODE } from 'constants/misc';
 import { timesDecimals } from 'utils/calculate';
-import { message } from 'antd';
 import { isUserDenied } from 'utils/provider';
 import CommonMessage from 'components/CommonMessage';
 // elf

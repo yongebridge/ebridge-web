@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import { getChainIdToMap, getShortNameByChainId } from 'utils/chain';
 import { isELFChain } from 'utils/aelfUtils';
-import { message } from 'antd';
 import { requestGql } from 'api';
 import CommonMessage from 'components/CommonMessage';
 

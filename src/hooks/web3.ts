@@ -7,7 +7,6 @@ import { AElfNodes } from 'constants/aelf';
 import { Web3Type } from 'types';
 import { useChain, useChainDispatch } from 'contexts/useChain';
 import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
-import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { Accounts } from '@portkey/provider-types';
 import { setSelectELFWallet } from 'contexts/useChain/actions';

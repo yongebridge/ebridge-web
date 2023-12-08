@@ -65,7 +65,7 @@ function Actions() {
 
   const [limitAmountModal, checkLimitAndRate] = useLimitAmountModal();
 
-  const { checkPortketConnect } = useCheckPortkeyStatus();
+  const { checkPortkeyConnect } = useCheckPortkeyStatus();
 
   const onCrossChainReceive = useLockCallback(async () => {
     if (!receiveItem) return CommonMessage.error(t('record does not exist'));
@@ -109,7 +109,7 @@ function Actions() {
     if (!(tokenContract && fromAccount && toAccount && token && fromInput)) return;
     dispatch(setActionLoading(true));
 
-    if (!(await checkPortketConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
+    if (!(await checkPortkeyConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
       dispatch(setActionLoading(false));
       return;
     }
@@ -156,7 +156,7 @@ function Actions() {
       crossFee,
     };
 
-    if (!(await checkPortketConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
+    if (!(await checkPortkeyConnect(isELFChain(fromChainId) ? fromChainId : toChainId))) {
       dispatch(setActionLoading(false));
       return;
     }
@@ -191,7 +191,7 @@ function Actions() {
     library,
     fromInput,
     crossFee,
-    checkPortketConnect,
+    checkPortkeyConnect,
     checkLimitAndRate,
     tokenContract,
   ]);

@@ -1,4 +1,4 @@
-import { Button, Divider, message, Row } from 'antd';
+import { Button, Divider, Row } from 'antd';
 import clsx from 'clsx';
 import Network from 'components/Network';
 import WalletIcon from 'components/WalletIcon';

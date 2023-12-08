@@ -5,7 +5,6 @@ import { Contract } from 'web3-eth-contract';
 import BigNumber from 'bignumber.js';
 import { ContractBasic } from '../utils/contract';
 import { ERC20_ABI } from 'constants/abis';
-import { message } from 'antd';
 import { MaxUint256, REQ_CODE } from 'constants/misc';
 import { getDefaultProvider, isUserDenied } from 'utils/provider';
 import CommonMessage from 'components/CommonMessage';

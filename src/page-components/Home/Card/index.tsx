@@ -81,12 +81,10 @@ export function ToCard() {
   const token = chainId ? selectToken?.[chainId] : undefined;
   const min = useMemo(() => divDecimals(1, token?.decimals), [token?.decimals]);
 
-  const checkBoxInputRowStatus = useMemo(() => {
-    if (toChecked && toAddress && !isChainAddress(toAddress, chainId)) {
-      return true;
-    }
-    return false;
-  }, [chainId, toAddress, toChecked]);
+  const checkBoxInputRowStatus = useMemo(
+    () => !!(toChecked && toAddress && !isChainAddress(toAddress, chainId)),
+    [chainId, toAddress, toChecked],
+  );
   return (
     <div className={clsx(styles.card, { [animation.admin2]: changing })}>
       <ToHeader />

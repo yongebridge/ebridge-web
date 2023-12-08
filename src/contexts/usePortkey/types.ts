@@ -50,7 +50,7 @@ export interface PortkeyContextType extends PortkeyContextState {
   deactivate: () => Promise<true>;
   // try eagerly connection
   connectEagerly: (nodes?: PortkeyReactProviderProps['nodes']) => Promise<true>;
-  checkWalletConnect: (chainId: ChainId) => Promise<boolean>;
+  getWalletManagerStatus: (chainId: ChainId) => Promise<boolean>;
 }
 
 export type ReducerAction = {
