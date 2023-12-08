@@ -1,3 +1,5 @@
+import { Connector } from '@web3-react/types';
+
 export function compareVersions(v1: string, v2: string) {
   const v1Parts = v1.split('.').map(Number);
   const v2Parts = v2.split('.').map(Number);
@@ -28,7 +30,7 @@ export function isPortkeyConnectEagerly() {
   return false;
 }
 
-export function isPortkeyConnector(connector?: string) {
+export function isPortkeyConnector(connector?: string | Connector) {
   return connector === 'PORTKEY';
 }
 
