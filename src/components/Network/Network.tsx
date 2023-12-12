@@ -41,13 +41,13 @@ export default function Network({
     return getIconByChainId(chainId);
   }, [chainId]);
 
-  const isXS = useMediaQueries('xs');
+  const isMd = useMediaQueries('md');
   const name = getNameByChainId(chainId);
 
   const IconName = useMemo(() => {
     const props = { nameSize: 14, marginRight: 16 };
 
-    if (isXS) {
+    if (isMd) {
       props.nameSize = 12;
       props.marginRight = 8;
     }
@@ -58,7 +58,7 @@ export default function Network({
         <div className="network-name">{name || 'Wrong Network'}</div>
       </Row>
     );
-  }, [iconProps?.type, isXS, name]);
+  }, [iconProps?.type, isMd, name]);
   return (
     <Dropdown
       className={clsx(styles.dropdown, 'cursor-pointer', className)}
