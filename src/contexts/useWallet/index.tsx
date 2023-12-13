@@ -95,6 +95,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     } else if (isPortkeyConnector(toWallet.connector as string) && toWallet.isActive && !toWallet.account) {
       selectWallet = 'to';
     }
+
     if (selectWallet) {
       const isForm = selectWallet === 'from';
       const activeChainId = Object.keys(
