@@ -13,6 +13,7 @@ export enum WalletActions {
   changeWallet = 'CHANGE_WALLET',
   changeEnd = 'CHANGE_END',
   destroy = 'DESTROY',
+  setSwitchChainInConnectPorkey = 'SET_SWITCH_CHAIN_IN_CONNECT_PORTKEY',
 }
 
 export type ModalState = {
@@ -22,6 +23,10 @@ export type ModalState = {
   toOptions?: Options;
   changing?: boolean;
   isHomogeneous?: boolean;
+  switchChainInConnectPorkey?: {
+    status: boolean;
+    chainId?: ChainId;
+  };
 };
 
 export const basicWalletActions = {
@@ -30,6 +35,15 @@ export const basicWalletActions = {
   changeWallet: () => basicActions(WalletActions.changeWallet),
   changeEnd: () => basicActions(WalletActions.changeEnd),
   web3ProviderDestroy: () => basicActions(WalletActions['destroy']),
+  setSwitchChainInConnectPorkey: (info: { status: boolean; chainId?: ChainId }) =>
+    basicActions(WalletActions['setSwitchChainInConnectPorkey'], info),
 };
 
-export const { setFromWallet, setToWallet, web3ProviderDestroy, changeWallet, changeEnd } = basicWalletActions;
+export const {
+  setFromWallet,
+  setToWallet,
+  web3ProviderDestroy,
+  changeWallet,
+  changeEnd,
+  setSwitchChainInConnectPorkey,
+} = basicWalletActions;

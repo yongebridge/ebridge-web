@@ -30,6 +30,9 @@ export const DEFAULT_ERC_CHAIN = SupportedChainId.SEPOLIA;
 export const DEFAULT_MODAL_INITIAL_STATE = {
   fromOptions: { chainType: 'ERC', chainId: DEFAULT_ERC_CHAIN },
   toOptions: { chainType: 'ELF', chainId: DEFAULT_ELF_CHAIN },
+  setSwitchChainInConnectPorkey: {
+    status: false,
+  },
 };
 export const SupportedERCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.MAINNET]: MAINNET,
