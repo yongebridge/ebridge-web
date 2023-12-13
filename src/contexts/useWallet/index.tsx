@@ -63,6 +63,7 @@ function reducer(state: ModalState, { type, payload }: { type: WalletActions; pa
 
 const options: StorageOptions = {
   key: storages.useWallet + process.env.NEXT_PUBLIC_APP_ENV,
+  blacklist: ['switchChainInConnectPorkey'],
 };
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch]: [ModalState, BasicActions<WalletActions>['dispatch']] = useStorageReducer(
@@ -70,6 +71,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     INITIAL_STATE,
     options,
   );
+
   const { fromOptions, toOptions } = state;
   const [{ selectELFWallet }, { dispatch: chainDispatch }] = useChain();
 
@@ -88,7 +90,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
   const changeWallet = useThrottleCallback(() => {
     let selectWallet;
-    console.log('fromWallet: ', fromWallet, '\ntoWallet: ', toWallet);
     if (isPortkeyConnector(fromWallet.connector as string) && fromWallet.isActive && !fromWallet.account) {
       selectWallet = 'from';
     } else if (isPortkeyConnector(toWallet.connector as string) && toWallet.isActive && !toWallet.account) {
