@@ -5,6 +5,7 @@ import { Trans } from 'react-i18next';
 import { ChainId } from 'types';
 import { getTXLink } from './link';
 import writeText from 'copy-to-clipboard';
+import CommonMessage from 'components/CommonMessage';
 
 // message Configuration duration 5s
 antMessage.config({
@@ -65,15 +66,15 @@ export function txError({
         {getTXLink(TransactionId, chainId)}
       </span>
     );
-    TransactionId && antMessage.error(txt);
+    TransactionId && CommonMessage.error(txt);
   } else {
-    TransactionId && antMessage.error(getTXLink(TransactionId, chainId));
+    TransactionId && CommonMessage.error(getTXLink(TransactionId, chainId));
   }
 
   const s = req.error.message || message;
   const text = decimals ? formatMessage(s, decimals) : s;
   !isTransactionHash &&
-    antMessage.error(
+    CommonMessage.error(
       <span
         onClick={() => {
           writeText(text);

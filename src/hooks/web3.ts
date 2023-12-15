@@ -7,10 +7,10 @@ import { AElfNodes } from 'constants/aelf';
 import { Web3Type } from 'types';
 import { useChain, useChainDispatch } from 'contexts/useChain';
 import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
-import { message } from 'antd';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { Accounts } from '@portkey/provider-types';
 import { setSelectELFWallet } from 'contexts/useChain/actions';
+import CommonMessage from 'components/CommonMessage';
 export function useAEflConnect() {
   const { activate, connectEagerly } = useAElfReact();
   const chainDispatch = useChainDispatch();
@@ -28,7 +28,7 @@ export function useAEflConnect() {
           status
             .filter((i) => !!i)
             .forEach((i, k) => {
-              if (i && i.error) message.error(`${Object.keys(bridges)[k]} getChainStatus error`);
+              if (i && i.error) CommonMessage.error(`${Object.keys(bridges)[k]} getChainStatus error`);
             });
         }
         chainDispatch(setSelectELFWallet('NIGHTELF'));

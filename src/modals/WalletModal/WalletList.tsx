@@ -1,4 +1,4 @@
-import { Button, message } from 'antd';
+import { Button } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { basicModalView } from 'contexts/useModal/actions';
@@ -18,6 +18,7 @@ import { switchChain } from 'utils/network';
 import { sleep } from 'utils';
 import { isPortkey, isPortkeyConnector } from 'utils/portkey';
 import { MetaMask } from '@web3-react/metamask';
+import CommonMessage from 'components/CommonMessage';
 export default function WalletList() {
   const [{ walletWallet, walletChainType }] = useModal();
   const { chainId, connector: connectedConnector, account } = walletWallet || {};
@@ -59,7 +60,7 @@ export default function WalletList() {
         onCancel();
       } catch (error: any) {
         console.debug(`connection error: ${error}`);
-        message.error(`connection error: ${error.message}`);
+        CommonMessage.error(`connection error: ${error.message}`);
       }
       setLoading(undefined);
     },
