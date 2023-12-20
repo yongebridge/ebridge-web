@@ -5,7 +5,7 @@ import upgradeImg from 'components/Notification/images/upgrade.svg';
 import styles from './styles.module.less';
 import useMediaQueries from 'hooks/useMediaQueries';
 
-const URL = 'https://t.me/eBridge_Testing';
+const URL = 'https://t.me/eBridge_official';
 
 export default function Mask() {
   const { t } = useLanguage();
