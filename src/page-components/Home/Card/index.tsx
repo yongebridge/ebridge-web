@@ -19,7 +19,7 @@ import { Trans } from 'react-i18next';
 import { useLanguage } from 'i18n';
 import useMediaQueries from 'hooks/useMediaQueries';
 import { ZERO } from 'constants/misc';
-import { isAddress } from 'utils';
+import { isChainAddress } from 'utils';
 import { useWalletContext } from 'contexts/useWallet';
 
 export function FromCard() {
@@ -73,13 +73,18 @@ export function FromCard() {
 }
 
 export function ToCard() {
+  const { t } = useLanguage();
   const { toWallet, changing, isHomogeneous } = useWallet();
   const [{ toOptions }] = useWalletContext();
   const { account, chainId } = toWallet || {};
   const [{ selectToken, toInput, receiveList, receiveId, toChecked, toAddress }, { dispatch }] = useHomeContext();
   const token = chainId ? selectToken?.[chainId] : undefined;
   const min = useMemo(() => divDecimals(1, token?.decimals), [token?.decimals]);
-  const { t } = useLanguage();
+
+  const checkBoxInputRowStatus = useMemo(
+    () => !!(toChecked && toAddress && !isChainAddress(toAddress, chainId)),
+    [chainId, toAddress, toChecked],
+  );
   return (
     <div className={clsx(styles.card, { [animation.admin2]: changing })}>
       <ToHeader />
@@ -98,13 +103,14 @@ export function ToCard() {
       </Row>
       {!isHomogeneous && (
         <CheckBoxInputRow
-          className={clsx({ [styles['red-input']]: toChecked && toAddress && !isAddress(toAddress, chainId) })}
+          status={checkBoxInputRowStatus ? 'error' : undefined}
           checked={toChecked}
           value={toAddress}
           onCheckStatusTrigger={(e) => dispatch(setToChecked(e.target.checked))}
-          onInputChange={(e) => dispatch(setToAddress(e.target.value))}
+          onInputChange={(value) => dispatch(setToAddress(value))}
         />
       )}
+
       {!!account && (
         <div className={clsx('flex-row-between', styles['receipt-row'])}>
           <div className={styles['receipt-title']}>
@@ -120,9 +126,6 @@ export function ToCard() {
               return (
                 <Select.Option key={item.id} value={item.id}>
                   #{item.id?.slice(25)}
-                  {/* {item.fromChainId}-{item.toChainId}{' '}
-                  {unitConverter({ num: item.transferAmount, minDecimals: item.transferToken?.decimals })}{' '}
-                  {item.transferToken?.symbol} */}
                 </Select.Option>
               );
             })}
