@@ -5,6 +5,7 @@ import * as AELF_Test from '../platform/AELF_Test';
 import * as tDVV_Test from '../platform/tDVV_Test';
 import * as tDVW_Test from '../platform/tDVW_Test';
 import * as BSC_TESTNET from '../platform/BSC_Test';
+import * as TRON_NILE_TESTNET from '../platform/TRON_Nile_Testnet';
 import * as SEPOLIA from '../platform/sepolia';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
@@ -19,7 +20,8 @@ export type ChainConstantsType =
   | typeof tDVW_Test
   | typeof GORELI
   | typeof SEPOLIA
-  | typeof BSC_TESTNET;
+  | typeof BSC_TESTNET
+  | typeof TRON_NILE_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type ELF_CHAIN_TYPE = keyof typeof SupportedELFChain;
@@ -73,6 +75,10 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedELFChainId.tDVV]: 'SideChain tDVV Testnet',
   [SupportedELFChainId.tDVW]: 'SideChain tDVW Testnet',
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
+  [SupportedChainId.TRON_MAINNET]: 'Tron Mainnet',
+  [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron Shasta Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron Nile Testnet',
+  [SupportedChainId.TRON_DEVNET]: 'Tron Nile Testnet',
 };
 
 export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
@@ -121,6 +127,18 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.SEPOLIA]: {
     // type: 'SEPOLIA',
     type: 'Ethereum',
+  },
+  [SupportedChainId.TRON_MAINNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_SHASTA_TESTNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_NILE_TESTNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_DEVNET]: {
+    type: 'Tron',
   },
 };
 
