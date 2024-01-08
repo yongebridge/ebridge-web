@@ -6,7 +6,7 @@ import styles from './styles.module.less';
 import warnIcon from './images/warning_6.svg';
 import closeIcon from './images/close.svg';
 
-const URL = 'https://t.me/eBridge_Testing';
+const URL = 'https://t.me/eBridge_official';
 
 function useBoliplate() {
   const { t } = useLanguage();

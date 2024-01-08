@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import { getChainIdToMap, getShortNameByChainId } from 'utils/chain';
 import { isELFChain } from 'utils/aelfUtils';
-import { message } from 'antd';
 import { requestGql } from 'api';
+import CommonMessage from 'components/CommonMessage';
 
 interface LimitDataByGqlProps {
   fromChainId: ChainId;
@@ -131,7 +131,7 @@ export const getLimitData = async ({
       isEnable,
     };
   } catch (error: any) {
-    message.error(error.message);
+    CommonMessage.error(error.message);
     console.log('error: ', error);
   }
 };

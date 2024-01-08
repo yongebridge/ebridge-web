@@ -41,24 +41,24 @@ export default function Network({
     return getIconByChainId(chainId);
   }, [chainId]);
 
-  const isXS = useMediaQueries('xs');
+  const isMd = useMediaQueries('md');
   const name = getNameByChainId(chainId);
-  const isLong = name?.length > 10;
 
   const IconName = useMemo(() => {
     const props = { nameSize: 14, marginRight: 16 };
-    if (isLong) {
+
+    if (isMd) {
       props.nameSize = 12;
-      if (isXS) props.marginRight = 4;
-      else props.marginRight = 10;
+      props.marginRight = 8;
     }
+
     return (
       <Row className="flex-row-center network-row" style={{ fontSize: props.nameSize }}>
         <IconFont type={iconProps?.type || ''} style={{ marginRight: props.marginRight }} />
         <div className="network-name">{name || 'Wrong Network'}</div>
       </Row>
     );
-  }, [iconProps?.type, isLong, isXS, name]);
+  }, [iconProps?.type, isMd, name]);
   return (
     <Dropdown
       className={clsx(styles.dropdown, 'cursor-pointer', className)}

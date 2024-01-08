@@ -12,7 +12,7 @@ import { isELFChain } from './aelfUtils';
 import { NetworkType } from 'types';
 import { ChainId } from 'types';
 import { WalletConnect } from '@web3-react/walletconnect-v2';
-import { message } from 'antd';
+import CommonMessage from 'components/CommonMessage';
 
 type Info = {
   chainId: number | string;
@@ -142,7 +142,7 @@ export const switchChain = async (
       if (
         !getSupportedChainIdsFromWalletConnectSession((connector as WalletConnect).provider?.session).includes(chainId)
       ) {
-        message.error(`Unsupported ${chainName} by your wallet`);
+        CommonMessage.error(`Unsupported ${chainName} by your wallet`);
       } else {
         await connector.activate(chainId);
       }

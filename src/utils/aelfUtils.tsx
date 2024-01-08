@@ -13,6 +13,7 @@ import storages from 'constants/storages';
 import { isMobileDevices } from './isMobile';
 import { AelfInstancesKey, ChainId } from 'types';
 import type { AElfWallet } from '@aelf-react/types';
+import CommonMessage from 'components/CommonMessage';
 const Wallet = AElf.wallet;
 
 let wallet: AElfWallet;
@@ -42,7 +43,9 @@ export const approveELF = async (
 ) => {
   const approveResult = await tokenContract.callSendMethod('Approve', '', [address, symbol, amount.toString()]);
   if (approveResult.error) {
-    message.error(approveResult.error.message || approveResult?.errorMessage?.message || approveResult.errorMessage);
+    CommonMessage.error(
+      approveResult.error.message || approveResult?.errorMessage?.message || approveResult.errorMessage,
+    );
     return false;
   }
   const { TransactionId } = approveResult.result || approveResult;
@@ -149,7 +152,7 @@ export const checkElfAllowanceAndApprove = async (
     tokenContract.callViewMethod('GetTokenInfo', [symbol]),
   ]);
   if (allowance?.error) {
-    message.error(allowance.error.message || allowance.errorMessage?.message || allowance.errorMessage);
+    CommonMessage.error(allowance.error.message || allowance.errorMessage?.message || allowance.errorMessage);
     return false;
   }
   const bigA = timesDecimals(amount, tokenInfo?.decimals ?? 8);

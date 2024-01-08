@@ -52,15 +52,18 @@ export function formatRestoreAddress(chainId: ChainId, address?: string) {
   return address.replace(new RegExp(head, 'g'), '').replace(new RegExp(tail, 'g'), '');
 }
 
-export function formatAddress(chainId: ChainId, address?: string) {
-  if (!address) return '';
+export function formatAddress(chainId?: ChainId, address?: string) {
+  if (!address || !chainId) return '';
   address = formatRestoreAddress(chainId, address);
   const tail = `_${chainId}`;
   return head + address + tail;
 }
 
-export function shortenAddressByAPI(address: string, chainId: ChainId) {
+export function shortenAddressByAPI(address?: string, chainId?: ChainId, chars?: number) {
+  if (!address || !chainId) {
+    return '';
+  }
   const isELF = isELFChain(chainId);
   const tmpAddress = isELF ? formatAddress(chainId, address) : address;
-  return shortenAddress(tmpAddress, undefined, isELF ? 58 : undefined);
+  return shortenAddress(tmpAddress, chars, isELF ? 58 : undefined);
 }

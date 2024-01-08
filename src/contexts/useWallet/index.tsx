@@ -5,7 +5,7 @@ import useStorageReducer, { StorageOptions } from 'hooks/useStorageReducer';
 import { useAElf, usePortkey, useWeb3 } from 'hooks/web3';
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { isELFChain } from 'utils/aelfUtils';
-import { WalletActions, ModalState, setToWallet, setFromWallet } from './actions';
+import { WalletActions, ModalState, setToWallet, setFromWallet, setSwitchChainInConnectPorkey } from './actions';
 import { getWalletByOptions, isChange } from './utils';
 import { useChain } from 'contexts/useChain';
 import { usePrevious } from 'react-use';
@@ -48,6 +48,11 @@ function reducer(state: ModalState, { type, payload }: { type: WalletActions; pa
       if (isChange(fromOptions, payload.toOptions)) newState.fromOptions = toOptions;
       return Object.assign({}, state, newState);
     }
+    case WalletActions.setSwitchChainInConnectPorkey: {
+      return Object.assign({}, state, {
+        switchChainInConnectPorkey: payload,
+      });
+    }
     default: {
       const { destroy } = payload;
       if (destroy) return Object.assign({}, payload);
@@ -58,6 +63,7 @@ function reducer(state: ModalState, { type, payload }: { type: WalletActions; pa
 
 const options: StorageOptions = {
   key: storages.useWallet + process.env.NEXT_PUBLIC_APP_ENV,
+  blacklist: ['switchChainInConnectPorkey'],
 };
 export default function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch]: [ModalState, BasicActions<WalletActions>['dispatch']] = useStorageReducer(
@@ -65,6 +71,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     INITIAL_STATE,
     options,
   );
+
   const { fromOptions, toOptions } = state;
   const [{ selectELFWallet }, { dispatch: chainDispatch }] = useChain();
 
@@ -88,12 +95,26 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     } else if (isPortkeyConnector(toWallet.connector as string) && toWallet.isActive && !toWallet.account) {
       selectWallet = 'to';
     }
+
     if (selectWallet) {
       const isForm = selectWallet === 'from';
       const activeChainId = Object.keys(
         ((isForm ? fromWallet : toWallet) as { accounts: Accounts }).accounts,
       )[0] as SupportedELFChainId;
       if (!ACTIVE_CHAIN[activeChainId]) return;
+
+      if (
+        (portkeyActive && isForm && activeChainId !== fromOptions?.chainId) ||
+        (portkeyActive && !isForm && activeChainId !== toOptions?.chainId)
+      ) {
+        dispatch(
+          setSwitchChainInConnectPorkey({
+            status: true,
+            chainId: isForm ? fromOptions?.chainId : toOptions?.chainId,
+          }),
+        );
+      }
+
       dispatch((isForm ? setFromWallet : setToWallet)({ chainId: activeChainId, chainType: 'ELF' }));
       chainDispatch(setUserELFChainId(activeChainId));
     }
