@@ -3,13 +3,14 @@
 @import '/src/assets/theme/font.less';
 
 .card {
-  padding: 20px 32px 28px;
+  padding: 20px 32px;
   background: @bg-2;
   box-shadow: 0 5px 12px 4px @shadow-2;
   border-radius: 20px;
   .title-row {
     font-size: 16px;
     margin-bottom: 24px;
+    line-height: 24px;
     .fee-tip {
       font-size: 14px;
       line-height: 20px;
@@ -27,7 +28,8 @@
   .wallet-row {
     border: 1px solid @border-1;
     border-radius: 10px;
-    padding: 10px 16px;
+    padding: 16px;
+    box-sizing: border-box;
     .wallet-row-btn {
       min-width: 120px;
     }
@@ -50,28 +52,34 @@
   .wallet-icon {
     width: 28px;
     height: 28px;
-    margin-right: 10px;
+    font-size: 28px;
+    margin-right: 16px;
   }
   .wallet-account-row {
     height: 40px;
     background: @bg-3;
     color: @font-5;
     font-size: 12px;
-    padding: 0 10px;
+    padding: 4px 8px;
     border-radius: 6px;
-    width: 160px;
+    width: 190px;
+    flex-wrap: nowrap;
     &:hover {
       background: @bg-4;
       border-color: @border-1;
     }
   }
 }
+.wallet-address {
+  word-break: break-all;
+}
 .from-card {
   padding-bottom: 16px;
 }
 .wallet-divider {
   height: 100%;
-  margin-right: 16px;
+  // margin-right: 16px;
+  margin: 0 16px;
 }
 .red-input {
   color: @font-6;
@@ -87,13 +95,14 @@
   }
 }
 .balance-row {
-  margin-top: 6px;
+  margin-top: 16px;
   color: @font-5;
+  line-height: 22px;
 }
 .input-row {
   flex: 1;
-  margin-left: 55px;
-  margin-right: 16px;
+  margin-left: 48px;
+  margin-right: 24px;
   :global {
     .@{app-prefix}-input {
       border: 0;
@@ -110,12 +119,16 @@
 .select-token-btn {
   font-size: 16px;
   width: 200px;
-  height: 64px;
-  border-radius: 10px;
+  height: 72px;
+  border-radius: 8px;
+  padding: 16px;
   .select-token-img {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     margin-right: 16px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid @font-10;
   }
   .token-title-row {
     width: calc(100% - 50px);
@@ -136,9 +149,6 @@
       width: 320px;
     }
   }
-}
-.wallet-icon {
-  margin-right: 5px;
 }
 .check-input {
   padding-top: 24px;
@@ -174,6 +184,7 @@
   font-size: 16px;
   text-align: left;
   font-family: PingFangSC-Regular, sans-serif;
+  padding-right: 36px;
 
   /* stylelint-disable-next-line selector-no-vendor-prefix */
   &::-webkit-input-placeholder {
@@ -228,12 +239,33 @@
   }
 }
 
+.input-error {
+  font-size: 12px;
+  line-height: 20px;
+  color: @font-6;
+  margin-top: 8px;
+}
+
+.input-box {
+  position: relative;
+}
+
+.clear-icon {
+  position: absolute;
+  right: 12px;
+  top: 28px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 @media screen and (max-width: @md-width) {
   .card {
     padding: 16px 16px 32px;
     .title-row {
       display: flex;
       flex-wrap: wrap;
+      margin-bottom: 16px;
       .a-tip,
       .fee-tip {
         margin-top: 8px;
@@ -242,8 +274,14 @@
         line-height: 14px;
       }
     }
+    .wallet-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+    }
     .wallet-row {
-      padding: 10px;
+      padding: 11px;
       .wallet-row-btn {
         flex: none;
         font-size: 12px;
@@ -263,9 +301,10 @@
     }
     .wallet-account-row {
       flex: none;
-      width: max(120px, 32vw);
-      padding: 0;
-      margin: 0;
+      width: max(115px, 30vw);
+      align-self: center;
+      // padding: 0;
+      // margin: 0;
       font-size: 12px;
       justify-content: center;
     }
@@ -322,11 +361,11 @@
   }
 }
 @media screen and (max-width: @xs-width) {
-  .card {
-    .wallet-account-row {
-      width: 100px;
-    }
-  }
+  // .card {
+  //   .wallet-account-row {
+  //     width: 100px;
+  //   }
+  // }
   .select-token-btn {
     .select-token-img {
       width: 24px;

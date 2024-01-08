@@ -1,7 +1,7 @@
-import { Button, Card, Col, message, Row } from 'antd';
+import { Button, Card, Col, Row } from 'antd';
 import { useCallback, useMemo } from 'react';
 import { injected } from '../../walletConnectors';
-import { getExploreLink, shortenAddress } from '../../utils';
+import { getExploreLink, shortenString } from '../../utils';
 import Copy from '../../components/Copy';
 import CommonLink from '../../components/CommonLink';
 import { useModal } from 'contexts/useModal';
@@ -13,9 +13,11 @@ import { getConnection } from 'walletConnectors/utils';
 import { useChainDispatch } from 'contexts/useChain';
 import { setSelectERCWallet } from 'contexts/useChain/actions';
 import { clearWCStorageByDisconnect } from 'utils/localStorage';
+import { formatAddress } from 'utils/chain';
+import CommonMessage from 'components/CommonMessage';
 
 function AccountCard() {
-  const [{ accountWallet }, { dispatch }] = useModal();
+  const [{ accountWallet, accountChainId }, { dispatch }] = useModal();
   const chainDispatch = useChainDispatch();
 
   const { connector, account, chainId, deactivate, aelfInstance, walletType } = accountWallet || {};
@@ -72,32 +74,50 @@ function AccountCard() {
       );
     } catch (error: any) {
       console.debug(`connection error: ${error}`);
-      message.error(`connection error: ${error.message}`);
+      CommonMessage.error(`connection error: ${error.message}`);
     }
   }, [chainId, dispatch, walletType]);
   const isELF = isELFChain(chainId);
+
   return (
     <>
       <p>{formatConnectorName}</p>
       <Card className="account-modal-card">
-        <Row justify="space-between">
-          {account ? (
-            <span className="flex-row-center account-modal-account">
-              <WalletIcon connector={connector} />
-              {shortenAddress(account, undefined, isELF ? 50 : undefined)}
-            </span>
-          ) : null}
-          {account ? (
-            <Copy className="account-modal-copy cursor-pointer" toCopy={account}>
-              Copy Address
-            </Copy>
-          ) : null}
-        </Row>
-        {chainId && account ? (
-          <CommonLink href={getExploreLink(account, 'address', chainId)}>
-            {isELF ? 'View on explorer.aelf.io' : 'View on Etherscan'}
-          </CommonLink>
-        ) : null}
+        <div className="account-modal-card-box">
+          {account && <WalletIcon className="account-modal-card-box-icon" connector={connector} />}
+          <div>
+            <Row>
+              <Col span={24}>
+                <Row gutter={[8, 0]}>
+                  {account ? (
+                    <Col className="flex-row-center account-modal-account">
+                      {shortenString(isELF ? formatAddress(accountChainId, account) : account, 8, 9)}
+                    </Col>
+                  ) : null}
+                  {account ? (
+                    <Col>
+                      <Copy
+                        className="account-modal-copy cursor-pointer"
+                        toCopy={isELF ? formatAddress(accountChainId, account) : account}></Copy>
+                    </Col>
+                  ) : null}
+                </Row>
+              </Col>
+              <Col>
+                {accountChainId && account ? (
+                  <CommonLink
+                    showIcon={false}
+                    className="account-modal-card-box-link"
+                    href={getExploreLink(account, 'address', accountChainId)}>
+                    {isELF
+                      ? `View on ${new URL(getExploreLink(account, 'address', accountChainId)).host}`
+                      : 'View on Etherscan'}
+                  </CommonLink>
+                ) : null}
+              </Col>
+            </Row>
+          </div>
+        </div>
       </Card>
       {aelfInstance?.connect ? null : (
         <Col span={24}>

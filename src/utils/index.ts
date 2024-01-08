@@ -48,10 +48,13 @@ export function shortenAddress(address: string | null, chars = 4, end = 42): str
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(end - chars)}`;
 }
 
-export function shortenString(address: string | null, chars = 10): string {
+export function shortenString(address: string | null, leftChars = 10, rightChars?: number): string {
   const parsed = address;
   if (!parsed) return '';
-  return `${parsed.substring(0, chars)}...${parsed.substring(parsed.length - chars)}`;
+  if (!rightChars) {
+    rightChars = leftChars;
+  }
+  return `${parsed.substring(0, leftChars)}...${parsed.substring(parsed.length - rightChars)}`;
 }
 
 export function unityTokenInfo(tokenInfo?: TokenInfo) {
@@ -134,6 +137,21 @@ export function isAddress(value?: string, chainId?: ChainId) {
   if (!value) return false;
   if (isELFChain(chainId)) return isELFAddress(value);
   return isERCAddress(value);
+}
+
+export function isChainAddress(address?: string, chainId?: ChainId) {
+  if (!address || !chainId) {
+    return false;
+  }
+  if (!isELFChain(chainId)) {
+    return isERCAddress(address);
+  }
+  const reg = new RegExp(`${chainId}$`);
+  if (!reg.test(address)) {
+    return false;
+  }
+
+  return isELFAddress(address);
 }
 
 export function formatAddress(value: string) {

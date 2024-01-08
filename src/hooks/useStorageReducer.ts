@@ -26,7 +26,7 @@ export default function useStorageReducer<R extends Reducer<any, any>>(
         blacklist.forEach((i) => {
           delete storageState[i];
         });
-      key && storage.setItem(key, JSON.stringify(state));
+      key && storage.setItem(key, JSON.stringify(storageState));
       return state;
     },
     [reducer, blacklist, key, storage],

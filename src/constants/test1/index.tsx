@@ -18,6 +18,9 @@ export const DEFAULT_ERC_CHAIN = SupportedChainId.SEPOLIA;
 export const DEFAULT_MODAL_INITIAL_STATE = {
   fromOptions: { chainType: 'ERC', chainId: DEFAULT_ERC_CHAIN },
   toOptions: { chainType: 'ELF', chainId: DEFAULT_ELF_CHAIN },
+  switchChainInConnectPorkey: {
+    status: false,
+  },
 };
 export const SupportedERCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.BSC_TESTNET]: BSC_TESTNET,
@@ -107,8 +110,6 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
 
 export const NetworkList = [
   { title: CHAIN_NAME[SupportedChainId.SEPOLIA], icon: CHAIN_ICON[SupportedChainId.SEPOLIA], info: SEPOLIA.CHAIN_INFO },
-  // { title: CHAIN_NAME[SupportedChainId.GORELI], icon: CHAIN_ICON[SupportedChainId.GORELI], info: GORELI.CHAIN_INFO },
-  // { title: CHAIN_NAME[SupportedChainId.KOVAN], icon: CHAIN_ICON[SupportedChainId.KOVAN], info: KOVAN.CHAIN_INFO },
   {
     title: CHAIN_NAME[SupportedELFChainId.AELF],
     icon: CHAIN_ICON[SupportedELFChainId.AELF],
@@ -152,17 +153,27 @@ export const CrossChainTimeList = [
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '4 minutes',
+    time: '4',
   },
   {
     fromChainId: SupportedChainId.BSC_TESTNET,
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '500s',
+    time: '10',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: SupportedChainId.BSC_TESTNET,
+    time: '10',
   },
   {
     fromChainId: SupportedChainId.SEPOLIA,
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '500s',
+    time: '40',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: SupportedChainId.SEPOLIA,
+    time: '40',
   },
 ];
 
