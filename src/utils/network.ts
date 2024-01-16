@@ -37,55 +37,56 @@ type Info = {
  * @returns {boolean} true if the setup succeeded, false otherwise
  */
 export const switchNetwork = async (info: Info): Promise<boolean> => {
-  let provider = window.ethereum;
   try {
-    if (provider?.providerMap) {
-      for (const [key, value] of provider.providerMap) {
-        if (key === 'MetaMask' && value?.isMetaMask) provider = value;
+    const { chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
+
+    const chainIdNumber = Number(info.chainId);
+
+    if (SUPPORTED_ERC_CHAIN_IDS.includes(chainIdNumber)) {
+      eventBus.emit(storages.userERCChainId, chainIdNumber);
+
+      let provider = window.ethereum;
+      try {
+        if (provider?.providerMap) {
+          for (const [key, value] of provider.providerMap) {
+            if (key === 'MetaMask' && value?.isMetaMask) provider = value;
+          }
+        }
+      } catch (error) {
+        console.log(error, '======error');
       }
+
+      if (!provider?.request) {
+        console.error("Can't setup the RPC network on metamask because window.ethereum is undefined");
+        return false;
+      }
+
+      if (nativeCurrency && chainName) {
+        await provider.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: `0x${chainIdNumber.toString(16)}`,
+              chainName,
+              nativeCurrency,
+              rpcUrls,
+              iconUrls,
+              blockExplorerUrls,
+            },
+          ],
+        });
+      } else {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainIdNumber.toString(16)}` }],
+        });
+      }
+    } else if (SUPPORTED_TRON_CHAIN_IDS.includes(chainIdNumber)) {
+      eventBus.emit(storages.userTRCChainId, chainIdNumber);
+    } else if (typeof info.chainId === 'string') {
+      eventBus.emit(storages.userELFChainId, info.chainId);
     }
-  } catch (error) {
-    console.log(error, '======error');
-  }
 
-  const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
-  if (typeof info.chainId === 'string') {
-    eventBus.emit(storages.userELFChainId, info.chainId);
-    return true;
-  }
-
-  if (SUPPORTED_ERC_CHAIN_IDS.includes(info.chainId)) {
-    eventBus.emit(storages.userERCChainId, info.chainId);
-  }
-
-  if (!provider?.request) {
-    console.error("Can't setup the RPC network on metamask because window.ethereum is undefined");
-    return false;
-  }
-  try {
-    if (SUPPORTED_TRON_CHAIN_IDS.includes(info.chainId)) {
-      eventBus.emit(storages.userTRCChainId, info.chainId);
-      return true;
-    } else if (nativeCurrency && chainName) {
-      await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: `0x${chainId.toString(16)}`,
-            chainName,
-            nativeCurrency,
-            rpcUrls,
-            iconUrls,
-            blockExplorerUrls,
-          },
-        ],
-      });
-    } else {
-      await provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${chainId.toString(16)}` }],
-      });
-    }
     return true;
   } catch (error) {
     console.error('switchNetwork', error);
@@ -147,7 +148,11 @@ export const switchChain = async (
     return true;
   }
   if (!isELFChain(info.chainId) && web3ChainId === info.chainId) return;
-  eventBus.emit(storages.userERCChainId, info.chainId);
+
+  if (SUPPORTED_ERC_CHAIN_IDS.includes(Number(info.chainId))) {
+    eventBus.emit(storages.userERCChainId, info.chainId);
+  }
+
   if (!connector || typeof connector === 'string') return;
   if (isWeb3Active) {
     if (!isChainAllowed(connector, chainId)) {
