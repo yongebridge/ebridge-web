@@ -1,5 +1,10 @@
 import { Connector } from '@web3-react/types';
-import { ALL_SUPPORTED_CHAIN_IDS, SupportedChainId } from 'constants/chain';
+import {
+  ALL_SUPPORTED_CHAIN_IDS,
+  SUPPORTED_ERC_CHAIN_IDS,
+  SUPPORTED_TRON_CHAIN_IDS,
+  SupportedChainId,
+} from 'constants/chain';
 import storages from 'constants/storages';
 import { eventBus } from 'utils';
 import {
@@ -48,13 +53,20 @@ export const switchNetwork = async (info: Info): Promise<boolean> => {
     eventBus.emit(storages.userELFChainId, info.chainId);
     return true;
   }
-  eventBus.emit(storages.userERCChainId, info.chainId);
+
+  if (SUPPORTED_ERC_CHAIN_IDS.includes(info.chainId)) {
+    eventBus.emit(storages.userERCChainId, info.chainId);
+  }
+
   if (!provider?.request) {
     console.error("Can't setup the RPC network on metamask because window.ethereum is undefined");
     return false;
   }
   try {
-    if (nativeCurrency && chainName) {
+    if (SUPPORTED_TRON_CHAIN_IDS.includes(info.chainId)) {
+      eventBus.emit(storages.userTRCChainId, info.chainId);
+      return true;
+    } else if (nativeCurrency && chainName) {
       await provider.request({
         method: 'wallet_addEthereumChain',
         params: [
