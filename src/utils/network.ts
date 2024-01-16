@@ -6,6 +6,7 @@ import {
   coinbaseWalletConnection,
   injectedConnection,
   networkConnection,
+  tronLinkWalletConnection,
   walletConnectConnection,
 } from 'walletConnectors';
 import { isELFChain } from './aelfUtils';
@@ -84,6 +85,7 @@ export function isChainAllowed(connector: Connector, chainId: number) {
     case injectedConnection.connector:
     case coinbaseWalletConnection.connector:
     case walletConnectConnection.connector:
+    case tronLinkWalletConnection.connector:
     case networkConnection.connector:
       return ALL_SUPPORTED_CHAIN_IDS.includes(chainId);
     default:
