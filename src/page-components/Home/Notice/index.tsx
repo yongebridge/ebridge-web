@@ -73,8 +73,8 @@ function Heterogeneous() {
         </>
       );
     } else if (
-      SUPPORTED_ELF_CHAIN_IDS.some((item) => item === toChainId) &&
-      SUPPORTED_TRON_CHAIN_IDS.some((item) => item === fromChainId)
+      SUPPORTED_TRON_CHAIN_IDS.some((item) => item === fromChainId) &&
+      SUPPORTED_ELF_CHAIN_IDS.some((item) => item === toChainId)
     ) {
       return (
         <>
@@ -112,7 +112,7 @@ function Heterogeneous() {
     }
   };
 
-  return <>{getContent()};</>;
+  return <>{getContent()}</>;
 }
 
 export default function Notice() {

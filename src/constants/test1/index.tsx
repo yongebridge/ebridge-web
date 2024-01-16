@@ -219,11 +219,6 @@ export const CrossChainTimeList = [
     time: '40',
   },
   {
-    fromChainId: SupportedChainId.TRON_NILE_TESTNET,
-    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '500s',
-  },
-  {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [
       SupportedChainId.TRON_DEVNET,
