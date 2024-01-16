@@ -64,11 +64,7 @@ function Heterogeneous() {
       return (
         <>
           <p>{t('Estimated time of arrival is', { time })}</p>
-          <p>
-            {t(
-              "Once the token is sent cross-chain, the recipient needs to visit eBridge, connect the 'To' wallet, and select the 'Receipt ID' to receive the token. This will incur transaction fees on <Chain Name, e.g. Shasta> so the recipient should ensure there a sufficient balance to pay for the fees.",
-            )}
-          </p>
+          <p>{t('Once the token is sent cross-chain', { toChain: getChainIdToMap(toChainId) })}</p>
           <p>
             <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
               {t('eBridge limit rules')}
@@ -82,17 +78,13 @@ function Heterogeneous() {
     ) {
       return (
         <>
-          <p>{t('Estimated time of arrival is', { time })}</p>
+          <p>{t('Estimated time of arrival in AELF is', { time })}</p>
           <p>
-            {t(
-              'You only need to pay for transaction fees generated on <Chain Name, e.g. Shasta> as fees on aelf will be covered by eBridge.',
-            )}
+            {t('Tokens will arrive automatically after being sent. Please check them in your wallet TRC', {
+              fromChain: getChainIdToMap(fromChainId),
+            })}
           </p>
-          <p>
-            {t(
-              "Upon the completion of the transaction, the tokens will automatically reflect in the recipient's wallet and can be checked on the blockchain explorer.",
-            )}
-          </p>
+          <p>{t('The cross-chain transaction fee will be covered by AELF TRC')}</p>
           <p>
             <a className={styles['limit-amount-desc']} onClick={() => dispatch(setLimitAmountDescModal(true))}>
               {t('eBridge limit rules')}

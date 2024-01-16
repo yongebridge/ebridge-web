@@ -41,10 +41,10 @@
     "Estimated time of homogeneous cross-chain arrival is2": "内部跨鏈耗時約為{{time}}。",
     "Estimated time of arrival in AELF is": "代幣跨入AELF用時約{{time}}。",
 
-    "Estimated time of arrival is": "CH_Estimated time of arrival is {{time}}.",
-    "Once the token is sent cross-chain, the recipient needs to visit eBridge, connect the 'To' wallet, and select the 'Receipt ID' to receive the token. This will incur transaction fees on <Chain Name, e.g. Shasta> so the recipient should ensure there a sufficient balance to pay for the fees.": "CH_Once the token is sent cross-chain, the recipient needs to visit eBridge, connect the 'To' wallet, and select the 'Receipt ID' to receive the token. This will incur transaction fees on <Chain Name, e.g. Shasta> so the recipient should ensure there a sufficient balance to pay for the fees.",
-    "You only need to pay for transaction fees generated on <Chain Name, e.g. Shasta> as fees on aelf will be covered by eBridge.": "CH_You only need to pay for transaction fees generated on <Chain Name, e.g. Shasta> as fees on aelf will be covered by eBridge.",
-    "Upon the completion of the transaction, the tokens will automatically reflect in the recipient's wallet and can be checked on the blockchain explorer.": "CH_Upon the completion of the transaction, the tokens will automatically reflect in the recipient's wallet and can be checked on the blockchain explorer.",
+    "Estimated time of arrival is": "預計到賬時間為{{time}}分鐘；",
+    "Once the token is sent cross-chain": "代幣跨鏈後，接收方需要訪問eBridge、鏈接至“To”錢包、選擇“Receipt ID”以接收代幣。此步驟會在{{toChain}}網絡產生交易費，因此接收方需確保錢包有充足的餘額支付費用；",
+    "The cross-chain transaction fee will be covered by AELF TRC": "轉賬成功後，代幣將自動在收款地址中顯示且可以通過區塊鏈瀏覽器查詢；",
+    "Tokens will arrive automatically after being sent. Please check them in your wallet TRC": "您只需要支付{{fromChain}}網絡的交易費，aelf網絡的費用由eBridge代為支付；",
 
     "Cross Chain time": "異構跨鏈耗時約為{{heterogeneous}}，同構跨鏈的耗時約為{{homogeneous}}。",
     "Tokens will arrive automatically after being sent. Please check them in your wallet": "您只需要支付{{fromChain}}網絡的交易費，aelf網絡的費用由eBridge代為支付；",
