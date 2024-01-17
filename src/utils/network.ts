@@ -11,6 +11,7 @@ import {
   coinbaseWalletConnection,
   injectedConnection,
   networkConnection,
+  tronLink,
   tronLinkWalletConnection,
   walletConnectConnection,
 } from 'walletConnectors';
@@ -149,11 +150,26 @@ export const switchChain = async (
   }
   if (!isELFChain(info.chainId) && web3ChainId === info.chainId) return;
 
+  if (!connector || typeof connector === 'string') return;
+
+  if (SUPPORTED_TRON_CHAIN_IDS.includes(Number(info.chainId))) {
+    eventBus.emit(storages.userTRCChainId, info.chainId);
+
+    const connector = tronLink;
+
+    connector.activate();
+
+    if (info.chainId !== connector.getChainId()) {
+      throw new Error('Please switch to Nile Testnet');
+    }
+
+    return;
+  }
+
   if (SUPPORTED_ERC_CHAIN_IDS.includes(Number(info.chainId))) {
     eventBus.emit(storages.userERCChainId, info.chainId);
   }
 
-  if (!connector || typeof connector === 'string') return;
   if (isWeb3Active) {
     if (!isChainAllowed(connector, chainId)) {
       throw new Error(`Chain ${chainId} not supported for connector (${typeof connector})`);
