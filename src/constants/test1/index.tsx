@@ -53,7 +53,10 @@ export const ACTIVE_CHAIN: any = {
   [SupportedELFChainId.tDVV]: true,
   [SupportedChainId.BSC_TESTNET]: true,
   [SupportedChainId.SEPOLIA]: true,
+  [SupportedChainId.TRON_MAINNET]: true,
+  [SupportedChainId.TRON_DEVNET]: true,
   [SupportedChainId.TRON_NILE_TESTNET]: true,
+  [SupportedChainId.TRON_SHASTA_TESTNET]: true,
 };
 export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'TRX'];
 
