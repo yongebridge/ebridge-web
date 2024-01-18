@@ -157,7 +157,11 @@ export const switchChain = async (
 
     const connector = tronLink;
 
-    connector.activate();
+    try {
+      connector.activate();
+    } catch (err) {
+      console.log(err);
+    }
 
     if (info.chainId !== connector.getChainId()) {
       throw new Error('Please Unlock the TronLink wallet and switch to Nile Testnet');

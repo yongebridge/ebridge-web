@@ -14,6 +14,12 @@
       "decimals": 18,
       "symbol": "ELF",
       "address": "0x8adD57b8aD6C291BC3E3ffF89F767fcA08e0E7Ab"
+    },
+    "3448148188": {
+      "name": "ELF Token",
+      "decimals": 18,
+      "symbol": "ELF",
+      "address": "0x41701a9bc2cd74612282112efc17163de9e250b101"
     }
   },
   "USDT": {
@@ -49,6 +55,12 @@
       "decimals": 6,
       "symbol": "USDT",
       "address": "0x60eeCc4d19f65B9EaDe628F2711C543eD1cE6679"
+    },
+    "3448148188": {
+      "name": "USDT Token",
+      "decimals": 6,
+      "symbol": "USDT",
+      "address": "0x415607fcbb57f80da872b152fb19341319fe736fe8"
     }
   },
   "ETH": {
