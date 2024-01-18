@@ -164,6 +164,11 @@ export const switchChain = async (
     }
 
     return;
+  } else {
+    if (tronLink.customProvider?.isTronLink) {
+      tronLink.resetState();
+      return;
+    }
   }
 
   if (SUPPORTED_ERC_CHAIN_IDS.includes(Number(info.chainId))) {
@@ -192,6 +197,7 @@ export const switchChain = async (
         iconUrls,
         blockExplorerUrls,
       };
+
       await connector.activate(addChainParameter);
       // fix disconnect metamask
       if (connector === injectedConnection.connector && !window.ethereum?.selectedAddress) connector.connectEagerly?.();
