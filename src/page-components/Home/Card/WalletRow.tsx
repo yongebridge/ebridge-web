@@ -4,11 +4,12 @@ import Network from 'components/Network';
 import WalletIcon from 'components/WalletIcon';
 import { NetworkList } from 'constants/index';
 import { basicModalView, setAccountModal, setWalletModal } from 'contexts/useModal/actions';
+import { useTranslation } from 'react-i18next';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { setFromWallet, setToWallet } from 'contexts/useWallet/actions';
 import { useWalletActions } from 'contexts/useWallet/hooks';
 import { usePortkey, useWeb3 } from 'hooks/web3';
-import { memo, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Trans } from 'react-i18next';
 import { ChainType, NetworkType, Web3Type } from 'types';
 import { shortenString } from 'utils';
@@ -26,6 +27,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   const { connector: web3Connector, chainId: web3ChainId, account: web3Account } = useWeb3();
 
   const { chainId, account, connector } = wallet || {};
+  const { i18n } = useTranslation();
   const portkeyWallet = usePortkey();
   const [{ selectELFWallet }] = useChain();
   const modalDispatch = useModalDispatch();
@@ -72,7 +74,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
         )}
       </>
     );
-  }, [account, chainId, chainType, connector, modalDispatch, wallet?.walletType]);
+  }, [account, chainId, chainType, connector, modalDispatch, wallet?.walletType, i18n.language]);
   const onChange = useCallback(
     async (info: NetworkType['info']) => {
       const _wallet = portkeyWallet;
@@ -143,4 +145,4 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   );
 }
 
-export default memo(WalletRow);
+export default WalletRow;
