@@ -66,6 +66,28 @@ function Actions() {
   const [limitAmountModal, checkLimitAndRate] = useLimitAmountModal();
 
   const { checkPortkeyConnect } = useCheckPortkeyStatus();
+  const fetchELFToken = async (metaMaskAddress?: string) => {
+    const provider = window.ethereum;
+    try {
+      if (provider?.request) {
+        await provider?.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: metaMaskAddress,
+              symbol: 'ELF',
+              decimals: 18,
+              image:
+                'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE2IDMyYzguODM3IDAgMTYtNy4xNjMgMTYtMTZTMjQuODM3IDAgMTYgMCAwIDcuMTYzIDAgMTZzNy4xNjMgMTYgMTYgMTZaIi8+PHBhdGggZmlsbD0iIzJCNUVCOSIgZD0iTTIxLjkwMyAyMC4wOThhNC4wOTggNC4wOTggMCAxIDAgMC04LjE5NiA0LjA5OCA0LjA5OCAwIDAgMCAwIDguMTk2Wm0tNi4yOTUtMy4zNjZhMS4xMzggMS4xMzggMCAwIDAtLjU4NS40MzljLS4wNzMuMDczLS4wNzMuMTQ2LS4xNDYuMjItLjA5NS4yMS0uMjE4LjQwNy0uMzY2LjU4NWEzLjMxIDMuMzEgMCAwIDEtMS4wMjUuNzMyYy0uNzMxLjM2Ni0yLjE5NS0uMjItMi44NTMtLjUxM2EuNTYuNTYgMCAwIDAtLjM2Ni0uMTQ2IDMuMDY1IDMuMDY1IDAgMSAwIDEuNjEgNC4wMjVjLjA3My0uMTQ3LjA3My0uMjkzLjE0Ni0uNDRhMy40NjUgMy40NjUgMCAwIDEgMS42MS0yLjQ4NyAzLjExNyAzLjExNyAwIDAgMSAxLjgzLS4wNzMgMS4yMDMgMS4yMDMgMCAwIDAgMS41MzYtLjgwNSAxLjMxIDEuMzEgMCAwIDAtLjM2Ni0xLjMxOGMtLjA3My0uMjkyLS41ODUtLjM2Ni0xLjAyNC0uMjJabS45NTIgOS4xNDdhMi4wNDkgMi4wNDkgMCAxIDAgMC00LjA5OCAyLjA0OSAyLjA0OSAwIDAgMCAwIDQuMDk4Wm0wLTE1LjY2YTIuMDQ5IDIuMDQ5IDAgMSAwIDAtNC4wOTggMi4wNDkgMi4wNDkgMCAwIDAgMCA0LjA5OFptMCAyLjU2MWEuODY3Ljg2NyAwIDAgMC0uNzMxLS4wNzNjLS4wNzMgMC0uMTQ3LjA3My0uMjIuMDczLS4yMS4wODQtLjQzMi4xMzMtLjY1OC4xNDdhNy4yMDkgNy4yMDkgMCAwIDEtMS4yNDQtLjE0N2MtLjgwNS0uMjItMS4zOS0xLjc1Ni0xLjY4My0yLjQxNSAwLS4xNDYtLjA3NC0uMjItLjE0Ny0uMzY2YTIuOTc1IDIuOTc1IDAgMCAwLTQuMDI0LTEuNTM2IDMuMDM2IDMuMDM2IDAgMCAwLTEuNTM3IDQuMDI0IDMuMDkyIDMuMDkyIDAgMCAwIDQuMDI1IDEuNjFsLjQzOS0uMjJhMy41NjcgMy41NjcgMCAwIDEgMi44NTQtLjY1OCAzLjM3MSAzLjM3MSAwIDAgMSAxLjM5IDEuMjQ0IDEuMTk1IDEuMTk1IDAgMCAwIDIuMTIyLTEuMDk3Yy0uMDczLS4yOTMtLjI5My0uNDQtLjU4NS0uNTg2WiIvPjwvc3ZnPg==',
+            },
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error, '======error');
+    }
+  };
 
   const onCrossChainReceive = useLockCallback(async () => {
     if (!receiveItem) return CommonMessage.error(t('record does not exist'));
@@ -343,6 +365,16 @@ function Actions() {
           }
         }
       }
+    }
+    if (fromWallet?.walletType === 'ERC' && toWallet?.walletType === 'PORTKEY') {
+      onClick = () => fetchELFToken(fromWallet?.account);
+      disabled = false;
+      return { children, onClick, disabled };
+    }
+    if (toWallet?.walletType === 'ERC' && fromWallet?.walletType === 'PORTKEY') {
+      onClick = fetchELFToken(toWallet?.account);
+      disabled = false;
+      return { children, onClick, disabled };
     }
     return { children, disabled, onClick };
   }, [
