@@ -3,6 +3,7 @@ import * as tDVV_Test from './tDVV';
 import * as BSC_TESTNET from './BSC_Test';
 import * as SEPOLIA from './sepolia';
 import * as TRON_NILE_TESTNET from './tron_nile_testnet';
+import * as TRON_SHASTA_TESTNET from './tron_shasta_testnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
@@ -13,7 +14,8 @@ export type ChainConstantsType =
   | typeof tDVV_Test
   | typeof SEPOLIA
   | typeof BSC_TESTNET
-  | typeof TRON_NILE_TESTNET;
+  | typeof TRON_NILE_TESTNET
+  | typeof TRON_SHASTA_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type TRC_CHAIN_TYPE = keyof typeof SupportedTRCChain;
@@ -39,6 +41,7 @@ export const DEFAULT_ERC_CHAIN_INFO = SupportedERCChain[DEFAULT_ERC_CHAIN].CHAIN
 
 export const SupportedTRCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.TRON_NILE_TESTNET]: TRON_NILE_TESTNET,
+  [SupportedChainId.TRON_SHASTA_TESTNET]: TRON_SHASTA_TESTNET,
 };
 
 export const DEFAULT_TRC_CHAIN_INFO = SupportedTRCChain[DEFAULT_TRC_CHAIN].CHAIN_INFO;

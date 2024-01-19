@@ -6,6 +6,7 @@ import * as tDVV_Test from '../platform/tDVV_Test';
 import * as tDVW_Test from '../platform/tDVW_Test';
 import * as BSC_TESTNET from '../platform/BSC_Test';
 import * as TRON_NILE_TESTNET from '../platform/TRON_Nile_Testnet';
+import * as TRON_SHASTA_TESTNET from '../platform/TRON_Shasta_Testnet';
 import * as SEPOLIA from '../platform/sepolia';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
@@ -21,7 +22,8 @@ export type ChainConstantsType =
   | typeof GORELI
   | typeof SEPOLIA
   | typeof BSC_TESTNET
-  | typeof TRON_NILE_TESTNET;
+  | typeof TRON_NILE_TESTNET
+  | typeof TRON_SHASTA_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type ELF_CHAIN_TYPE = keyof typeof SupportedELFChain;
