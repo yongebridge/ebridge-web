@@ -57,7 +57,7 @@ export default function CheckBoxInputRow({
             {t("Initiate cross-chain transfer to the recipient's address")}
           </span>
         </Checkbox>
-        <CommonPopover className="cursor-pointer" content="Your funds will be transferred to this address.">
+        <CommonPopover className="cursor-pointer" content={t('Your funds will be transferred to this address')}>
           <QuestionCircleOutlined className={styles['help-icon']} />
         </CommonPopover>
       </Row>
