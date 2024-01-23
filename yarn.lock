@@ -2135,7 +2135,7 @@
 
 "@web3-react/tron-link@yongebridge/web3-react-tron-link":
   version "8.2.2"
-  resolved "https://codeload.github.com/yongebridge/web3-react-tron-link/tar.gz/0a7daccc64150e086d7484143cab9857ddc2d420"
+  resolved "https://codeload.github.com/yongebridge/web3-react-tron-link/tar.gz/4c5a9163236a1df09a109df92cb125badd845ae7"
   dependencies:
     "@ethersproject/bignumber" "^5.7.0"
     "@web3-react/types" "^8.2.2"

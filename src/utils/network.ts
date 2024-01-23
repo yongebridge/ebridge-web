@@ -158,14 +158,20 @@ export const switchChain = async (
     const connector = tronLink;
 
     try {
-      connector.activate();
+      if (window.tronWeb) {
+        const provider = window.tronWeb;
+        provider.request({
+          method: 'tron_requestAccounts',
+        });
+      } else {
+        connector.activate();
+      }
     } catch (err) {
       console.log(err);
     }
-
-    if (info.chainId !== connector.getChainId()) {
+    /* if (info.chainId !== connector.getChainId()) {
       throw new Error('Please Unlock the TronLink wallet and switch to Nile Testnet');
-    }
+    } */
 
     return;
   } else {
