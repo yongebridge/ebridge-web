@@ -7,6 +7,7 @@ import { isERCAddress } from 'utils';
 import { isELFChain } from 'utils/aelfUtils';
 import { useTokenContract } from './useContract';
 import useInterval from './useInterval';
+import { isChainSupportedByTRC } from 'utils/common';
 
 export const useBalances = (
   wallet?: Web3Type,
@@ -28,6 +29,10 @@ export const useBalances = (
         if (!tokenContract) return '0';
         if (symbol) return getELFChainBalance(tokenContract, symbol, account);
       });
+    } else if (isChainSupportedByTRC(chainId)) {
+      // trc chain
+      // return await window.tronWeb?.getBalance(window.tronWeb?.address.toHex.toString()).then(res => res);
+      return 0;
     } else {
       // erc20 chain
       promise = tokensList.map((i) => {

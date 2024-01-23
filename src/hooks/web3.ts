@@ -2,11 +2,12 @@ import { useAElfReact } from '@aelf-react/core';
 import { useWeb3React } from '@web3-react/core';
 import { ZERO } from 'constants/misc';
 import { useCallback, useMemo } from 'react';
+import { tronLink } from 'walletConnectors';
 import { getProvider } from 'utils/provider';
 import { AElfNodes } from 'constants/aelf';
 import { Web3Type } from 'types';
 import { useChain, useChainDispatch } from 'contexts/useChain';
-import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN } from 'constants/index';
+import { ACTIVE_CHAIN, DEFAULT_ERC_CHAIN, DEFAULT_TRC_CHAIN } from 'constants/index';
 import { usePortkeyReact } from 'contexts/usePortkey/provider';
 import { Accounts } from '@portkey/provider-types';
 import { setSelectELFWallet } from 'contexts/useChain/actions';
@@ -127,5 +128,26 @@ export function usePortkey(): Web3Type {
       isPortkey: true,
     };
   }, [portkeyReact]);
+  return tmpContext;
+}
+
+export function useTRCWeb(): Web3Type {
+  const trcReact = window.tronWeb;
+  const tmpContext = useMemo(() => {
+    const contextNetwork: any = {
+      ...trcReact,
+      account: trcReact?.defaultAddress.hex.toString(),
+      address: trcReact?.defaultAddress.hex.toString(),
+    };
+    return {
+      ...contextNetwork,
+      chainId: DEFAULT_TRC_CHAIN,
+      library: window.tronWeb,
+      provider: window.tronWeb,
+      walletType: 'TRC',
+      connector: tronLink,
+      isPortkey: false,
+    };
+  }, [trcReact]);
   return tmpContext;
 }

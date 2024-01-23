@@ -46,10 +46,8 @@ export default function WalletList() {
             }
             break;
           case 'TRONLINK':
-            if (connector instanceof TronLink) {
-              await sleep(500);
-              await switchChain(DEFAULT_TRC_CHAIN_INFO as any, connector, true);
-            }
+            await sleep(500);
+            await switchChain(DEFAULT_TRC_CHAIN_INFO as any, connector, true);
             break;
           default:
             if (typeof connector === 'string') {

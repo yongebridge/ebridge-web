@@ -1,5 +1,5 @@
 import { BasicActions } from 'contexts/utils';
-import { useAElf, usePortkey, useWeb3 } from 'hooks/web3';
+import { useAElf, usePortkey, useTRCWeb, useWeb3 } from 'hooks/web3';
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 import { ModalActions, ModalState, basicModalView } from './actions';
 import { formatPortkeyWallet } from 'contexts/useWallet/utils';
@@ -33,6 +33,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const actions = useMemo(() => ({ dispatch }), [dispatch]);
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
+  const trcWebWallet = useTRCWeb();
   const portkeyWallet = usePortkey();
   const { switchChainInConnectPorkey } = useWallet();
   const [walletWallet, accountWallet] = useMemo(() => {
@@ -40,6 +41,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     switch (accountWalletType) {
       case 'ERC':
         accountWallet = web3Wallet;
+        break;
+      case 'TRC':
+        accountWallet = trcWebWallet;
         break;
       case 'PORTKEY':
         accountWallet = formatPortkeyWallet(portkeyWallet, accountChainId as any);
@@ -54,6 +58,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     switch (walletWalletType) {
       case 'ERC':
         walletWallet = web3Wallet;
+        break;
+      case 'TRC':
+        walletWallet = trcWebWallet;
         break;
       case 'PORTKEY':
         walletWallet = formatPortkeyWallet(portkeyWallet, walletChainId as any);

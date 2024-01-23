@@ -17,6 +17,7 @@ export function getWalletByOptions(
   aelfWallet: Web3Type,
   web3Wallet: Web3Type,
   portkeyWallet: Web3Type,
+  trcWebWallet: Web3Type,
   options?: Options,
   selectELFWallet?: WalletType,
 ) {
@@ -32,6 +33,8 @@ export function getWalletByOptions(
         wallet.chainId = chainId;
       }
     }
+  } else if (chainType === 'TRC') {
+    wallet = trcWebWallet;
   } else {
     wallet = web3Wallet;
   }
@@ -45,6 +48,7 @@ export function isChange(stateOptions?: Options, payloadOptions?: Options) {
   return (
     (isPortkey && stateType === 'ELF' && chainType === 'ELF') ||
     ((stateType === 'ERC' || chainType === 'ERC') && stateType === chainType) ||
-    (stateType === 'ELF' && chainType === 'ELF' && stateChainId === chainId)
+    (stateType === 'ELF' && chainType === 'ELF' && stateChainId === chainId) ||
+    ((stateType === 'TRC' || chainType === 'TRC') && stateType === chainType)
   );
 }

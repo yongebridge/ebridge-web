@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Row } from 'antd';
+import { Dropdown, Row } from 'antd';
 import { useMemo } from 'react';
 import { switchNetwork } from '../../utils/network';
 import { ChainId, NetworkType } from 'types';
@@ -21,29 +21,22 @@ export default function Network({
   className?: string;
   chainId?: ChainId;
 }) {
-  const menu = useMemo(() => {
-    return (
-      <Menu
-        selectedKeys={chainId ? [chainId.toString()] : ['']}
-        items={networkList.map((i) => {
-          return {
-            key: i.info.chainId,
-            label: i.title,
-            onClick: () => (onChange || switchNetwork)(i.info),
-          };
-        })}
-      />
-    );
-  }, [chainId, networkList, onChange]);
+  const isMd = useMediaQueries('md');
+  const name = getNameByChainId(chainId);
+  const items = useMemo(
+    () =>
+      networkList.map((i) => ({
+        label: i.title,
+        key: i.info.chainId as string,
+        onClick: () => (onChange || switchNetwork)(i.info),
+      })),
+    [chainId, networkList, onChange],
+  );
 
   const iconProps = useMemo(() => {
     if (!chainId) return undefined;
     return getIconByChainId(chainId);
   }, [chainId]);
-
-  const isMd = useMediaQueries('md');
-  const name = getNameByChainId(chainId);
-
   const IconName = useMemo(() => {
     const props = { nameSize: 14, marginRight: 16 };
 
@@ -63,7 +56,7 @@ export default function Network({
     <Dropdown
       className={clsx(styles.dropdown, 'cursor-pointer', className)}
       overlayClassName={clsx(styles['dropdown-overlay'], overlayClassName)}
-      overlay={menu}
+      menu={{ items }}
       trigger={['click']}
       getPopupContainer={(triggerNode) => triggerNode}>
       <Row className="flex-row-center">

@@ -9,7 +9,8 @@ import { useModalDispatch } from 'contexts/useModal/hooks';
 import { setFromWallet, setToWallet } from 'contexts/useWallet/actions';
 import { useWalletActions } from 'contexts/useWallet/hooks';
 import { usePortkey, useWeb3 } from 'hooks/web3';
-import { useCallback, useMemo } from 'react';
+import { isChainSupportedByTRC } from 'utils/common';
+import { useCallback, useMemo, memo } from 'react';
 import { Trans } from 'react-i18next';
 import { ChainType, NetworkType, Web3Type } from 'types';
 import { shortenString } from 'utils';
@@ -97,6 +98,8 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
         dispatch(
           setWallet({ chainType: 'ELF', chainId: info.chainId, isPortkey: selectPortkey && portkeyWallet.isActive }),
         );
+      } else if (isChainSupportedByTRC(info.chainId)) {
+        dispatch(setWallet({ chainType: 'TRC' }));
       } else {
         dispatch(setWallet({ chainType: 'ERC' }));
       }
@@ -145,4 +148,4 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   );
 }
 
-export default WalletRow;
+export default memo(WalletRow);

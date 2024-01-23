@@ -24,7 +24,7 @@ export function getExploreLink(
   if (isELFChain(chainId)) {
     prefix = ELFChainConstants.constants[chainId as AelfInstancesKey]?.CHAIN_INFO?.exploreUrl;
   } else if (SUPPORTED_TRON_CHAIN_IDS.some((item) => item.toString() == chainId)) {
-    prefix = TRCChainConstants.constants.CHAIN_INFO.exploreUrl;
+    prefix = TRCChainConstants.constants?.CHAIN_INFO.exploreUrl;
   } else {
     prefix = ERCChainConstants.constants.CHAIN_INFO.exploreUrl;
   }

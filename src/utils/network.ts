@@ -158,20 +158,28 @@ export const switchChain = async (
     const connector = tronLink;
 
     try {
-      if (window.tronWeb) {
-        const provider = window.tronWeb;
-        provider.request({
-          method: 'tron_requestAccounts',
-        });
+      // send Tronlink transaction process
+      if (!window.tronWeb) {
+        throw new Error('Please Install TronLink wallet.');
       } else {
-        connector.activate();
+        // if tronlink is installed in chrome
+        // check tronlink is connect wallet in website
+        const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
+        if (!response) {
+          // if tronlink is not connected .....
+          throw new Error('Please Unlock the TronLink wallet and switch to Nile Testnet');
+        } else if (response === 200) {
+          // get tronlink current chains config
+          console.log('All ok');
+        } else {
+          // if node not correct .....
+          console.log('Else ok: ', response);
+          // connector.activate();
+        }
       }
     } catch (err) {
       console.log(err);
     }
-    /* if (info.chainId !== connector.getChainId()) {
-      throw new Error('Please Unlock the TronLink wallet and switch to Nile Testnet');
-    } */
 
     return;
   } else {
