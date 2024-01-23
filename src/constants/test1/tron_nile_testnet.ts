@@ -1,5 +1,7 @@
+import { SupportedChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 3448148188,
+  chainId: SupportedChainId.TRON_NILE_TESTNET,
   exploreUrl: 'https://nile.tronscan.org/',
   rpcUrl: 'https://api.nileex.io',
   chainName: 'TRON Nile Testnet',
@@ -17,7 +19,7 @@ export const BRIDGE_CONTRACT_OUT = '41856fd68205317d9023b1158f5dfc4876830c8f27';
 export const LIMIT_CONTRACT = '41d689c2170d29c9ad74dd46dd53b849d3b32c6fb3'; // TODO
 
 /* export const CHAIN_INFO = {
-  chainId: 3448148188,
+  chainId: SupportedChainId.TRON_NILE_TESTNET,
   exploreUrl: 'https://nile.tronscan.org/',
   rpcUrl: 'https://api.nileex.io',
   chainName: 'TRON Nile Testnet',

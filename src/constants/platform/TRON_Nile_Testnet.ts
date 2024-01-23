@@ -1,5 +1,7 @@
+import { SupportedChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 3448148188,
+  chainId: SupportedChainId.TRON_NILE_TESTNET,
   exploreUrl: 'https://nile.tronscan.org/',
   rpcUrl: 'https://api.nileex.io',
   chainName: 'TRON Nile Testnet',
