@@ -1,7 +1,7 @@
 export const CHAIN_INFO = {
   chainId: 3448148188,
   exploreUrl: 'https://nile.tronscan.org/',
-  rpcUrl: 'http://192.168.67.173:9090',
+  rpcUrl: 'https://api.nileex.io',
   chainName: 'TRON Nile Testnet',
   nativeCurrency: {
     name: 'TRON Nile Testnet Native Token',
@@ -9,12 +9,12 @@ export const CHAIN_INFO = {
     decimals: 8,
   },
   iconUrls: ['https://etherscan.io/token/images/trontrx_32.png'],
-  rpcUrls: ['http://192.168.67.173:9090'],
+  rpcUrls: ['https://api.nileex.io'],
   blockExplorerUrls: ['https://nile.tronscan.org/'],
 };
-export const BRIDGE_CONTRACT = '0x41d0e25d08dc6f390435ce2c4b5c325e3d030d10a2'; // TODO
-export const BRIDGE_CONTRACT_OUT = '0x41f19186c3a84817886bcc69269dc701cab8804786'; // TODO
-export const LIMIT_CONTRACT = '0x414765abda9ad4ccd38a61b18fff1983445f3f88fe'; // TODO
+export const BRIDGE_CONTRACT = '41f6be4af14c54b3aa47dd1c3d8171492b90731a38'; // TODO
+export const BRIDGE_CONTRACT_OUT = '41856fd68205317d9023b1158f5dfc4876830c8f27'; // TODO
+export const LIMIT_CONTRACT = '41d689c2170d29c9ad74dd46dd53b849d3b32c6fb3'; // TODO
 
 /* export const CHAIN_INFO = {
   chainId: 3448148188,
