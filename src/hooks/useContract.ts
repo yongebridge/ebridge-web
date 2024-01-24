@@ -168,18 +168,19 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
 }
 
 function useContract(address: string, ABI: any, chainId: ChainId, isPortkey?: boolean): ContractBasic | undefined {
-  let contract = useERCContract(address, ABI, chainId);
   if (isPortkey) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    contract = usePortkeyContract(address, chainId);
+    return usePortkeyContract(address, chainId);
   } else if (isELFChain(chainId)) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    contract = useAElfContract(address, chainId);
+    return useAElfContract(address, chainId);
   } else if (isChainSupportedByTRC(chainId)) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    contract = useTRCContract(address, ABI, chainId);
+    return useTRCContract(address, ABI, chainId);
+  } else {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useERCContract(address, ABI, chainId);
   }
-  return contract;
 }
 
 export function useTokenContract(chainId: ChainId, address?: string, isPortkey?: boolean) {
