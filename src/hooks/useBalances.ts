@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { ZERO } from 'constants/misc';
-import { getELFChainBalance, getBalance, getETHBalance } from 'contracts';
+import { getELFChainBalance, getBalance, getETHBalance, getTRCChainBalance } from 'contracts';
 import { useCallback, useMemo, useState } from 'react';
 import { Web3Type } from 'types';
 import { isERCAddress } from 'utils';
@@ -31,8 +31,10 @@ export const useBalances = (
       });
     } else if (isChainSupportedByTRC(chainId)) {
       // trc chain
-      // return await window.tronWeb?.getBalance(window.tronWeb?.address.toHex.toString()).then(res => res);
-      return 0;
+      promise = tokensList.map((tokenAddress) => {
+        if (!tokenContract) return '0';
+        if (tokenAddress) return getTRCChainBalance(tokenContract, owner);
+      });
     } else {
       // erc20 chain
       promise = tokensList.map((i) => {
@@ -48,7 +50,7 @@ export const useBalances = (
       if (key) obj[key + account + chainId] = bs[index];
     });
     setBalanceMap((preObj) => ({ ...preObj, ...obj }));
-  }, [account, tokensList, chainId, tokenContract, library]);
+  }, [account, tokensList, chainId, tokenContract, library, owner]);
   useInterval(onGetBalance, delay, [onGetBalance, library, tokenContract]);
   const memoBalances = useMemo(() => {
     if (tokensList) return tokensList.map((key) => (balanceMap && key ? balanceMap[key + account + chainId] : ZERO));

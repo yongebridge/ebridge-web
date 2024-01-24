@@ -23,6 +23,7 @@ import CheckToFillAddressModal from './CheckToFillAddressModal';
 import useLimitAmountModal from '../useLimitAmountModal';
 import CommonMessage from 'components/CommonMessage';
 import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
+import { getChainIdForContract } from 'contracts';
 
 function Actions() {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
@@ -49,7 +50,6 @@ function Actions() {
   const sendTokenContract = useTokenContract(itemSendChainID, undefined, fromWallet?.isPortkey);
   const bridgeContract = useBridgeContract(fromChainId, fromWallet?.isPortkey);
   const bridgeOutContract = useBridgeOutContract(toChainId, toWallet?.isPortkey);
-
   const [fromTokenAllowance, getAllowance] = useAllowance(
     tokenContract,
     fromAccount,
@@ -151,7 +151,7 @@ function Actions() {
       account: fromAccount,
       bridgeContract,
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
-      toChainId,
+      toChainId: getChainIdForContract(toChainId), // Check later
       to: toChecked && toAddress ? toAddress : (toAccount as string),
       crossFee,
     };

@@ -19,7 +19,7 @@
       "name": "ELF Token",
       "decimals": 18,
       "symbol": "ELF",
-      "address": "0x41701a9bc2cd74612282112efc17163de9e250b101"
+      "address": "TXL8Uuto8oxWKEC8HQrL7jxWyJPhC4Tcnd"
     }
   },
   "USDT": {
@@ -60,7 +60,7 @@
       "name": "USDT Token",
       "decimals": 6,
       "symbol": "USDT",
-      "address": "0x415607fcbb57f80da872b152fb19341319fe736fe8"
+      "address": "TX2zsgyT8aYSyAnyzTJQPPsDWhvMon1j15"
     }
   },
   "ETH": {

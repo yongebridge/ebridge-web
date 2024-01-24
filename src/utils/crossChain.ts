@@ -9,6 +9,7 @@ import { AElfTransaction, TransactionResult } from '@aelf-react/types';
 import { checkApprove } from 'contracts';
 import type { provider } from 'web3-core';
 import { CrossFeeToken, REQ_CODE, ZERO } from 'constants/misc';
+import { isChainSupportedByTRC } from 'utils/common';
 import { getTokenInfoByWhitelist } from './whitelist';
 import { timesDecimals } from './calculate';
 import { formatAddress, isIncludesChainId } from 'utils';
@@ -31,8 +32,6 @@ export async function CrossChainTransfer({
   toChainId: ChainId;
   amount: string;
 }) {
-  console.log('CrossChainTransfer', '===CrossChainTransfer');
-
   return contract.callSendMethod(
     'CrossChainTransfer',
     account,
@@ -348,9 +347,10 @@ export async function getSwapId({
   let swapId;
   const { address } = getTokenInfoByWhitelist(toChainId, symbol) || {};
   const chainId = getChainIdToMap(fromChainId);
-
   if (bridgeOutContract?.contractType === 'ELF') {
     swapId = await bridgeOutContract?.callViewMethod('GetSwapIdByToken', [chainId, symbol]);
+  } else if (isChainSupportedByTRC(toChainId)) {
+    swapId = await bridgeOutContract?.callViewMethod('getSwapId', [address, chainId]);
   } else {
     swapId = await bridgeOutContract?.callViewMethod('getSwapId', [address, chainId]);
   }
@@ -393,7 +393,6 @@ export async function getReceiptLimit({
     };
   } catch (error: any) {
     CommonMessage.error(error.message);
-    console.log('getReceiptLimit error :', error);
   }
 }
 
@@ -434,6 +433,5 @@ export async function getSwapLimit({
     };
   } catch (error: any) {
     CommonMessage.error(error.message);
-    console.log('getSwapLimit error :', error);
   }
 }

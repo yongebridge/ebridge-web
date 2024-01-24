@@ -80,12 +80,12 @@ export class TRCChainConstants extends ChainConstants {
     this.setStaticAttrs();
   }
   setStaticAttrs() {
-    const chainId = (this.id || getChainId()) as TRC_CHAIN_TYPE;
+    const chainId = getChainId() as TRC_CHAIN_TYPE;
     let attrs;
     if (ACTIVE_CHAIN[chainId]) {
       attrs = SupportedTRCChain[chainId];
     } else {
-      attrs = SupportedTRCChain[DEFAULT_ERC_CHAIN];
+      attrs = SupportedTRCChain[DEFAULT_TRC_CHAIN];
     }
     TRCChainConstants['constants'] = attrs;
     TRCChainConstants['chainId'] = attrs?.CHAIN_INFO.chainId;

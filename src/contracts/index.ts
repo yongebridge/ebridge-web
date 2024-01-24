@@ -20,3 +20,4 @@ export const checkApprove = async (
 };
 export * from './elf';
 export * from './ethereum';
+export * from './tron';

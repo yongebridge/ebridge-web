@@ -136,8 +136,8 @@ export function useTRCWeb(): Web3Type {
   const tmpContext = useMemo(() => {
     const contextNetwork: any = {
       ...trcReact,
-      account: trcReact?.defaultAddress.hex.toString(),
-      address: trcReact?.defaultAddress.hex.toString(),
+      account: trcReact?.defaultAddress.base58.toString(),
+      address: trcReact?.defaultAddress.base58.toString(),
     };
     return {
       ...contextNetwork,
