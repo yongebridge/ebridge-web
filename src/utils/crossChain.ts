@@ -207,6 +207,8 @@ export async function CreateReceipt({
   toChainId,
   to,
   tokenContract,
+  fromChainId,
+  trcLibrary,
   crossFee,
 }: {
   bridgeContract: ContractBasic;
@@ -217,6 +219,8 @@ export async function CreateReceipt({
   toChainId: ChainId;
   to: string;
   tokenContract: ContractBasic;
+  fromChainId: ChainId;
+  trcLibrary: provider;
   crossFee?: string;
 }) {
   const toAddress = formatAddress(to);
@@ -224,9 +228,11 @@ export async function CreateReceipt({
   if (fromELFChain && fromToken !== CrossFeeToken) {
     const req = await checkApprove(
       library,
+      trcLibrary,
       CrossFeeToken,
       account,
       bridgeContract.address || '',
+      fromChainId,
       timesDecimals(crossFee, 8).toFixed(0),
       undefined,
       fromELFChain ? tokenContract : undefined,
@@ -245,13 +251,16 @@ export async function CreateReceipt({
   }
   const req = await checkApprove(
     library,
+    trcLibrary,
     fromToken,
     account,
     bridgeContract.address || '',
+    fromChainId,
     checkAmount,
     undefined,
     fromELFChain ? tokenContract : undefined,
   );
+  console.log(54);
   if (req !== REQ_CODE.Success) throw req;
   if (fromELFChain) {
     return bridgeContract.callSendMethod('createReceipt', account, [

@@ -16,6 +16,7 @@ import { useLanguage } from 'i18n';
 import useLockCallback from 'hooks/useLockCallback';
 import { useUpdateEffect } from 'react-use';
 import { useAllowance } from 'hooks/useAllowance';
+import { useTRCWeb } from 'hooks/web3';
 import { isELFChain } from 'utils/aelfUtils';
 import { ACTIVE_CHAIN } from 'constants/index';
 import { formatAddress, isAddress } from 'utils';
@@ -43,6 +44,7 @@ function Actions() {
     return token;
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
+  const { library: trcLibrary } = useTRCWeb();
 
   const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address, fromWallet?.isPortkey);
   const sendCrossChainContract = useCrossChainContract(itemSendChainID, undefined, fromWallet?.isPortkey);
@@ -153,6 +155,8 @@ function Actions() {
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
       toChainId: getChainIdForContract(toChainId), // Check later
       to: toChecked && toAddress ? toAddress : (toAccount as string),
+      fromChainId,
+      trcLibrary,
       crossFee,
     };
 

@@ -429,15 +429,29 @@ export class TronContractBasic {
     paramsOption,
     callOptions = { defaultBlock: 'latest' },
   ) => {
-    const { options } = callOptions;
+    if (!this.contract) return { error: { code: 401, message: 'Contract init error' } };
     try {
-      return await this.contract?.[functionName](...(paramsOption || [])).call(options);
+      const { options } = callOptions;
+      const contract = this.contract;
+      return await contract?.methods[functionName](...(paramsOption || [])).call(options);
     } catch (e) {
       return { error: e };
     }
   };
 
-  public callSendMethod: CallSendMethod = async (functionName, account, paramsOption) => {
-    return await this.contract?.[functionName](account, paramsOption).send();
+  public callSendMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
+    if (!this.contract) return { error: { code: 401, message: 'Contract init error' } };
+    try {
+      const contract = this.contract;
+      const { onMethod = 'receipt', ...options } = sendOptions || {};
+      const result: any = await contract.methods[functionName](...(paramsOption || [])).send({
+        from: account,
+        ...options,
+      });
+      if (onMethod === 'receipt') return { ...result, TransactionId: result.transactionHash };
+      return { TransactionId: result };
+    } catch (error) {
+      return { error };
+    }
   };
 }
