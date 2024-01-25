@@ -420,7 +420,7 @@ export class TronContractBasic {
   }
 
   public initContract: InitContract = async (provider, address, ABI) => {
-    this.contract = await window.tronWeb.contract(ABI, address);
+    this.contract = window.tronWeb.contract(ABI as any, address);
     return this.contract as any;
   };
 
@@ -432,8 +432,9 @@ export class TronContractBasic {
     if (!this.contract) return { error: { code: 401, message: 'Contract init error' } };
     try {
       const { options } = callOptions;
-      const contract = this.contract;
-      return await contract?.methods[functionName](...(paramsOption || [])).call(options);
+      const contract = await this.contract;
+      const result: any = await contract?.[functionName](...(paramsOption || [])).call();
+      return result;
     } catch (e) {
       return { error: e };
     }
@@ -442,9 +443,9 @@ export class TronContractBasic {
   public callSendMethod: CallSendMethod = async (functionName, account, paramsOption, sendOptions) => {
     if (!this.contract) return { error: { code: 401, message: 'Contract init error' } };
     try {
-      const contract = this.contract;
+      const contract = await this.contract;
       const { onMethod = 'receipt', ...options } = sendOptions || {};
-      const result: any = await contract.methods[functionName](...(paramsOption || [])).send({
+      const result: any = await contract?.[functionName](...(paramsOption || [])).send({
         from: account,
         ...options,
       });

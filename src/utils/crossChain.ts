@@ -260,7 +260,6 @@ export async function CreateReceipt({
     undefined,
     fromELFChain ? tokenContract : undefined,
   );
-  console.log(54);
   if (req !== REQ_CODE.Success) throw req;
   if (fromELFChain) {
     return bridgeContract.callSendMethod('createReceipt', account, [
