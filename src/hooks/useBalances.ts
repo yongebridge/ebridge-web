@@ -32,7 +32,7 @@ export const useBalances = (
     } else if (isChainSupportedByTRC(chainId)) {
       // trc chain
       promise = tokensList.map((tokenAddress) => {
-        if (!tokenContract) return '0';
+        // if (!tokenContract) return '0';
         if (tokenAddress) return getTRCChainBalance(tokenContract, owner);
       });
     } else {

@@ -8,10 +8,8 @@ export const getTRCBalance = async (address: string) => {
 };
 
 export const getTRCChainBalance = async (tokenContract: ContractBasic, owner?: string) => {
-  console.log('tokenContract: ', tokenContract);
-  console.log('owner: ', owner);
   const tokenTronContract = await window.tronWeb.contract().at('TXL8Uuto8oxWKEC8HQrL7jxWyJPhC4Tcnd');
-  const callBalance = await tokenTronContract.balanceOf('TCbNFfGoWxBH1KFDfjR5hQNyyLDCsyWHzV').call();
+  const callBalance = await tokenTronContract.balanceOf(owner).call();
   const balance = window.tronWeb.toDecimal(callBalance);
   return balance;
 };
