@@ -79,8 +79,8 @@ export const checkTRCAllowanceAndApprove = async ({
   return true;
 };
 
-export const getTRCChainBalance = async (tokenContract: ContractBasic, owner?: string) => {
-  const tokenTronContract = await window.tronWeb.contract().at('TXL8Uuto8oxWKEC8HQrL7jxWyJPhC4Tcnd');
+export const getTRCChainBalance = async (tokenContract: ContractBasic, tokenAddress: string, owner?: string) => {
+  const tokenTronContract = await window.tronWeb.contract().at(tokenAddress);
   const callBalance = await tokenTronContract.balanceOf(owner).call();
   const balance = window.tronWeb.toDecimal(callBalance);
   return balance;

@@ -33,7 +33,7 @@ export const useBalances = (
       // trc chain
       promise = tokensList.map((tokenAddress) => {
         // if (!tokenContract) return '0';
-        if (tokenAddress) return getTRCChainBalance(tokenContract, owner);
+        if (tokenAddress) return getTRCChainBalance(tokenContract, tokenAddress, owner);
       });
     } else {
       // erc20 chain
