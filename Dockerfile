@@ -1,4 +1,4 @@
-FROM node:20.0.0
+FROM node:20.9.0
 
 ARG web=/opt/workspace/aelf-bridge-frontend
 
