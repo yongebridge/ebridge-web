@@ -11,6 +11,7 @@ import {
 } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import { evokePortkey } from '@portkey/onboarding';
+import { PortkeyNameVersion } from './constants';
 const INITIAL_STATE = {
   isActive: false,
   account: undefined,
@@ -40,41 +41,54 @@ function reducer(state: PortkeyContextState, { type, payload }: ReducerAction) {
 export function PortkeyReactProvider({ children, networkType: propsNetworkType }: PortkeyReactProviderProps) {
   const [state, dispatch]: [PortkeyContextState, any] = useReducer(reducer, INITIAL_STATE);
   const { provider, accounts } = state;
-  const activate = useCallback(async () => {
-    const installed = await evokePortkey.extension();
-    if (!installed) throw Error('provider not installed');
-    const provider = await detectProvider();
-    if (!provider) throw Error('provider init error');
-    const accounts = await provider.request({ method: MethodsBase.REQUEST_ACCOUNTS });
-    const [name, networkType] = await Promise.all([
-      provider.request({ method: MethodsWallet.GET_WALLET_NAME }),
-      provider.request({ method: MethodsBase.NETWORK }),
-    ]);
-    if (networkType !== propsNetworkType) throw Error('networkType error');
-    dispatch({
-      type: Actions.ACTIVATE,
-      payload: {
-        accounts,
-        name,
-        provider,
-        isActive: true,
-      },
-    });
-    // return bridges;
-  }, [propsNetworkType]);
+  let portkeyVersion = PortkeyNameVersion.v1;
+  const activate = useCallback(
+    async (version: PortkeyNameVersion) => {
+      const installed = await evokePortkey.extension();
+      if (!installed) throw Error('provider not installed');
+      portkeyVersion = version;
+      const provider = await detectProvider({
+        providerName: version,
+      });
+      if (!provider) throw Error('provider init error');
+      const accounts = await provider.request({ method: MethodsBase.REQUEST_ACCOUNTS });
+      const [name, networkType] = await Promise.all([
+        provider.request({ method: MethodsWallet.GET_WALLET_NAME }),
+        provider.request({ method: MethodsBase.NETWORK }),
+      ]);
+      if (networkType !== propsNetworkType) throw Error('networkType error');
+      dispatch({
+        type: Actions.ACTIVATE,
+        payload: {
+          accounts,
+          name,
+          provider,
+          isActive: true,
+        },
+      });
+      // return bridges;
+    },
+    [propsNetworkType],
+  );
   const deactivate = useCallback(async () => {
     if (!accounts) throw Error('no active connection');
     dispatch({ type: Actions.DEACTIVATE });
     return true;
   }, [accounts]);
 
-  const connectEagerly = useCallback(async () => {
-    const provider = await detectProvider();
-    if (!provider) throw Error('provider init error');
-    const accounts = await provider.request({ method: MethodsBase.ACCOUNTS });
-    if (Object.keys(accounts).length) return activate();
-    throw Error('Can‘t Connect Eagerly');
-  }, [activate]);
+  const connectEagerly = useCallback(
+    async (version: PortkeyNameVersion) => {
+      portkeyVersion = version;
+      const provider = await detectProvider({
+        providerName: version,
+      });
+      if (!provider) throw Error('provider init error');
+      const accounts = await provider.request({ method: MethodsBase.ACCOUNTS });
+      if (Object.keys(accounts).length) return activate(version);
+      throw Error('Can‘t Connect Eagerly');
+    },
+    [activate],
+  );
 
   const accountsChanged = useCallback((accounts: Accounts) => {
     dispatch({
@@ -117,7 +131,7 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   const disconnected = useCallback(() => {
     try {
       deactivate();
-      connectEagerly();
+      connectEagerly(portkeyVersion);
     } catch (error) {
       console.log(error, '====error');
     }

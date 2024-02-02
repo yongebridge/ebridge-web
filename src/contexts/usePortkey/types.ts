@@ -23,9 +23,11 @@ export interface PortkeyReactProviderProps {
   children: ReactNode;
   appName: string;
   networkType: NetworkType;
-  nodes?: {
-    [key: string]: PortkeyNode;
-  };
+  nodes?:
+    | {
+        [key: string]: PortkeyNode;
+      }
+    | string;
 }
 
 export interface PortkeyContextState {
