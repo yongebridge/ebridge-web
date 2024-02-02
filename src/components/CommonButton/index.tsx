@@ -7,7 +7,7 @@ import styles from './styles.module.less';
 type ButtonTypes = 'default' | 'primary' | 'ghost' | 'dashed' | 'link' | 'text' | 'select';
 
 interface CommonButtonProps {
-  type?: ButtonTypes;
+  type?: (typeof ButtonTypes)[number];
   children?: React.ReactNode;
   icon?: React.ReactNode;
   shape?: ButtonProps['shape'];

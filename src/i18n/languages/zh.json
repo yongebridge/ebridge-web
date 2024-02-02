@@ -145,6 +145,7 @@
     "Synchronising data on the chain 2": "請等待5-10分鐘後再發起跨鏈。",
     "main chain": "主鏈",
     "side chain": "側鏈",
-    "Request rejected. eBridge needs your permission to continue": "請求被拒絕。eBridge需要您的授權才能繼續。"
+    "Request rejected. eBridge needs your permission to continue": "請求被拒絕。eBridge需要您的授權才能繼續。",
+    "Your funds will be transferred to this address": "您的资金将被转移到该地址。"
   }
 }
