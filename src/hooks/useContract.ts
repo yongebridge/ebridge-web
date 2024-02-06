@@ -121,8 +121,8 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
   }, [accounts, chainId, isActive]);
   const [contracts, { dispatch }] = useAElfContractContext();
   const key = useMemo(
-    () => contractAddress + '_' + chainId + '_' + account + '_' + String(isActive),
-    [account, chainId, contractAddress, isActive],
+    () => contractAddress + '_' + chainId + '_' + account + '_' + provider?.providerVersion,
+    [account, chainId, contractAddress, provider?.providerVersion],
   );
   const getContract = useCallback(
     async (reCount = 0) => {
