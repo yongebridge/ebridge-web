@@ -23,8 +23,13 @@ export function getContract(address: string, ABI: any, library?: provider) {
   });
 }
 
-export function getPortkeyContract(address: string, chainId: ChainId, portkeyChain: IAElfChain) {
-  const key = address + chainId + portkeyChain.rpcUrl;
+export function getPortkeyContract(
+  address: string,
+  chainId: ChainId,
+  portkeyChain: IAElfChain,
+  providerVersion?: string,
+) {
+  const key = address + chainId + portkeyChain.rpcUrl + String(providerVersion);
   if (!ContractMap[key])
     ContractMap[key] = new ContractBasic({
       contractAddress: address,
@@ -131,7 +136,7 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
         const portkeyChain = await provider.getChain(chainId as any);
         dispatch(
           setContract({
-            [key]: getPortkeyContract(contractAddress, chainId, portkeyChain),
+            [key]: getPortkeyContract(contractAddress, chainId, portkeyChain, provider.providerVersion),
           }),
         );
       } catch (error) {
