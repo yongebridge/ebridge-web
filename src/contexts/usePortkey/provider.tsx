@@ -44,7 +44,9 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   let portkeyVersion = PortkeyNameVersion.v1;
   const activate = useCallback(
     async (version: PortkeyNameVersion) => {
-      const installed = await evokePortkey.extension();
+      const installed = await evokePortkey.extension({
+        version: version == PortkeyNameVersion.v1 ? 'v1' : undefined,
+      });
       if (!installed) throw Error('provider not installed');
       portkeyVersion = version;
       const provider = await detectProvider({
