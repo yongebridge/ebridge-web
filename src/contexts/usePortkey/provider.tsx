@@ -11,7 +11,7 @@ import {
 } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import { evokePortkey } from '@portkey/onboarding';
-import { PortkeyNameVersion } from './constants';
+import { PortkeyNameVersion, PORTKEY_APP_DOWNLOAD_PAGE } from './constants';
 const INITIAL_STATE = {
   isActive: false,
   account: undefined,
@@ -52,7 +52,14 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
       const provider = await detectProvider({
         providerName: version,
       });
-      if (!provider) throw Error('provider init error');
+      if (!provider) {
+        if (version == PortkeyNameVersion.v1) {
+          window.open(PORTKEY_APP_DOWNLOAD_PAGE.v1, '_blank');
+        } else if (version == PortkeyNameVersion.v2) {
+          window.open(PORTKEY_APP_DOWNLOAD_PAGE.v2, '_blank');
+        }
+        throw Error('provider init error');
+      }
       const accounts = await provider.request({ method: MethodsBase.REQUEST_ACCOUNTS });
       const [name, networkType] = await Promise.all([
         provider.request({ method: MethodsWallet.GET_WALLET_NAME }),
