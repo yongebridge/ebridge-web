@@ -22,6 +22,7 @@ import { formatAddress, isAddress } from 'utils';
 import CheckToFillAddressModal from './CheckToFillAddressModal';
 import useLimitAmountModal from '../useLimitAmountModal';
 import CommonMessage from 'components/CommonMessage';
+import { getErrorMessage } from 'utils/errorUtils';
 import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
 
 function Actions() {
@@ -123,6 +124,13 @@ function Actions() {
         amount: timesDecimals(fromInput, token.decimals).toFixed(0),
       });
       if (!req.error) dispatch(setFrom(''));
+      if (req.error && req.error?.code) {
+        const errorMessage = getErrorMessage(req.error?.code);
+        if (errorMessage && req.error?.message) {
+          req.error.message = t(errorMessage);
+          throw req.error;
+        }
+      }
       txMessage({ req, chainId: fromChainId, decimals: token.decimals });
     } catch (error: any) {
       CommonMessage.error(error.message);
@@ -173,6 +181,13 @@ function Actions() {
     try {
       const req = await (fromTokenInfo.isNativeToken ? LockToken : CreateReceipt)(params);
       if (!req?.error) dispatch(setFrom(''));
+      if (req.error && req.error?.code) {
+        const errorMessage = getErrorMessage(req.error?.code);
+        if (errorMessage && req.error?.message) {
+          req.error.message = t(errorMessage);
+          throw req.error;
+        }
+      }
       txMessage({ req, chainId: fromChainId, decimals: isELFChain(fromChainId) ? fromTokenInfo.decimals : undefined });
     } catch (error: any) {
       error?.message && CommonMessage.error(error.message);
