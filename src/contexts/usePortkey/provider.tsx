@@ -11,7 +11,9 @@ import {
 } from '@portkey/provider-types';
 import detectProvider from '@portkey/detect-provider';
 import { evokePortkey } from '@portkey/onboarding';
-import { PortkeyNameVersion, PORTKEY_APP_DOWNLOAD_PAGE } from './constants';
+import { PortkeyNameVersion, PortkeyVersion, PORTKEY_APP_DOWNLOAD_PAGE } from './constants';
+import { isMobileDevices } from 'utils/isMobile';
+import { isPortkey } from 'utils/portkey';
 const INITIAL_STATE = {
   isActive: false,
   account: undefined,
@@ -41,21 +43,43 @@ function reducer(state: PortkeyContextState, { type, payload }: ReducerAction) {
 export function PortkeyReactProvider({ children, networkType: propsNetworkType }: PortkeyReactProviderProps) {
   const [state, dispatch]: [PortkeyContextState, any] = useReducer(reducer, INITIAL_STATE);
   const { provider, accounts } = state;
-  let portkeyVersion = PortkeyNameVersion.v1;
-  const activate = useCallback(
-    async (version: PortkeyNameVersion) => {
-      const installed = await evokePortkey.extension({
-        version: version == PortkeyNameVersion.v1 ? 'v1' : undefined,
-      });
-      if (!installed) throw Error('provider not installed');
-      portkeyVersion = version;
+  let portkeyVersionName = PortkeyNameVersion.v1;
+
+  const getProvider = async (versionName: PortkeyNameVersion) => {
+    try {
       const provider = await detectProvider({
-        providerName: version,
+        providerName: versionName,
       });
+      if (provider) return provider;
+      return undefined;
+    } catch (error) {
+      console.log('getProvider:', error);
+      return undefined;
+    }
+  };
+
+  const activate = useCallback(
+    async (versionName: PortkeyNameVersion) => {
+      portkeyVersionName = versionName;
+      const provider = await getProvider(versionName);
       if (!provider) {
-        if (version == PortkeyNameVersion.v1) {
+        if (isMobileDevices() && !isPortkey()) {
+          await evokePortkey.app({
+            action: 'linkDapp',
+            ...(versionName == PortkeyNameVersion.v1 && { version: PortkeyVersion.v1 }),
+            custom: {
+              url: window.location.href,
+            },
+          });
+        } else {
+          const installed = await evokePortkey.extension({
+            version: versionName == PortkeyNameVersion.v1 ? PortkeyVersion.v1 : undefined,
+          });
+          if (!installed) throw Error('provider not installed');
+        }
+        if (versionName == PortkeyNameVersion.v1) {
           window.open(PORTKEY_APP_DOWNLOAD_PAGE.v1, '_blank');
-        } else if (version == PortkeyNameVersion.v2) {
+        } else if (versionName == PortkeyNameVersion.v2) {
           window.open(PORTKEY_APP_DOWNLOAD_PAGE.v2, '_blank');
         }
         throw Error('provider init error');
@@ -79,6 +103,7 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
     },
     [propsNetworkType],
   );
+
   const deactivate = useCallback(async () => {
     if (!accounts) throw Error('no active connection');
     dispatch({ type: Actions.DEACTIVATE });
@@ -86,14 +111,12 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   }, [accounts]);
 
   const connectEagerly = useCallback(
-    async (version: PortkeyNameVersion) => {
-      portkeyVersion = version;
-      const provider = await detectProvider({
-        providerName: version,
-      });
+    async (versionName: PortkeyNameVersion) => {
+      portkeyVersionName = versionName;
+      const provider = await getProvider(versionName);
       if (!provider) throw Error('provider init error');
       const accounts = await provider.request({ method: MethodsBase.ACCOUNTS });
-      if (Object.keys(accounts).length) return activate(version);
+      if (Object.keys(accounts).length) return activate(versionName);
       throw Error('Can‘t Connect Eagerly');
     },
     [activate],
@@ -140,7 +163,7 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
   const disconnected = useCallback(() => {
     try {
       deactivate();
-      connectEagerly(portkeyVersion);
+      connectEagerly(portkeyVersionName);
     } catch (error) {
       console.log(error, '====error');
     }
