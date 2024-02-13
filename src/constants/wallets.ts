@@ -25,7 +25,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
       connector: coinbaseWallet,
       name: 'Coinbase Wallet',
       iconType: 'coinbaseWallet',
-      description: 'Use Coinbase Wallet app on mobile device',
+      description: 'Connect to Coinbase Wallet',
       href: null,
     },
   }),
