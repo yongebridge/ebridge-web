@@ -65,7 +65,7 @@ export default function Network({
         <div className="network-name">{name || 'Select a Network'}</div>
       </Row>
     );
-  }, [iconProps?.type, isMd, name]);
+  }, [iconProps?.type, isMd, name, t]);
   return (
     <Dropdown
       className={clsx(styles.dropdown, 'cursor-pointer', className)}
