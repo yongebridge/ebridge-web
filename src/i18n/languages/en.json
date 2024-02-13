@@ -94,6 +94,8 @@
     "Approve": "Approve",
     "Approve symbol": "Approve {{symbol}}",
     "Invalid to chain": "Invalid to chain",
+    "Please Switch Network": "Please Switch Network",
+    "Invalid evm chain": "The chain where your wallet is located is not yet supported by eBridge!",
     "Invalid from chain": "Invalid from chain",
     "Please confirm the recipient's address": "Please confirm the recipient's address",
     "Confirm3": "Confirm",
