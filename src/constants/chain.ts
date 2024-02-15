@@ -11,6 +11,9 @@ export enum SupportedChainId {
   POLYGON_MAINNET = 137,
   POLYGON_TESTNET = 80001,
   SEPOLIA = 11155111,
+  TRON_MAINNET = 728126428,
+  TRON_SHASTA_TESTNET = 2494104990,
+  TRON_NILE_TESTNET = 3448148188,
 }
 
 export enum SupportedELFChainId {
@@ -30,6 +33,14 @@ export const CHAIN_ID_MAP = {
   [SupportedChainId.BSC_TESTNET]: 'BSCTest',
   [SupportedChainId.SEPOLIA]: 'Sepolia',
 };
+
+export const SUPPORTED_TRON_CHAIN_IDS = [
+  SupportedChainId.TRON_MAINNET,
+  SupportedChainId.TRON_NILE_TESTNET,
+  SupportedChainId.TRON_SHASTA_TESTNET,
+];
+
+export const SUPPORTED_ELF_CHAIN_IDS = [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW];
 
 /**
  * Array of all the supported chain IDs
