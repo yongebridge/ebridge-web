@@ -112,13 +112,13 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
     type: 'Ethereum',
   },
   [SupportedChainId.TRON_MAINNET]: {
-    type: 'tronLink',
+    type: 'Tron',
   },
   [SupportedChainId.TRON_SHASTA_TESTNET]: {
-    type: 'tronLink',
+    type: 'Tron',
   },
   [SupportedChainId.TRON_NILE_TESTNET]: {
-    type: 'tronLink',
+    type: 'Tron',
   },
 };
 
