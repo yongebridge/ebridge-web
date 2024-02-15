@@ -73,6 +73,9 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedELFChainId.tDVV]: 'SideChain tDVV Testnet',
   [SupportedELFChainId.tDVW]: 'SideChain tDVW Testnet',
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
+  [SupportedChainId.TRON_MAINNET]: 'Tron Mainnet',
+  [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron Shasta Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron Nile Testnet',
 };
 
 export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
@@ -121,6 +124,15 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.SEPOLIA]: {
     // type: 'SEPOLIA',
     type: 'Ethereum',
+  },
+  [SupportedChainId.TRON_MAINNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_SHASTA_TESTNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_NILE_TESTNET]: {
+    type: 'Tron',
   },
 };
 
@@ -193,6 +205,24 @@ export const CrossChainTimeList = [
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: SupportedChainId.SEPOLIA,
     time: '40',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [
+      SupportedChainId.TRON_MAINNET,
+      SupportedChainId.TRON_NILE_TESTNET,
+      SupportedChainId.TRON_SHASTA_TESTNET,
+    ],
+    time: '10',
+  },
+  {
+    fromChainId: [
+      SupportedChainId.TRON_MAINNET,
+      SupportedChainId.TRON_NILE_TESTNET,
+      SupportedChainId.TRON_SHASTA_TESTNET,
+    ],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    time: '10',
   },
 ];
 
