@@ -6,6 +6,7 @@ import * as tDVV_Test from '../platform/tDVV_Test';
 import * as tDVW_Test from '../platform/tDVW_Test';
 import * as BSC_TESTNET from '../platform/BSC_Test';
 import * as SEPOLIA from '../platform/sepolia';
+import * as TRON_NILE_TESTNET from '../platform/TRON_Nile_Testnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
@@ -55,7 +56,7 @@ export const ACTIVE_CHAIN: any = {
   [SupportedChainId.BSC_TESTNET]: true,
   [SupportedChainId.SEPOLIA]: true,
 };
-export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB'];
+export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'WTRX'];
 
 export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: string } = {
   [SupportedChainId.MAINNET]: 'Ethereum',
@@ -156,6 +157,11 @@ export const NetworkList = [
     icon: CHAIN_ICON[SupportedChainId.BSC_TESTNET],
     info: BSC_TESTNET.CHAIN_INFO,
   },
+  {
+    title: CHAIN_NAME[SupportedChainId.TRON_NILE_TESTNET],
+    icon: CHAIN_ICON[SupportedChainId.TRON_NILE_TESTNET],
+    info: TRON_NILE_TESTNET.CHAIN_INFO,
+  },
 ] as unknown as NetworkType[];
 
 export const AELF_NODES = {
@@ -177,6 +183,12 @@ export const FormatTokenList = [
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
+  },
+  {
+    fromChainId: [SupportedChainId.TRON_NILE_TESTNET],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    fromSymbol: 'WTRX',
+    toSymbol: 'TRX',
   },
 ];
 

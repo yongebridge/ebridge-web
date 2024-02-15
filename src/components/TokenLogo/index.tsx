@@ -28,6 +28,9 @@ export default function TokenLogo({
   onClick?: ImageProps['onClick'];
 }) {
   const [, refresh] = useState<number>(0);
+  // Need to upload TRON logo image for select token modal
+  // EXAMPLE TRON - https://raw.githubusercontent.com/eBridgeCrosschain/assets/master/blockchains/AELF/assets/TRX/logo.png - Not working
+  // EXAMPLE BNB - https://raw.githubusercontent.com/eBridgeCrosschain/assets/master/blockchains/AELF/assets/BNB/logo.png - working
   const tmpSrc = BAD_SRCS[src] ? undefined : src;
   return (
     <div

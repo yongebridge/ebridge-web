@@ -4,5 +4,6 @@ import coinbaseWalletIcon from './coinbaseWalletIcon.svg';
 import nightElfIcon from './nightElf.png';
 import ebridgeLog from './logo-eBridge.svg';
 import clearIcon from './clear-icon.svg';
+import tronlink from './tronLink.png';
 
-export { metamask, walletConnectIcon, coinbaseWalletIcon, nightElfIcon, ebridgeLog, clearIcon };
+export { metamask, walletConnectIcon, coinbaseWalletIcon, nightElfIcon, ebridgeLog, clearIcon, tronlink };
