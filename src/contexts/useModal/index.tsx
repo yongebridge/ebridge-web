@@ -65,6 +65,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       case 'PORTKEY':
         walletWallet = formatPortkeyWallet(portkeyWallet, walletChainId as any);
         break;
+      case 'TRC':
+        walletWallet = trcWebWallet;
+        break;
       case 'NIGHTELF':
         walletWallet = aelfWallet;
         break;

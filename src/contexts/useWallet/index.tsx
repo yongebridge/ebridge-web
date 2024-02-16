@@ -2,7 +2,7 @@ import { ACTIVE_CHAIN, DEFAULT_MODAL_INITIAL_STATE } from 'constants/index';
 import storages from 'constants/storages';
 import { BasicActions } from 'contexts/utils';
 import useStorageReducer, { StorageOptions } from 'hooks/useStorageReducer';
-import { useAElf, usePortkey, useTRCWeb, useWeb3 } from 'hooks/web3';
+import { useAElf, usePortkey, useWeb3, useTRCWeb } from 'hooks/web3';
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { isELFChain } from 'utils/aelfUtils';
 import { WalletActions, ModalState, setToWallet, setFromWallet, setSwitchChainInConnectPorkey } from './actions';
@@ -79,6 +79,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const web3Wallet = useWeb3();
   const trcWebWallet = useTRCWeb();
   const portkeyWallet = usePortkey();
+  const trcWebWallet = useTRCWeb();
   const [fromWallet, toWallet]: [Web3Type, Web3Type] = useMemo(
     () => [
       getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, trcWebWallet, fromOptions, selectELFWallet),
