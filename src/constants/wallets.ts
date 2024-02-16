@@ -1,5 +1,5 @@
 import { WalletInfo } from 'types';
-import { coinbaseWallet, injected, walletConnect } from 'walletConnectors';
+import { coinbaseWallet, injected, walletConnect, tronLink } from 'walletConnectors';
 import { isMobileDevices } from 'utils/isMobile';
 import { PortkeyNameVersion } from '../contexts/usePortkey/constants';
 
@@ -51,5 +51,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'PORTKEY (EARLY ACCESS)',
     href: null,
     version: PortkeyNameVersion.v2,
+  },
+  TRON_LINK: {
+    connector: tronLink,
+    name: 'TRONLINK',
+    iconType: 'tronLink',
+    description: 'TRONLINK',
+    href: 'https://lf1-cdn-tos.bytegoofy.com/obj/iconpark/svg_16148_23.0e0b48355a318994ec8af9b76b4de4a8.js',
   },
 };

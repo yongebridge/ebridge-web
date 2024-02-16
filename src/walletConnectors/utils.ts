@@ -5,10 +5,11 @@ import {
   injectedConnection,
   networkConnection,
   walletConnectConnection,
+  tronLinkWalletConnection,
 } from '.';
 
 export function getIsInjected(): boolean {
-  return Boolean(window.ethereum);
+  return Boolean(window.ethereum || window.tronWeb);
 }
 
 export function getIsMetaMask(): boolean {
@@ -18,8 +19,18 @@ export function getIsMetaMask(): boolean {
 export function getIsCoinbaseWallet(): boolean {
   return window.ethereum?.isCoinbaseWallet ?? false;
 }
+export function getIsTronLink(): boolean {
+  return Boolean(window.tronWeb);
+}
 
-const CONNECTIONS = [injectedConnection, coinbaseWalletConnection, walletConnectConnection, networkConnection];
+const CONNECTIONS = [
+  injectedConnection,
+  coinbaseWalletConnection,
+  walletConnectConnection,
+  networkConnection,
+  tronLinkWalletConnection,
+];
+
 export function getConnection(c: Connector | ConnectionType) {
   if (c instanceof Connector) {
     const connection = CONNECTIONS.find((connection) => connection.connector === c);
@@ -37,19 +48,23 @@ export function getConnection(c: Connector | ConnectionType) {
         return walletConnectConnection;
       case ConnectionType.NETWORK:
         return networkConnection;
+      case ConnectionType.TRON_LINK:
+        return tronLinkWalletConnection;
     }
   }
 }
 
-export function getConnectionName(connectionType: ConnectionType, isMetaMask?: boolean) {
+export function getConnectionName(connectionType: ConnectionType, isMetaMask?: boolean, isTronLink?: boolean) {
   switch (connectionType) {
     case ConnectionType.INJECTED:
-      return isMetaMask ? 'MetaMask' : 'Injected';
+      return isMetaMask ? 'MetaMask' : isTronLink ? 'TronLink' : 'Injected';
     case ConnectionType.COINBASE_WALLET:
       return 'Coinbase Wallet';
     case ConnectionType.WALLET_CONNECT:
       return 'WalletConnect';
     case ConnectionType.NETWORK:
       return 'Network';
+    case ConnectionType.TRON_LINK:
+      return 'TronLink';
   }
 }
