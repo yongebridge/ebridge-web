@@ -2,6 +2,7 @@ import * as AELF_Test from './AELF';
 import * as tDVV_Test from './tDVV';
 import * as BSC_TESTNET from './BSC_Test';
 import * as SEPOLIA from './sepolia';
+import * as TRON_NILE_TESTNET from './tron_nile_testnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
@@ -38,8 +39,9 @@ export const ACTIVE_CHAIN: any = {
   [SupportedELFChainId.tDVV]: true,
   [SupportedChainId.BSC_TESTNET]: true,
   [SupportedChainId.SEPOLIA]: true,
+  [SupportedChainId.TRON_NILE_TESTNET]: true,
 };
-export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB'];
+export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'WTRX'];
 
 export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: string } = {
   [SupportedChainId.MAINNET]: 'Ethereum',
@@ -121,7 +123,11 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
 };
 
 export const NetworkList = [
-  { title: CHAIN_NAME[SupportedChainId.SEPOLIA], icon: CHAIN_ICON[SupportedChainId.SEPOLIA], info: SEPOLIA.CHAIN_INFO },
+  {
+    title: CHAIN_NAME[SupportedChainId.SEPOLIA],
+    icon: CHAIN_ICON[SupportedChainId.SEPOLIA],
+    info: SEPOLIA.CHAIN_INFO,
+  },
   {
     title: CHAIN_NAME[SupportedELFChainId.AELF],
     icon: CHAIN_ICON[SupportedELFChainId.AELF],
@@ -136,6 +142,11 @@ export const NetworkList = [
     title: CHAIN_NAME[SupportedChainId.BSC_TESTNET],
     icon: CHAIN_ICON[SupportedChainId.BSC_TESTNET],
     info: BSC_TESTNET.CHAIN_INFO,
+  },
+  {
+    title: CHAIN_NAME[SupportedChainId.TRON_NILE_TESTNET],
+    icon: CHAIN_ICON[SupportedChainId.TRON_NILE_TESTNET],
+    info: TRON_NILE_TESTNET.CHAIN_INFO,
   },
 ] as unknown as NetworkType[];
 
@@ -158,6 +169,12 @@ export const FormatTokenList = [
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
+  },
+  {
+    fromChainId: [SupportedChainId.TRON_NILE_TESTNET],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    fromSymbol: 'WTRX',
+    toSymbol: 'TRX',
   },
 ];
 

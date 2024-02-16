@@ -14,6 +14,12 @@
       "decimals": 18,
       "symbol": "ELF",
       "address": "0x8adD57b8aD6C291BC3E3ffF89F767fcA08e0E7Ab"
+    },
+    "3448148188": {
+      "name": "ELF Token",
+      "decimals": 18,
+      "symbol": "ELF",
+      "address": "41ea4f9a8f4c15c97aa4568f933ee513ae7d80ad81"
     }
   },
   "USDT": {
@@ -49,6 +55,12 @@
       "decimals": 6,
       "symbol": "USDT",
       "address": "0x60eeCc4d19f65B9EaDe628F2711C543eD1cE6679"
+    },
+    "3448148188": {
+      "name": "USDT Token",
+      "decimals": 6,
+      "symbol": "USDT",
+      "address": "4117d47dfe41b646025398a53496d2ae7618078f8b"
     }
   },
   "ETH": {
@@ -79,6 +91,17 @@
       "symbol": "ETH",
       "address": "0x035900292c309d8beCBCAFb3227238bec0EBa253",
       "isNativeToken": true
+    }
+  },
+  "TRX": {
+    "AELF": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
+    "tDVV": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
+    "tDVW": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
+    "3448148188": {
+      "name": "TRX Token",
+      "decimals": 18,
+      "symbol": "TRX",
+      "address": "41bd483e11ad5bbc75c516973fa5135c51a97cbfc2"
     }
   },
   "BNB": {
