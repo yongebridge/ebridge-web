@@ -32,6 +32,9 @@ export const CHAIN_ID_MAP = {
   [SupportedChainId.GORELI]: 'Goerli',
   [SupportedChainId.BSC_TESTNET]: 'BSCTest',
   [SupportedChainId.SEPOLIA]: 'Sepolia',
+  [SupportedChainId.TRON_MAINNET]: 'Tron_Mainnet',
+  [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron_Shasta_Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron_Nile_Testnet',
 };
 
 export const SUPPORTED_TRON_CHAIN_IDS = [
@@ -42,6 +45,20 @@ export const SUPPORTED_TRON_CHAIN_IDS = [
 
 export const SUPPORTED_ELF_CHAIN_IDS = [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW];
 
+export const SUPPORTED_ERC_CHAIN_IDS = [
+  SupportedChainId.BSC_MAINNET,
+  SupportedChainId.BSC_TESTNET,
+  SupportedChainId.GORELI,
+  SupportedChainId.HECO_MAINNET,
+  SupportedChainId.HECO_TESTNET,
+  SupportedChainId.KOVAN,
+  SupportedChainId.MAINNET,
+  SupportedChainId.OEC_MAINNET,
+  SupportedChainId.OEC_TESTNET,
+  SupportedChainId.POLYGON_MAINNET,
+  SupportedChainId.POLYGON_TESTNET,
+  SupportedChainId.SEPOLIA,
+];
 /**
  * Array of all the supported chain IDs
  */

@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { ZERO } from 'constants/misc';
-import { getELFChainBalance, getBalance, getETHBalance } from 'contracts';
+import { getELFChainBalance, getBalance, getETHBalance, getTRCChainBalance } from 'contracts';
 import { useCallback, useMemo, useState } from 'react';
 import { Web3Type } from 'types';
 import { isERCAddress } from 'utils';
 import { isELFChain } from 'utils/aelfUtils';
 import { useTokenContract } from './useContract';
 import useInterval from './useInterval';
+import { isChainSupportedByTRC } from 'utils/common';
 
 export const useBalances = (
   wallet?: Web3Type,
@@ -28,6 +29,12 @@ export const useBalances = (
         if (!tokenContract) return '0';
         if (symbol) return getELFChainBalance(tokenContract, symbol, account);
       });
+    } else if (isChainSupportedByTRC(chainId)) {
+      // trc chain
+      promise = tokensList.map((tokenAddress) => {
+        // if (!tokenContract) return '0';
+        if (tokenAddress) return getTRCChainBalance(tokenAddress, owner);
+      });
     } else {
       // erc20 chain
       promise = tokensList.map((i) => {
@@ -43,7 +50,7 @@ export const useBalances = (
       if (key) obj[key + account + chainId] = bs[index];
     });
     setBalanceMap((preObj) => ({ ...preObj, ...obj }));
-  }, [account, tokensList, chainId, tokenContract, library]);
+  }, [account, tokensList, chainId, tokenContract, library, owner]);
   useInterval(onGetBalance, delay, [onGetBalance, library, tokenContract]);
   const memoBalances = useMemo(() => {
     if (tokensList) return tokensList.map((key) => (balanceMap && key ? balanceMap[key + account + chainId] : ZERO));
