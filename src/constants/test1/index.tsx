@@ -8,13 +8,20 @@ import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
 import { IconInfo } from 'types/misc';
 
-export type ChainConstantsType = typeof AELF_Test | typeof tDVV_Test | typeof SEPOLIA | typeof BSC_TESTNET;
+export type ChainConstantsType =
+  | typeof AELF_Test
+  | typeof tDVV_Test
+  | typeof SEPOLIA
+  | typeof BSC_TESTNET
+  | typeof TRON_NILE_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
+export type TRC_CHAIN_TYPE = keyof typeof SupportedTRCChain;
 export type ELF_CHAIN_TYPE = keyof typeof SupportedELFChain;
 
 export const DEFAULT_ELF_CHAIN = SupportedELFChainId.AELF;
 export const DEFAULT_ERC_CHAIN = SupportedChainId.SEPOLIA;
+export const DEFAULT_TRC_CHAIN = SupportedChainId.TRON_NILE_TESTNET;
 
 export const DEFAULT_MODAL_INITIAL_STATE = {
   fromOptions: { chainType: 'ERC', chainId: DEFAULT_ERC_CHAIN },
@@ -28,6 +35,11 @@ export const SupportedERCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.SEPOLIA]: SEPOLIA,
 };
 export const DEFAULT_ERC_CHAIN_INFO = SupportedERCChain[DEFAULT_ERC_CHAIN].CHAIN_INFO;
+
+export const SupportedTRCChain: { [k: string | number]: ChainConstantsType } = {
+  [SupportedChainId.TRON_NILE_TESTNET]: TRON_NILE_TESTNET,
+};
+export const DEFAULT_TRC_CHAIN_INFO = SupportedTRCChain[DEFAULT_TRC_CHAIN].CHAIN_INFO;
 
 export const SupportedELFChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedELFChainId.AELF]: AELF_Test,

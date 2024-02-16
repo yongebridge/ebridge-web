@@ -20,13 +20,16 @@ export type ChainConstantsType =
   | typeof tDVW_Test
   | typeof GORELI
   | typeof SEPOLIA
-  | typeof BSC_TESTNET;
+  | typeof BSC_TESTNET
+  | typeof TRON_NILE_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type ELF_CHAIN_TYPE = keyof typeof SupportedELFChain;
+export type TRC_CHAIN_TYPE = keyof typeof SupportedTRCChain;
 
 export const DEFAULT_ELF_CHAIN = SupportedELFChainId.AELF;
 export const DEFAULT_ERC_CHAIN = SupportedChainId.SEPOLIA;
+export const DEFAULT_TRC_CHAIN = SupportedChainId.TRON_NILE_TESTNET;
 
 export const DEFAULT_MODAL_INITIAL_STATE = {
   fromOptions: { chainType: 'ERC', chainId: DEFAULT_ERC_CHAIN },
@@ -42,7 +45,11 @@ export const SupportedERCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.BSC_TESTNET]: BSC_TESTNET,
   [SupportedChainId.SEPOLIA]: SEPOLIA,
 };
+export const SupportedTRCChain: { [k: string | number]: ChainConstantsType } = {
+  [SupportedChainId.TRON_NILE_TESTNET]: TRON_NILE_TESTNET,
+};
 export const DEFAULT_ERC_CHAIN_INFO = SupportedERCChain[DEFAULT_ERC_CHAIN].CHAIN_INFO;
+export const DEFAULT_TRC_CHAIN_INFO = SupportedTRCChain[DEFAULT_TRC_CHAIN].CHAIN_INFO;
 
 export const SupportedELFChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedELFChainId.AELF]: AELF_Test,
@@ -55,6 +62,7 @@ export const ACTIVE_CHAIN: any = {
   [SupportedELFChainId.tDVW]: true,
   [SupportedChainId.BSC_TESTNET]: true,
   [SupportedChainId.SEPOLIA]: true,
+  [SupportedChainId.TRON_NILE_TESTNET]: true,
 };
 export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'WTRX'];
 

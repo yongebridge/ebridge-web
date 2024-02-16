@@ -1,11 +1,18 @@
 import { Connector } from '@web3-react/types';
-import { ALL_SUPPORTED_CHAIN_IDS, SupportedChainId } from 'constants/chain';
+import {
+  ALL_SUPPORTED_CHAIN_IDS,
+  SUPPORTED_ERC_CHAIN_IDS,
+  SUPPORTED_TRON_CHAIN_IDS,
+  SupportedChainId,
+} from 'constants/chain';
 import storages from 'constants/storages';
 import { eventBus } from 'utils';
 import {
   coinbaseWalletConnection,
   injectedConnection,
   networkConnection,
+  tronLink,
+  tronLinkWalletConnection,
   walletConnectConnection,
 } from 'walletConnectors';
 import { isELFChain } from './aelfUtils';
@@ -31,48 +38,56 @@ type Info = {
  * @returns {boolean} true if the setup succeeded, false otherwise
  */
 export const switchNetwork = async (info: Info): Promise<boolean> => {
-  let provider = window.ethereum;
   try {
-    if (provider?.providerMap) {
-      for (const [key, value] of provider.providerMap) {
-        if (key === 'MetaMask' && value?.isMetaMask) provider = value;
-      }
-    }
-  } catch (error) {
-    console.log(error, '======error');
-  }
+    const { chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
 
-  const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
-  if (typeof info.chainId === 'string') {
-    eventBus.emit(storages.userELFChainId, info.chainId);
-    return true;
-  }
-  eventBus.emit(storages.userERCChainId, info.chainId);
-  if (!provider?.request) {
-    console.error("Can't setup the RPC network on metamask because window.ethereum is undefined");
-    return false;
-  }
-  try {
-    if (nativeCurrency && chainName) {
-      await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: `0x${chainId.toString(16)}`,
-            chainName,
-            nativeCurrency,
-            rpcUrls,
-            iconUrls,
-            blockExplorerUrls,
-          },
-        ],
-      });
-    } else {
-      await provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${chainId.toString(16)}` }],
-      });
+    const chainIdNumber = Number(info.chainId);
+
+    if (SUPPORTED_ERC_CHAIN_IDS.includes(chainIdNumber)) {
+      eventBus.emit(storages.userERCChainId, chainIdNumber);
+
+      let provider = window.ethereum;
+      try {
+        if (provider?.providerMap) {
+          for (const [key, value] of provider.providerMap) {
+            if (key === 'MetaMask' && value?.isMetaMask) provider = value;
+          }
+        }
+      } catch (error) {
+        console.log(error, '======error');
+      }
+
+      if (!provider?.request) {
+        console.error("Can't setup the RPC network on metamask because window.ethereum is undefined");
+        return false;
+      }
+
+      if (nativeCurrency && chainName) {
+        await provider.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: `0x${chainIdNumber.toString(16)}`,
+              chainName,
+              nativeCurrency,
+              rpcUrls,
+              iconUrls,
+              blockExplorerUrls,
+            },
+          ],
+        });
+      } else {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${chainIdNumber.toString(16)}` }],
+        });
+      }
+    } else if (SUPPORTED_TRON_CHAIN_IDS.includes(chainIdNumber)) {
+      eventBus.emit(storages.userTRCChainId, chainIdNumber);
+    } else if (typeof info.chainId === 'string') {
+      eventBus.emit(storages.userELFChainId, info.chainId);
     }
+
     return true;
   } catch (error) {
     console.error('switchNetwork', error);
@@ -84,6 +99,7 @@ export function isChainAllowed(connector: Connector, chainId: number) {
     case injectedConnection.connector:
     case coinbaseWalletConnection.connector:
     case walletConnectConnection.connector:
+    case tronLinkWalletConnection.connector:
     case networkConnection.connector:
       return ALL_SUPPORTED_CHAIN_IDS.includes(chainId);
     default:
@@ -133,8 +149,52 @@ export const switchChain = async (
     return true;
   }
   if (!isELFChain(info.chainId) && web3ChainId === info.chainId) return;
-  eventBus.emit(storages.userERCChainId, info.chainId);
+
   if (!connector || typeof connector === 'string') return;
+
+  if (SUPPORTED_TRON_CHAIN_IDS.includes(Number(info.chainId))) {
+    eventBus.emit(storages.userTRCChainId, info.chainId);
+
+    const connector = tronLink;
+
+    try {
+      // send Tronlink transaction process
+      if (!window.tronWeb) {
+        CommonMessage.error('Please Install TronLink wallet.');
+        return false;
+      } else {
+        // if tronlink is installed in chrome
+        // check tronlink is connect wallet in website
+        const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
+        if (!response) {
+          // if tronlink is not connected .....
+          CommonMessage.error('Please Unlock the TronLink wallet, switch to Nile Testnet and then try again.');
+          return false;
+        } else if (response === 200) {
+          // get tronlink current chains config
+          console.log('All ok');
+        } else {
+          // if node not correct .....
+          console.log('Else ok: ', response);
+          // connector.activate();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    return;
+  } else {
+    if (tronLink.customProvider?.isTronLink) {
+      tronLink.resetState();
+      return;
+    }
+  }
+
+  if (SUPPORTED_ERC_CHAIN_IDS.includes(Number(info.chainId))) {
+    eventBus.emit(storages.userERCChainId, info.chainId);
+  }
+
   if (isWeb3Active) {
     if (!isChainAllowed(connector, chainId)) {
       throw new Error(`Chain ${chainId} not supported for connector (${typeof connector})`);
