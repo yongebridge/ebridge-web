@@ -5,8 +5,6 @@ import * as AELF_Test from '../platform/AELF_Test';
 import * as tDVV_Test from '../platform/tDVV_Test';
 import * as tDVW_Test from '../platform/tDVW_Test';
 import * as BSC_TESTNET from '../platform/BSC_Test';
-import * as TRON_NILE_TESTNET from '../platform/TRON_Nile_Testnet';
-import * as TRON_SHASTA_TESTNET from '../platform/TRON_Shasta_Testnet';
 import * as SEPOLIA from '../platform/sepolia';
 import * as TRON_NILE_TESTNET from '../platform/TRON_Nile_Testnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
