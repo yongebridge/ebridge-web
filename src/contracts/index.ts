@@ -4,7 +4,6 @@ import { ChainId } from 'types';
 import { checkELFApprove } from './elf';
 import { checkErcApprove } from './ethereum';
 import { checkTrcApprove } from './tron';
-
 import { isChainSupportedByTRC } from 'utils/common';
 
 export const checkApprove = async (

@@ -19,7 +19,7 @@
       "name": "ELF Token",
       "decimals": 18,
       "symbol": "ELF",
-      "address": "41ea4f9a8f4c15c97aa4568f933ee513ae7d80ad81"
+      "address": "TXL8Uuto8oxWKEC8HQrL7jxWyJPhC4Tcnd"
     }
   },
   "USDT": {
@@ -60,7 +60,7 @@
       "name": "USDT Token",
       "decimals": 6,
       "symbol": "USDT",
-      "address": "4117d47dfe41b646025398a53496d2ae7618078f8b"
+      "address": "TC9D6ghWXUcGPdhvJZPMVvmST5WkX6Rock"
     }
   },
   "ETH": {
@@ -101,7 +101,7 @@
       "name": "TRX Token",
       "decimals": 18,
       "symbol": "TRX",
-      "address": "41bd483e11ad5bbc75c516973fa5135c51a97cbfc2"
+      "address": "TTE3FosJrL3kHdHTtKup7nruQYYSCBfDoZ"
     }
   },
   "BNB": {

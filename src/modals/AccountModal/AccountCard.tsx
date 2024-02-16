@@ -11,10 +11,11 @@ import WalletIcon from 'components/WalletIcon';
 import { SUPPORTED_WALLETS } from 'constants/wallets';
 import { getConnection } from 'walletConnectors/utils';
 import { useChainDispatch } from 'contexts/useChain';
-import { setSelectERCWallet } from 'contexts/useChain/actions';
+import { setSelectERCWallet, setSelectTRCWallet } from 'contexts/useChain/actions';
 import { clearWCStorageByDisconnect } from 'utils/localStorage';
 import { formatAddress } from 'utils/chain';
 import CommonMessage from 'components/CommonMessage';
+import { isChainSupportedByTRC } from 'utils/common';
 
 function AccountCard() {
   const [{ accountWallet, accountChainId }, { dispatch }] = useModal();
@@ -48,7 +49,11 @@ function AccountCard() {
       } catch (error) {
         console.log('error: ', error);
       } finally {
-        chainDispatch(setSelectERCWallet(undefined));
+        if (isChainSupportedByTRC(accountChainId)) {
+          chainDispatch(setSelectTRCWallet(undefined));
+        } else {
+          chainDispatch(setSelectERCWallet(undefined));
+        }
         clearWCStorageByDisconnect();
       }
     } else {
@@ -57,7 +62,7 @@ function AccountCard() {
     dispatch(
       basicModalView.setWalletModal(true, {
         walletWalletType: walletType,
-        walletChainType: walletType === 'ERC' ? 'ERC' : 'ELF',
+        walletChainType: walletType === 'ERC' ? 'ERC' : walletType === 'TRC' ? 'TRC' : 'ELF',
         walletChainId: chainId,
       }),
     );
@@ -68,7 +73,7 @@ function AccountCard() {
       return dispatch(
         basicModalView.setWalletModal(true, {
           walletWalletType: walletType,
-          walletChainType: walletType === 'ERC' ? 'ERC' : 'ELF',
+          walletChainType: walletType === 'ERC' ? 'ERC' : walletType === 'TRC' ? 'TRC' : 'ELF',
           walletChainId: chainId,
         }),
       );
@@ -78,6 +83,7 @@ function AccountCard() {
     }
   }, [chainId, dispatch, walletType]);
   const isELF = isELFChain(chainId);
+  const isTRC = isChainSupportedByTRC(chainId);
 
   return (
     <>
@@ -111,6 +117,8 @@ function AccountCard() {
                     href={getExploreLink(account, 'address', accountChainId)}>
                     {isELF
                       ? `View on ${new URL(getExploreLink(account, 'address', accountChainId)).host}`
+                      : isTRC
+                      ? 'View on Tronscan'
                       : 'View on Etherscan'}
                   </CommonLink>
                 ) : null}

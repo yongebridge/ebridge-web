@@ -7,6 +7,7 @@ export const eventBus = new EventEmitter();
 import { getAddress } from '@ethersproject/address';
 import AElf from 'aelf-sdk';
 import { NATIVE_TOKEN_LIST } from 'constants/index';
+import { isChainSupportedByTRC } from 'utils/common';
 
 export const sleep = (time: number) => {
   return new Promise<string>((resolve) => {
@@ -23,8 +24,8 @@ export function getExploreLink(
   let prefix;
   if (isELFChain(chainId)) {
     prefix = ELFChainConstants.constants[chainId as AelfInstancesKey]?.CHAIN_INFO?.exploreUrl;
-  } else if (SUPPORTED_TRON_CHAIN_IDS.some((item) => item.toString() == chainId)) {
-    prefix = TRCChainConstants.constants?.CHAIN_INFO.exploreUrl;
+  } else if (isChainSupportedByTRC(chainId)) {
+    prefix = TRCChainConstants.constants?.CHAIN_INFO.exploreUrl.concat('#/');
   } else {
     prefix = ERCChainConstants.constants.CHAIN_INFO.exploreUrl;
   }

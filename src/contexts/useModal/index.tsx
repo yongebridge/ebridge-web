@@ -73,7 +73,16 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     }
 
     return [walletWallet, accountWallet];
-  }, [accountChainId, accountWalletType, aelfWallet, portkeyWallet, walletChainId, walletWalletType, web3Wallet]);
+  }, [
+    accountChainId,
+    accountWalletType,
+    aelfWallet,
+    portkeyWallet,
+    walletChainId,
+    walletWalletType,
+    web3Wallet,
+    trcWebWallet,
+  ]);
 
   useEffect(() => {
     if (switchChainInConnectPorkey?.status) {
