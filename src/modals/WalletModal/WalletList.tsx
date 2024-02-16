@@ -13,9 +13,7 @@ import { SUPPORTED_WALLETS } from 'constants/wallets';
 import { getConnection } from 'walletConnectors/utils';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
 import { TronLink } from '@web3-react/tron-link';
-
-import { DEFAULT_ERC_CHAIN_INFO } from 'constants/index';
-import { DEFAULT_TRC_CHAIN_INFO } from 'constants/index';
+import { DEFAULT_ERC_CHAIN_INFO, DEFAULT_TRC_CHAIN_INFO } from 'constants/index';
 import { switchChain } from 'utils/network';
 import { sleep } from 'utils';
 import { isPortkey, isPortkeyConnector } from 'utils/portkey';

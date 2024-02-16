@@ -20,6 +20,17 @@ export function getIsMetaMask(): boolean {
 export function getIsCoinbaseWallet(): boolean {
   return window.ethereum?.isCoinbaseWallet ?? false;
 }
+export function getIsTronLink(): boolean {
+  return Boolean(window.tronWeb);
+}
+
+const CONNECTIONS = [
+  injectedConnection,
+  coinbaseWalletConnection,
+  walletConnectConnection,
+  networkConnection,
+  tronLinkWalletConnection,
+];
 
 export function getIsTronLink(): boolean {
   return Boolean(window.tronWeb);

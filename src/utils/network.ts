@@ -160,14 +160,16 @@ export const switchChain = async (
     try {
       // send Tronlink transaction process
       if (!window.tronWeb) {
-        throw new Error('Please Install TronLink wallet.');
+        CommonMessage.error('Please Install TronLink wallet.');
+        return false;
       } else {
         // if tronlink is installed in chrome
         // check tronlink is connect wallet in website
         const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
         if (!response) {
           // if tronlink is not connected .....
-          throw new Error('Please Unlock the TronLink wallet and switch to Nile Testnet');
+          CommonMessage.error('Please Unlock the TronLink wallet, switch to Nile Testnet and then try again.');
+          return false;
         } else if (response === 200) {
           // get tronlink current chains config
           console.log('All ok');

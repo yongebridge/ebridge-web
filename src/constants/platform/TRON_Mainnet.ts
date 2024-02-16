@@ -1,5 +1,7 @@
+import { SupportedChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 728126428,
+  chainId: SupportedChainId.TRON_MAINNET,
   exploreUrl: 'https://tronscan.io/',
   rpcUrl: 'https://api.trongrid.io',
   chainName: 'TRON Mainnet',

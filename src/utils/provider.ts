@@ -19,7 +19,7 @@ export function isUserDenied(m: string) {
 }
 
 export const getDefaultProvider = () => {
-  const defaultProvider = new Web3.providers.HttpProvider(ERCChainConstants.constants.CHAIN_INFO.rpcUrl, {
+  const defaultProvider = new Web3.providers.HttpProvider(ERCChainConstants.constants?.CHAIN_INFO.rpcUrl, {
     keepAlive: true,
     withCredentials: false,
     timeout: 20000, // ms

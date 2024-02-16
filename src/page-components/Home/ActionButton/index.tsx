@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import CommonButton from 'components/CommonButton';
 import { useWallet } from 'contexts/useWallet/hooks';
 import { useBridgeContract, useBridgeOutContract, useCrossChainContract, useTokenContract } from 'hooks/useContract';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, Dispatch, SetStateAction } from 'react';
 import styles from './styles.module.less';
 import { CrossChainTransfer, CrossChainReceive, CreateReceipt, SwapToken, LockToken } from 'utils/crossChain';
 import { useHomeContext } from '../HomeContext';
@@ -26,7 +26,11 @@ import CommonMessage from 'components/CommonMessage';
 import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
 import { getChainIdForContract } from 'contracts';
 
-function Actions() {
+type ActionsProps = {
+  updateShowNotice: Dispatch<SetStateAction<boolean>>;
+};
+
+function Actions({ updateShowNotice }: ActionsProps) {
   const { fromWallet, toWallet, isHomogeneous } = useWallet();
   const [toConfirmModal, setToConfirmModal] = useState<boolean>(false);
   const [
@@ -295,6 +299,7 @@ function Actions() {
     let children = 'Transfer',
       onClick: any,
       disabled = true;
+    updateShowNotice(true);
     if (isHomogeneous) {
       if (!toAccount) {
         children = 'Connect Wallet';
@@ -314,7 +319,8 @@ function Actions() {
 
     // invalid to chain
     if (toChainId && !ACTIVE_CHAIN[toChainId]) {
-      children = 'Invalid to chain';
+      children = t('Please Switch Network'); // 'Invalid to chain';
+      updateShowNotice(false);
       return { children, onClick, disabled };
     }
     // receive
@@ -346,7 +352,8 @@ function Actions() {
       }
       // invalid from chain
       if (fromChainId && !ACTIVE_CHAIN[fromChainId]) {
-        children = 'Invalid from chain';
+        children = t('Please Switch Network'); // 'Invalid from chain';
+        updateShowNotice(false);
         return { children, onClick, disabled };
       }
 
@@ -425,10 +432,14 @@ function Actions() {
   );
 }
 
-export default function ActionButton() {
+type ActionButtonProps = {
+  updateShowNotice: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function ActionButton({ updateShowNotice }: ActionButtonProps) {
   return (
     <div className={clsx(styles['action-btn-row'], 'flex-center')}>
-      <Actions />
+      <Actions updateShowNotice={updateShowNotice} />
     </div>
   );
 }

@@ -9,6 +9,7 @@ export declare type ChainState = {
   selectERCWallet?: ConnectionType;
   selectTRCWallet?: ConnectionType;
   selectELFWallet?: WalletType;
+  setSelectTRCWallet?: ConnectionType;
 };
 
 export enum ChainActions {

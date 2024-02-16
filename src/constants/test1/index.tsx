@@ -3,7 +3,6 @@ import * as tDVV_Test from './tDVV';
 import * as BSC_TESTNET from './BSC_Test';
 import * as SEPOLIA from './sepolia';
 import * as TRON_NILE_TESTNET from './tron_nile_testnet';
-import * as TRON_SHASTA_TESTNET from './tron_shasta_testnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
@@ -14,8 +13,7 @@ export type ChainConstantsType =
   | typeof tDVV_Test
   | typeof SEPOLIA
   | typeof BSC_TESTNET
-  | typeof TRON_NILE_TESTNET
-  | typeof TRON_SHASTA_TESTNET;
+  | typeof TRON_NILE_TESTNET;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type TRC_CHAIN_TYPE = keyof typeof SupportedTRCChain;
@@ -41,9 +39,7 @@ export const DEFAULT_ERC_CHAIN_INFO = SupportedERCChain[DEFAULT_ERC_CHAIN].CHAIN
 
 export const SupportedTRCChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedChainId.TRON_NILE_TESTNET]: TRON_NILE_TESTNET,
-  [SupportedChainId.TRON_SHASTA_TESTNET]: TRON_SHASTA_TESTNET,
 };
-
 export const DEFAULT_TRC_CHAIN_INFO = SupportedTRCChain[DEFAULT_TRC_CHAIN].CHAIN_INFO;
 
 export const SupportedELFChain: { [k: string | number]: ChainConstantsType } = {
@@ -61,7 +57,7 @@ export const ACTIVE_CHAIN: any = {
   [SupportedChainId.TRON_NILE_TESTNET]: true,
   [SupportedChainId.TRON_SHASTA_TESTNET]: true,
 };
-export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'TRX'];
+export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'WTRX'];
 
 export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: string } = {
   [SupportedChainId.MAINNET]: 'Ethereum',
@@ -83,6 +79,9 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedELFChainId.tDVV]: 'SideChain tDVV Testnet',
   [SupportedELFChainId.tDVW]: 'SideChain tDVW Testnet',
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
+  [SupportedChainId.TRON_MAINNET]: 'Tron Mainnet',
+  [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron Shasta Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron Nile Testnet',
 };
 
 export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
@@ -141,13 +140,14 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedChainId.TRON_NILE_TESTNET]: {
     type: 'tronLink',
   },
-  [SupportedChainId.TRON_DEVNET]: {
-    type: 'tronLink',
-  },
 };
 
 export const NetworkList = [
-  { title: CHAIN_NAME[SupportedChainId.SEPOLIA], icon: CHAIN_ICON[SupportedChainId.SEPOLIA], info: SEPOLIA.CHAIN_INFO },
+  {
+    title: CHAIN_NAME[SupportedChainId.SEPOLIA],
+    icon: CHAIN_ICON[SupportedChainId.SEPOLIA],
+    info: SEPOLIA.CHAIN_INFO,
+  },
   {
     title: CHAIN_NAME[SupportedELFChainId.AELF],
     icon: CHAIN_ICON[SupportedELFChainId.AELF],
@@ -227,22 +227,20 @@ export const CrossChainTimeList = [
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [
-      SupportedChainId.TRON_DEVNET,
       SupportedChainId.TRON_MAINNET,
       SupportedChainId.TRON_NILE_TESTNET,
       SupportedChainId.TRON_SHASTA_TESTNET,
     ],
-    time: '10 minutes',
+    time: '10',
   },
   {
     fromChainId: [
-      SupportedChainId.TRON_DEVNET,
       SupportedChainId.TRON_MAINNET,
       SupportedChainId.TRON_NILE_TESTNET,
       SupportedChainId.TRON_SHASTA_TESTNET,
     ],
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
-    time: '10 minutes',
+    time: '10',
   },
 ];
 

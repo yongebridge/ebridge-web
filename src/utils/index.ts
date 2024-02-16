@@ -86,6 +86,7 @@ function chainIdToNetworkName(chainId?: ChainId): Network {
     case SupportedELFChainId.tDVW:
     case SupportedChainId.SEPOLIA:
     case SupportedChainId.BSC_TESTNET:
+    case SupportedChainId.TRON_NILE_TESTNET:
       return 'AELF';
     default:
       return 'AELF';

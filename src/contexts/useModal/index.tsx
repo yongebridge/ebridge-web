@@ -1,5 +1,5 @@
 import { BasicActions } from 'contexts/utils';
-import { useAElf, usePortkey, useTRCWeb, useWeb3 } from 'hooks/web3';
+import { useAElf, usePortkey, useWeb3, useTRCWeb } from 'hooks/web3';
 import React, { createContext, useContext, useEffect, useMemo, useReducer } from 'react';
 import { ModalActions, ModalState, basicModalView } from './actions';
 import { formatPortkeyWallet } from 'contexts/useWallet/utils';

@@ -63,4 +63,5 @@ export interface WalletInfo {
   mobile?: true;
   mobileOnly?: true;
   iconType: string;
+  version?: string;
 }
