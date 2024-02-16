@@ -5,7 +5,6 @@ import { MetaMask } from '@web3-react/metamask';
 import { TronLink } from '@web3-react/tron-link';
 import { Network } from '@web3-react/network';
 import { SupportedChainId } from 'constants/chain';
-// import { SupportedTRONChainId } from 'constants/chain';
 import { Connector } from '@web3-react/types';
 import * as MAINNET from 'constants/platform/main';
 import * as BSC_TESTNET from 'constants/platform/BSC_Test';
