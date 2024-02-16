@@ -2,7 +2,6 @@ import { Collapse } from 'antd';
 import clsx from 'clsx';
 import IconFont from 'components/IconFont';
 import { useWallet } from 'contexts/useWallet/hooks';
-import { SUPPORTED_TRON_CHAIN_IDS, SUPPORTED_ELF_CHAIN_IDS } from 'constants/chain';
 import { useLanguage } from 'i18n';
 import { useMemo, useState } from 'react';
 import { Trans } from 'react-i18next';
@@ -39,6 +38,7 @@ function Heterogeneous() {
     [isHomogeneous, toChainId],
   );
   const time = useMemo(() => getCrossChainTime(fromChainId, toChainId), [toChainId, fromChainId]);
+
   if (isHeterogeneousCrossInChain) {
     return (
       <>
