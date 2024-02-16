@@ -10,7 +10,7 @@ import { setFromWallet, setToWallet } from 'contexts/useWallet/actions';
 import { useWalletActions } from 'contexts/useWallet/hooks';
 import { usePortkey, useWeb3 } from 'hooks/web3';
 import { isChainSupportedByTRC } from 'utils/common';
-import { useCallback, useMemo, memo } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Trans } from 'react-i18next';
 import { ChainType, NetworkType, Web3Type } from 'types';
 import { shortenString } from 'utils';
