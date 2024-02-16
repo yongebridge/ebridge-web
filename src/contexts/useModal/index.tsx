@@ -59,9 +59,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       case 'ERC':
         walletWallet = web3Wallet;
         break;
-      case 'TRC':
-        walletWallet = trcWebWallet;
-        break;
       case 'PORTKEY':
         walletWallet = formatPortkeyWallet(portkeyWallet, walletChainId as any);
         break;
