@@ -1,4 +1,3 @@
-// import { tronWeb } from "tronweb";
 import { Connector } from '@web3-react/types';
 import {
   coinbaseWalletConnection,
@@ -32,17 +31,6 @@ const CONNECTIONS = [
   tronLinkWalletConnection,
 ];
 
-export function getIsTronLink(): boolean {
-  return Boolean(window.tronWeb);
-}
-
-const CONNECTIONS = [
-  injectedConnection,
-  coinbaseWalletConnection,
-  walletConnectConnection,
-  networkConnection,
-  tronLinkWalletConnection,
-];
 export function getConnection(c: Connector | ConnectionType) {
   if (c instanceof Connector) {
     const connection = CONNECTIONS.find((connection) => connection.connector === c);
