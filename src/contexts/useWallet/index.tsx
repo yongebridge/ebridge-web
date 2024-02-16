@@ -77,8 +77,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
   const aelfWallet = useAElf();
   const web3Wallet = useWeb3();
-  const trcWebWallet = useTRCWeb();
   const portkeyWallet = usePortkey();
+  const trcWebWallet = useTRCWeb();
   const [fromWallet, toWallet]: [Web3Type, Web3Type] = useMemo(
     () => [
       getWalletByOptions(aelfWallet, web3Wallet, portkeyWallet, trcWebWallet, fromOptions, selectELFWallet),
