@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FromCard, ToCard } from './Card';
 import HomeProvider from './HomeContext';
 import SelectTokenModal from './SelectTokenModal';
@@ -22,7 +21,6 @@ import LimitAmountDescModal from './LimitAmountDescModal';
 export default function Home() {
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
-  const [isShowNotice, setShowNotice] = useState(false);
   const { isShowMask, isLoading } = useMaskQuery();
   // const isShowMask = false,
   //   isLoading = false;
@@ -40,11 +38,11 @@ export default function Home() {
             <FromCard />
             <ChangeIcon />
             <ToCard />
-            {isShowNotice && <Notice />}
-            {!isMd && <ActionButton updateShowNotice={setShowNotice} />}
+            <Notice />
+            {!isMd && <ActionButton />}
             <History />
           </div>
-          {isMd && <ActionButton updateShowNotice={setShowNotice} />}
+          {isMd && <ActionButton />}
           <SelectTokenModal />
           <AddTokenModal />
           {isMd ? <NotificationForPhone /> : <Notification />}
