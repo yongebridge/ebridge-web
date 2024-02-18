@@ -89,6 +89,12 @@ export function PortkeyReactProvider({ children, networkType: propsNetworkType }
         provider.request({ method: MethodsWallet.GET_WALLET_NAME }),
         provider.request({ method: MethodsBase.NETWORK }),
       ]);
+      // WORK AROUND HACK FOR V1->MAIN AND V2->MAINNET
+      if (PortkeyNameVersion.v1 == versionName && propsNetworkType === 'MAINNET') {
+        propsNetworkType = 'MAIN';
+      } else if (PortkeyNameVersion.v2 == versionName && propsNetworkType === 'MAIN') {
+        propsNetworkType = 'MAINNET';
+      }
       if (networkType !== propsNetworkType) throw Error('networkType error');
       dispatch({
         type: Actions.ACTIVATE,

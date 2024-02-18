@@ -22,7 +22,7 @@ export type PortkeyNode = {
 export interface PortkeyReactProviderProps {
   children: ReactNode;
   appName: string;
-  networkType: NetworkType;
+  networkType: NetworkType | 'MAIN'; // HACK FOR PORTKEY V1 TYPE ISSUE
   nodes?:
     | {
         [key: string]: PortkeyNode;
