@@ -1,6 +1,5 @@
 import { WalletInfo } from 'types';
 import { coinbaseWallet, injected, walletConnect } from 'walletConnectors';
-import { isMobileDevices } from 'utils/isMobile';
 import { PortkeyNameVersion } from '../contexts/usePortkey/constants';
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
@@ -18,17 +17,13 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
   },
-  // Hide coinbase wallet option in mobile device
-  // Ticket EB-3000131432
-  ...(!isMobileDevices() && {
-    COINBASE_WALLET: {
-      connector: coinbaseWallet,
-      name: 'Coinbase Wallet',
-      iconType: 'coinbaseWallet',
-      description: 'Connect to Coinbase Wallet',
-      href: null,
-    },
-  }),
+  COINBASE_WALLET: {
+    connector: coinbaseWallet,
+    name: 'Coinbase Wallet',
+    iconType: 'coinbaseWallet',
+    description: 'Connect to Coinbase Wallet',
+    href: null,
+  },
   NIGHT_ELF: {
     connector: 'NIGHT ELF',
     name: 'NIGHT ELF',

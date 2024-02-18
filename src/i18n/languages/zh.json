@@ -94,8 +94,6 @@
     "Approve": "授權",
     "Approve symbol": "授權 {{symbol}}",
     "Invalid to chain": "無效的目標鏈",
-    "Please Switch Network": "请切换网络",
-    "Invalid evm chain": "eBridge尚不支持您钱包所在的链！",
     "Invalid from chain": "無效的來源鏈",
     "Please confirm the recipient's address": "請確認跨鏈目標地址",
     "Confirm3": "確認",
