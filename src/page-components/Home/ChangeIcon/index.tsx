@@ -5,14 +5,11 @@ import { useWalletActions } from 'contexts/useWallet/hooks';
 import { useThrottleCallback } from 'hooks';
 import Change from 'assets/images/change.svg';
 import styles from './styles.module.less';
-const time = 500;
 export default function ChangeIcon() {
   const { dispatch } = useWalletActions();
   const onChange = useThrottleCallback(() => {
     dispatch(changeWallet());
-    setTimeout(() => {
-      dispatch(changeEnd());
-    }, time);
+    dispatch(changeEnd());
   }, [dispatch, changeWallet]);
   return (
     <div className={clsx('flex-center', styles['change-body'])}>
