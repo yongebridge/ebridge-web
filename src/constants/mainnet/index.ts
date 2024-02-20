@@ -2,19 +2,22 @@ import * as MAINNET from '../platform/main';
 import * as AELF from '../platform/AELF';
 import * as tDVV from '../platform/tDVV';
 import * as BSC from '../platform/BSC';
+import * as TRON_Mainnet from '../platform/TRON_Mainnet';
 import DefaultWhitelistMap from './tokenWhitelist.json';
 
 import { SupportedChainId, SupportedELFChainId } from '../chain';
 import { NetworkType } from 'types';
 import { IconInfo } from 'types/misc';
 
-export type ChainConstantsType = typeof MAINNET | typeof AELF | typeof tDVV | typeof BSC;
+export type ChainConstantsType = typeof MAINNET | typeof AELF | typeof tDVV | typeof BSC | typeof TRON_Mainnet;
 
 export type ERC_CHAIN_TYPE = keyof typeof SupportedERCChain;
 export type ELF_CHAIN_TYPE = keyof typeof SupportedELFChain;
+export type TRC_CHAIN_TYPE = keyof typeof SupportedTRCChain;
 
 export const DEFAULT_ELF_CHAIN = SupportedELFChainId.AELF;
 export const DEFAULT_ERC_CHAIN = SupportedChainId.MAINNET;
+export const DEFAULT_TRC_CHAIN = SupportedChainId.TRON_MAINNET;
 
 export const DEFAULT_MODAL_INITIAL_STATE = {
   fromOptions: { chainType: 'ERC', chainId: DEFAULT_ERC_CHAIN },
@@ -29,6 +32,11 @@ export const SupportedERCChain: { [k: string | number]: ChainConstantsType } = {
 };
 export const DEFAULT_ERC_CHAIN_INFO = SupportedERCChain[DEFAULT_ERC_CHAIN].CHAIN_INFO;
 
+export const SupportedTRCChain: { [k: string | number]: ChainConstantsType } = {
+  [SupportedChainId.TRON_MAINNET]: TRON_Mainnet,
+};
+export const DEFAULT_TRC_CHAIN_INFO = SupportedTRCChain[DEFAULT_TRC_CHAIN].CHAIN_INFO;
+
 export const SupportedELFChain: { [k: string | number]: ChainConstantsType } = {
   [SupportedELFChainId.AELF]: AELF,
   [SupportedELFChainId.tDVV]: tDVV,
@@ -40,8 +48,9 @@ export const ACTIVE_CHAIN: any = {
   [SupportedELFChainId.tDVV]: true,
   [SupportedChainId.BSC_MAINNET]: true,
   [SupportedChainId.MAINNET]: true,
+  [SupportedChainId.TRON_MAINNET]: true,
 };
-export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB'];
+export const NATIVE_TOKEN_LIST = ['WETH', 'WBNB', 'WTRX'];
 
 export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: string } = {
   [SupportedChainId.MAINNET]: 'Ethereum Mainnet',
@@ -59,6 +68,9 @@ export const CHAIN_NAME: { [chainId in SupportedChainId | SupportedELFChainId]: 
   [SupportedELFChainId.tDVV]: 'SideChain tDVV Mainnet',
   [SupportedELFChainId.tDVW]: 'SideChain tDVW Mainnet',
   [SupportedChainId.SEPOLIA]: 'Sepolia Testnet',
+  [SupportedChainId.TRON_MAINNET]: 'Tron Mainnet',
+  [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron Shasta Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron Nile Testnet',
 };
 
 export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: IconInfo } = {
@@ -108,6 +120,15 @@ export const CHAIN_ICON: { [chainId in SupportedChainId | SupportedELFChainId]: 
     // type: 'SEPOLIA',
     type: 'Ethereum',
   },
+  [SupportedChainId.TRON_MAINNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_SHASTA_TESTNET]: {
+    type: 'Tron',
+  },
+  [SupportedChainId.TRON_NILE_TESTNET]: {
+    type: 'Tron',
+  },
 };
 
 export const NetworkList = [
@@ -126,6 +147,11 @@ export const NetworkList = [
     title: CHAIN_NAME[SupportedChainId.BSC_MAINNET],
     icon: CHAIN_ICON[SupportedChainId.BSC_MAINNET],
     info: BSC.CHAIN_INFO,
+  },
+  {
+    title: CHAIN_NAME[SupportedChainId.TRON_MAINNET],
+    icon: CHAIN_ICON[SupportedChainId.TRON_MAINNET],
+    info: TRON_Mainnet.CHAIN_INFO,
   },
 ] as unknown as NetworkType[];
 
@@ -148,6 +174,12 @@ export const FormatTokenList = [
     toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     fromSymbol: 'WETH',
     toSymbol: 'ETH',
+  },
+  {
+    fromChainId: [SupportedChainId.TRON_MAINNET],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    fromSymbol: 'WTRX',
+    toSymbol: 'TRX',
   },
 ];
 
@@ -175,6 +207,16 @@ export const CrossChainTimeList = [
   {
     fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     toChainId: [SupportedChainId.BSC_MAINNET],
+    time: '10',
+  },
+  {
+    fromChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
+    toChainId: [SupportedChainId.TRON_MAINNET],
+    time: '10',
+  },
+  {
+    fromChainId: [SupportedChainId.TRON_MAINNET],
+    toChainId: [SupportedELFChainId.AELF, SupportedELFChainId.tDVV, SupportedELFChainId.tDVW],
     time: '10',
   },
 ];

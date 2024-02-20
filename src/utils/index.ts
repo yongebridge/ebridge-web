@@ -1,5 +1,5 @@
-import { SupportedChainId, SupportedELFChainId } from 'constants/chain';
-import { ELFChainConstants, ERCChainConstants } from 'constants/ChainConstants';
+import { SupportedChainId, SupportedELFChainId, SUPPORTED_TRON_CHAIN_IDS } from 'constants/chain';
+import { ELFChainConstants, ERCChainConstants, TRCChainConstants } from 'constants/ChainConstants';
 import EventEmitter from 'events';
 import { AelfInstancesKey, ChainId, TokenInfo } from 'types';
 import { isELFChain } from './aelfUtils';
@@ -7,6 +7,7 @@ export const eventBus = new EventEmitter();
 import { getAddress } from '@ethersproject/address';
 import AElf from 'aelf-sdk';
 import { NATIVE_TOKEN_LIST } from 'constants/index';
+import { isChainSupportedByTRC } from 'utils/common';
 
 export const sleep = (time: number) => {
   return new Promise<string>((resolve) => {
@@ -23,6 +24,8 @@ export function getExploreLink(
   let prefix;
   if (isELFChain(chainId)) {
     prefix = ELFChainConstants.constants[chainId as AelfInstancesKey]?.CHAIN_INFO?.exploreUrl;
+  } else if (isChainSupportedByTRC(chainId)) {
+    prefix = TRCChainConstants.constants?.CHAIN_INFO.exploreUrl.concat('#/');
   } else {
     prefix = ERCChainConstants.constants.CHAIN_INFO.exploreUrl;
   }
@@ -84,6 +87,7 @@ function chainIdToNetworkName(chainId?: ChainId): Network {
     case SupportedELFChainId.tDVW:
     case SupportedChainId.SEPOLIA:
     case SupportedChainId.BSC_TESTNET:
+    case SupportedChainId.TRON_NILE_TESTNET:
       return 'AELF';
     default:
       return 'AELF';
