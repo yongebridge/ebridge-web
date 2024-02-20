@@ -1,7 +1,7 @@
 import { ContractBasic } from '../utils/contract';
 import { provider } from 'web3-core';
 import { ChainId } from 'types';
-import { SupportedChainId } from 'constants/chain';
+import { SupportedChainId, SupportedELFChainId } from 'constants/chain';
 import BigNumber from 'bignumber.js';
 import { ERC20_ABI } from 'constants/abis';
 import { MaxUint256, REQ_CODE } from 'constants/misc';
@@ -93,7 +93,15 @@ export const getChainIdForContract = (chainId: ChainId) => {
   switch (chainId) {
     case SupportedChainId.TRON_NILE_TESTNET: {
       return 'Nile';
-      break;
+    }
+    case SupportedELFChainId.AELF: {
+      return 'MainChain_AELF';
+    }
+    case SupportedELFChainId.tDVV: {
+      return 'SideChain_tDVV';
+    }
+    case SupportedELFChainId.tDVW: {
+      return 'SideChain_tDVW';
     }
     default: {
       return chainId;

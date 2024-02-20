@@ -16,6 +16,7 @@ import { useLanguage } from 'i18n';
 import useLockCallback from 'hooks/useLockCallback';
 import { useUpdateEffect } from 'react-use';
 import { useAllowance } from 'hooks/useAllowance';
+import { useTRCWeb } from 'hooks/web3';
 import { isELFChain } from 'utils/aelfUtils';
 import { ACTIVE_CHAIN } from 'constants/index';
 import { formatAddress, isAddress } from 'utils';
@@ -23,6 +24,7 @@ import CheckToFillAddressModal from './CheckToFillAddressModal';
 import useLimitAmountModal from '../useLimitAmountModal';
 import CommonMessage from 'components/CommonMessage';
 import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
+import { getChainIdForContract } from 'contracts';
 
 type ActionsProps = {
   updateShowNotice: Dispatch<SetStateAction<boolean>>;
@@ -46,6 +48,7 @@ function Actions({ updateShowNotice }: ActionsProps) {
     return token;
   }, [fromChainId, selectToken]);
   const { t } = useLanguage();
+  const { library: trcLibrary } = useTRCWeb();
 
   const tokenContract = useTokenContract(fromChainId, fromTokenInfo?.address, fromWallet?.isPortkey);
   const sendCrossChainContract = useCrossChainContract(itemSendChainID, undefined, fromWallet?.isPortkey);
@@ -177,8 +180,10 @@ function Actions({ updateShowNotice }: ActionsProps) {
       account: fromAccount,
       bridgeContract,
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
-      toChainId,
+      toChainId: getChainIdForContract(toChainId),
       to: toChecked && toAddress ? toAddress : (toAccount as string),
+      fromChainId,
+      trcLibrary,
       crossFee,
     };
 

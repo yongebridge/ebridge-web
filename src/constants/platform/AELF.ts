@@ -1,5 +1,7 @@
+import { SupportedELFChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 'AELF',
+  chainId: SupportedELFChainId.AELF,
   exploreUrl: 'https://explorer.aelf.io/',
   // rpcUrl: 'https://aelf-public-node.aelf.io',
   rpcUrl: 'https://explorer.aelf.io/chain',
