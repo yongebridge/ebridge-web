@@ -179,4 +179,4 @@ export const CrossChainTimeList = [
   },
 ];
 
-export const PORTKEY_NETWORK_TYPE = 'MAIN';
+export const PORTKEY_NETWORK_TYPE = 'MAINNET';
