@@ -180,9 +180,9 @@ function Actions({ updateShowNotice }: ActionsProps) {
       account: fromAccount,
       bridgeContract,
       amount: timesDecimals(fromInput, fromTokenInfo.decimals).toFixed(0),
-      toChainId: getChainIdForContract(toChainId),
+      toChainId: toChainId,
       to: toChecked && toAddress ? toAddress : (toAccount as string),
-      fromChainId,
+      fromChainId: fromChainId,
       trcLibrary,
       crossFee,
     };

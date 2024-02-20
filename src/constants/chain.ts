@@ -34,7 +34,7 @@ export const CHAIN_ID_MAP = {
   [SupportedChainId.SEPOLIA]: 'Sepolia',
   [SupportedChainId.TRON_MAINNET]: 'Tron_Mainnet',
   [SupportedChainId.TRON_SHASTA_TESTNET]: 'Tron_Shasta_Testnet',
-  [SupportedChainId.TRON_NILE_TESTNET]: 'Tron_Nile_Testnet',
+  [SupportedChainId.TRON_NILE_TESTNET]: 'Nile',
 };
 
 export const SUPPORTED_TRON_CHAIN_IDS = [

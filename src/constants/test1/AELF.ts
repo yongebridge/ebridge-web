@@ -1,4 +1,5 @@
 import { SupportedELFChainId } from '../chain';
+
 export const CHAIN_INFO = {
   chainId: SupportedELFChainId.AELF,
   exploreUrl: 'https://explorer-test.aelf.io/',

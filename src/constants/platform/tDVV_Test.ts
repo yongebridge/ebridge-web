@@ -1,5 +1,7 @@
+import { SupportedELFChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 'tDVV',
+  chainId: SupportedELFChainId.tDVV,
   exploreUrl: 'https://explorer-test.aelf.io/',
   rpcUrl: 'https://tdvw-test-node.aelf.io',
 };

@@ -56,8 +56,8 @@ export class ERCChainConstants extends ChainConstants {
 }
 
 function getChainId() {
-  if (!window.tronWeb) return undefined;
-  const host = window.tronWeb.fullNode.host;
+  if (!window.tronWeb?.fullNode?.host) return undefined;
+  const host = window.tronWeb.fullNode?.host;
 
   if (host.includes('api.trongrid')) {
     return SupportedChainId.TRON_MAINNET;

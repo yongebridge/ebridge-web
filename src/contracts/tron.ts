@@ -1,7 +1,7 @@
 import { ContractBasic } from '../utils/contract';
 import { provider } from 'web3-core';
 import { ChainId } from 'types';
-import { SupportedChainId, SupportedELFChainId } from 'constants/chain';
+import { SupportedChainId, SupportedELFChainId, CHAIN_ID_MAP } from 'constants/chain';
 import BigNumber from 'bignumber.js';
 import { ERC20_ABI } from 'constants/abis';
 import { MaxUint256, REQ_CODE } from 'constants/misc';
@@ -91,18 +91,11 @@ export const getTRCChainBalance = async (tokenAddress: string, owner?: string) =
 
 export const getChainIdForContract = (chainId: ChainId) => {
   switch (chainId) {
-    case SupportedChainId.TRON_NILE_TESTNET: {
-      return 'Nile';
-    }
-    case SupportedELFChainId.AELF: {
-      return 'MainChain_AELF';
-    }
-    case SupportedELFChainId.tDVV: {
-      return 'SideChain_tDVV';
-    }
-    case SupportedELFChainId.tDVW: {
-      return 'SideChain_tDVW';
-    }
+    case SupportedChainId.TRON_NILE_TESTNET:
+    case SupportedELFChainId.AELF:
+    case SupportedELFChainId.tDVV:
+    case SupportedELFChainId.tDVW:
+      return CHAIN_ID_MAP[chainId];
     default: {
       return chainId;
     }
