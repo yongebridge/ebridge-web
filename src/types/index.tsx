@@ -36,6 +36,7 @@ export type Web3Type = {
   isPortkey?: boolean;
   walletType?: WalletType;
   accounts?: Accounts;
+  defaultAddress?: any;
 };
 export type TokenInfo = {
   decimals: number;

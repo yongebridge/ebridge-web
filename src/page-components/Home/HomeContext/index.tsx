@@ -10,6 +10,7 @@ import { useCookie, usePrevious } from 'react-use';
 import { isELFChain } from 'utils/aelfUtils';
 import { divDecimals } from 'utils/calculate';
 import { getChainIdToMap } from 'utils/chain';
+import { isChainSupportedByTRC } from 'utils/common';
 import {
   DestroyModal,
   DestroyState,
@@ -31,6 +32,10 @@ import { useCrossFee } from 'hooks/useCrossFee';
 const defaultSelectToken = {
   symbol: 'ELF',
   ...DefaultWhitelistMap.ELF,
+};
+const defaultTRONSelectToken = {
+  symbol: 'USDT',
+  ...DefaultWhitelistMap.USDT,
 };
 const INITIAL_STATE = {
   selectToken: defaultSelectToken,
@@ -92,6 +97,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     if (selectToken && fromChainId && toChainId && (!selectToken[fromChainId] || !selectToken[toChainId])) {
       if (tokenInfo) {
         dispatch(setSelectToken(tokenInfo));
+      } else if (isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)) {
+        dispatch(setSelectToken(defaultTRONSelectToken));
       } else {
         dispatch(setSelectToken(defaultSelectToken));
       }

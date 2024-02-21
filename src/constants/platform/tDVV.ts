@@ -1,8 +1,9 @@
+import { SupportedELFChainId } from '../chain';
+
 export const CHAIN_INFO = {
-  chainId: 'tDVV',
+  chainId: SupportedELFChainId.tDVV,
   exploreUrl: 'https://tdvv-explorer.aelf.io/',
-  // rpcUrl: 'https://tdvv-public-node.aelf.io',
-  rpcUrl: 'https://tdvv-explorer.aelf.io/chain',
+  rpcUrl: 'https://tdvv-public-node.aelf.io',
 };
 
 export const TOKEN_CONTRACT = '7RzVGiuVWkvL4VfVHdZfQF2Tri3sgLe9U991bohHFfSRZXuGX';

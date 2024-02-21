@@ -2,9 +2,10 @@ import { BRIDGE_IN_ABI, BRIDGE_OUT_ABI, ERC20_ABI, LIMIT_ABI } from 'constants/a
 import { useCallback, useEffect, useMemo } from 'react';
 import { AelfInstancesKey, ChainId } from 'types';
 import { getAElf, getWallet, isELFChain } from 'utils/aelfUtils';
+import { isChainSupportedByTRC } from 'utils/common';
 import { provider } from 'web3-core';
-import { useAElf, useWeb3 } from './web3';
-import { ELFChainConstants, ERCChainConstants } from 'constants/ChainConstants';
+import { useAElf, useWeb3, useTRCWeb } from './web3';
+import { ELFChainConstants, ERCChainConstants, TRCChainConstants } from 'constants/ChainConstants';
 import { sleep } from 'utils';
 import { AElfDappBridge } from '@aelf-react/types';
 import { checkAElfBridge } from 'utils/checkAElfBridge';
@@ -15,11 +16,12 @@ import { ContractBasic } from 'utils/contract';
 import { IAElfChain } from '@portkey/provider-types';
 const ContractMap: { [key: string]: ContractBasic } = {};
 
-export function getContract(address: string, ABI: any, library?: provider) {
+export function getContract(address: string, ABI: any, library?: provider, chainId?: ChainId) {
   return new ContractBasic({
     contractAddress: address,
     contractABI: ABI,
     provider: library,
+    chainId,
   });
 }
 
@@ -50,6 +52,17 @@ export function useERCContract(address: string | undefined, ABI: any, chainId?: 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ABI, address, library]);
+}
+
+export function useTRCContract(address: string | undefined, ABI: any, chainId?: ChainId) {
+  const { library } = useTRCWeb();
+  if (!address || isELFChain(chainId)) return undefined;
+  try {
+    return getContract(address, ABI, library, chainId);
+  } catch (error) {
+    console.log(error, '====useTRCContract');
+    return undefined;
+  }
 }
 
 export async function getELFContract(
@@ -163,18 +176,24 @@ export function usePortkeyContract(contractAddress: string, chainId?: ChainId) {
 }
 
 function useContract(address: string, ABI: any, chainId?: ChainId, isPortkey?: boolean): ContractBasic | undefined {
-  const ercContract = useERCContract(address, ABI, chainId);
-  const elfContract = useAElfContract(address, chainId);
   const portkeyContract = usePortkeyContract(address, chainId);
-  return useMemo(() => {
-    if (isPortkey) return portkeyContract;
-    return isELFChain(chainId) ? elfContract : ercContract;
-  }, [chainId, elfContract, ercContract, isPortkey, portkeyContract]);
+  const aElfContract = useAElfContract(address, chainId);
+  const trcContract = useTRCContract(address, ABI, chainId);
+  const ercContract = useERCContract(address, ABI, chainId);
+  if (isPortkey) {
+    return portkeyContract;
+  } else if (isELFChain(chainId)) {
+    return aElfContract;
+  } else if (isChainSupportedByTRC(chainId)) {
+    return trcContract;
+  } else {
+    return ercContract;
+  }
 }
 
 export function useTokenContract(chainId?: ChainId, address?: string, isPortkey?: boolean) {
   const contractAddress = useMemo(() => {
-    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey].TOKEN_CONTRACT;
+    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey]?.TOKEN_CONTRACT;
     return address;
   }, [address, chainId]);
   return useContract(contractAddress || '', ERC20_ABI, chainId, isPortkey);
@@ -189,15 +208,25 @@ export function useCrossChainContract(chainId?: ChainId, address?: string, isPor
 
 export function useBridgeContract(chainId?: ChainId, isPortkey?: boolean) {
   const contractAddress = useMemo(() => {
-    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
-    return ERCChainConstants.constants?.BRIDGE_CONTRACT;
+    if (isELFChain(chainId)) {
+      return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
+    } else if (isChainSupportedByTRC(chainId)) {
+      return TRCChainConstants.constants?.BRIDGE_CONTRACT;
+    } else {
+      return ERCChainConstants.constants?.BRIDGE_CONTRACT;
+    }
   }, [chainId]);
   return useContract(contractAddress || '', BRIDGE_IN_ABI, chainId, isPortkey);
 }
 export function useBridgeOutContract(chainId?: ChainId, isPortkey?: boolean) {
   const contractAddress = useMemo(() => {
-    if (isELFChain(chainId)) return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
-    return ERCChainConstants.constants?.BRIDGE_CONTRACT_OUT;
+    if (isELFChain(chainId)) {
+      return ELFChainConstants.constants[chainId as AelfInstancesKey]?.BRIDGE_CONTRACT;
+    } else if (isChainSupportedByTRC(chainId)) {
+      return TRCChainConstants.constants.BRIDGE_CONTRACT_OUT;
+    } else {
+      return ERCChainConstants.constants?.BRIDGE_CONTRACT_OUT;
+    }
   }, [chainId]);
   return useContract(contractAddress || '', BRIDGE_OUT_ABI, chainId, isPortkey);
 }

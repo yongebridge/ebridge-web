@@ -27,11 +27,19 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   const { dispatch } = useWalletActions();
   const { connector: web3Connector, chainId: web3ChainId, account: web3Account } = useWeb3();
 
-  const { chainId, account, connector } = wallet || {};
+  const { chainId, account, connector, defaultAddress } = wallet || {};
   const { i18n } = useTranslation();
   const portkeyWallet = usePortkey();
   const [{ selectELFWallet }] = useChain();
   const modalDispatch = useModalDispatch();
+
+  const getAddress = (walletAccount: string) => {
+    if (isChainSupportedByTRC(chainId)) {
+      return defaultAddress.base58.toString();
+    } else {
+      return walletAccount;
+    }
+  };
 
   const renderRightBtn = useMemo(() => {
     if (account && isPortkey() && isELFChain(chainId)) {
@@ -54,7 +62,11 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
             className={clsx('cursor-pointer', 'flex-row-center', styles['wallet-account-row'])}>
             <WalletIcon connector={connector} className={styles['wallet-icon']} />
             <div className={styles['wallet-address']}>
-              {shortenString(isELFChain(chainId) ? formatAddress(chainId, account) : account, 8, 9)}
+              {shortenString(
+                isELFChain(chainId) ? formatAddress(chainId, getAddress(account)) : getAddress(account),
+                8,
+                9,
+              )}
             </div>
           </Row>
         ) : (
