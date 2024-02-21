@@ -27,6 +27,7 @@
     "@web3-react/core": "^8.2.2",
     "@web3-react/metamask": "^8.2.3",
     "@web3-react/network": "^8.2.2",
+    "@web3-react/tron-link": "yongebridge/web3-react-tron-link",
     "@web3-react/types": "^8.2.2",
     "@web3-react/walletconnect-v2": "8.3.7",
     "aelf-bridge": "git+https://github.com/mason-hz/aelf-bridge",
@@ -50,8 +51,7 @@
     "react-i18next": "^11.18.0",
     "react-use": "^17.4.0",
     "web3": "^1.7.4",
-    "web3-core": "^1.7.4",
-    "@web3-react/tron-link": "yongebridge/web3-react-tron-link"
+    "web3-core": "^1.7.4"
   },
   "devDependencies": {
     "@coinbase/wallet-sdk": "^3.3.0",

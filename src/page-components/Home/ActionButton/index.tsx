@@ -24,7 +24,6 @@ import CheckToFillAddressModal from './CheckToFillAddressModal';
 import useLimitAmountModal from '../useLimitAmountModal';
 import CommonMessage from 'components/CommonMessage';
 import useCheckPortkeyStatus from 'hooks/useCheckPortkeyStatus';
-import { getChainIdForContract } from 'contracts';
 
 type ActionsProps = {
   updateShowNotice: Dispatch<SetStateAction<boolean>>;

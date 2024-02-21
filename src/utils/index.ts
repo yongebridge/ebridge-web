@@ -1,4 +1,4 @@
-import { SupportedChainId, SupportedELFChainId, SUPPORTED_TRON_CHAIN_IDS } from 'constants/chain';
+import { SupportedChainId, SupportedELFChainId } from 'constants/chain';
 import { ELFChainConstants, ERCChainConstants, TRCChainConstants } from 'constants/ChainConstants';
 import EventEmitter from 'events';
 import { AelfInstancesKey, ChainId, TokenInfo } from 'types';
