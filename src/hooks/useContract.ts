@@ -232,9 +232,12 @@ export function useBridgeOutContract(chainId?: ChainId, isPortkey?: boolean) {
 }
 
 export function useLimitContract(fromChainId?: ChainId, toChainId?: ChainId) {
-  return useERCContract(
-    ERCChainConstants.constants?.LIMIT_CONTRACT || '',
-    LIMIT_ABI,
-    isELFChain(fromChainId) ? toChainId : fromChainId,
-  );
+  const contractAddress = useMemo(() => {
+    if (isChainSupportedByTRC(fromChainId)) {
+      return TRCChainConstants.constants?.LIMIT_CONTRACT;
+    } else {
+      return ERCChainConstants.constants?.LIMIT_CONTRACT;
+    }
+  }, [fromChainId]);
+  return useERCContract(contractAddress || '', LIMIT_ABI, isELFChain(fromChainId) ? toChainId : fromChainId);
 }

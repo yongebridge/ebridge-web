@@ -14,23 +14,6 @@
       "decimals": 18,
       "symbol": "ELF",
       "address": "0x8adD57b8aD6C291BC3E3ffF89F767fcA08e0E7Ab"
-    },
-    "3448148188": {
-      "name": "ELF Token",
-      "decimals": 18,
-      "symbol": "ELF",
-      "address": "TXL8Uuto8oxWKEC8HQrL7jxWyJPhC4Tcnd"
-    }
-  },
-  "TRX": {
-    "AELF": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
-    "tDVV": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
-    "tDVW": { "name": "TRX Token", "decimals": 8, "symbol": "TRX", "address": "", "issueChainId": 9992731 },
-    "3448148188": {
-      "name": "TRX Token",
-      "decimals": 18,
-      "symbol": "TRX",
-      "address": "TTE3FosJrL3kHdHTtKup7nruQYYSCBfDoZ"
     }
   },
   "USDT": {
@@ -113,7 +96,8 @@
       "address": "0x0CBAb7E71f969Bfb3eF5b13542E9087a73244F02",
       "isNativeToken": true
     },
-    "tDVW": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 }
+    "tDVW": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 },
+    "tDVV": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 }
   },
   "WRITE": {
     "AELF": { "name": "WRITE Token", "decimals": 8, "symbol": "WRITE", "address": "", "issueChainId": 9992731 },

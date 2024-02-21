@@ -446,6 +446,7 @@ export class TronContractBasic {
       const result: any = await contract?.[functionName](...(paramsOption || [])).send({
         from: account,
         ...options,
+        feeLimit: 1e10,
       });
       if (onMethod === 'receipt') return { ...result, TransactionId: result.transactionHash };
       return { TransactionId: result };
