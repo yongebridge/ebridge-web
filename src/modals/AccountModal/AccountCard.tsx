@@ -50,10 +50,6 @@ function AccountCard() {
         console.log('error: ', error);
       } finally {
         if (isChainSupportedByTRC(accountChainId)) {
-          // Disconnecting TRON wallet
-          if (window.tronWeb) {
-            window.tronWeb = null;
-          }
           chainDispatch(setSelectTRCWallet(undefined));
         } else {
           chainDispatch(setSelectERCWallet(undefined));

@@ -392,13 +392,21 @@ export async function getReceiptLimit({
       throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
 
-    return {
-      remain: new BigNumber(receiptDailyLimit.tokenAmount),
-      maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
-      currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
-      fillRate: new BigNumber(receiptTokenBucket.rate),
-      isEnable: receiptTokenBucket.isEnabled,
-    };
+    return isChainSupportedByTRC(fromChainId)
+      ? {
+          remain: new BigNumber(receiptDailyLimit.tokenAmount.toString()),
+          maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity.toString()),
+          currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount.toString()),
+          fillRate: new BigNumber(receiptTokenBucket.rate.toString()),
+          isEnable: receiptTokenBucket.isEnabled,
+        }
+      : {
+          remain: new BigNumber(receiptDailyLimit.tokenAmount),
+          maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
+          currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
+          fillRate: new BigNumber(receiptTokenBucket.rate),
+          isEnable: receiptTokenBucket.isEnabled,
+        };
   } catch (error: any) {
     CommonMessage.error(error.message);
   }
@@ -432,13 +440,21 @@ export async function getSwapLimit({
       throw new Error(swapDailyLimit.error || swapTokenBucket.error);
     }
 
-    return {
-      remain: new BigNumber(swapDailyLimit.tokenAmount),
-      maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
-      currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
-      fillRate: new BigNumber(swapTokenBucket.rate),
-      isEnable: swapTokenBucket.isEnabled,
-    };
+    return isChainSupportedByTRC(fromChainId)
+      ? {
+          remain: new BigNumber(swapDailyLimit.tokenAmount.toString()),
+          maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity.toString()),
+          currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount.toString()),
+          fillRate: new BigNumber(swapTokenBucket.rate.toString()),
+          isEnable: swapTokenBucket.isEnabled,
+        }
+      : {
+          remain: new BigNumber(swapDailyLimit.tokenAmount),
+          maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
+          currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
+          fillRate: new BigNumber(swapTokenBucket.rate),
+          isEnable: swapTokenBucket.isEnabled,
+        };
   } catch (error: any) {
     CommonMessage.error(error.message);
   }

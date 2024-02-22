@@ -1025,13 +1025,13 @@
     "@portkey/provider-types" "^2.0.0-alpha.5"
 
 "@portkey/onboarding@^2.0.0-alpha.28":
-  version "2.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@portkey/onboarding/-/onboarding-2.0.0-alpha.28.tgz#802c904ab9cc1a2ec53e0907a573091dd5ce3691"
-  integrity sha512-seiRHGxt3oIGE56vqhpdH/2xg9M5E0xufPzTlPHLg6N+1E7oGJF+5miHeq5wgmCeJVSeqJipF7WC4K6GfriGbQ==
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@portkey/onboarding/-/onboarding-2.0.0.tgz#a00144650715070806e77cf245b280848974da74"
+  integrity sha512-967vXXIv981k2/7+GqAjiwJJMuMR8PxLMfus5Z5BtMQWoQBn892pHHRVDqSpCncjZ27l206FwhJwUwUPnzw2Bw==
   dependencies:
     "@portkey/detect-provider" "^2.0.0-alpha.2"
-    "@portkey/types" "^2.0.0-alpha.28"
-    "@portkey/utils" "^2.0.0-alpha.28"
+    "@portkey/types" "^2.0.0"
+    "@portkey/utils" "^2.0.0"
     bowser "^2.11.0"
     query-string "^7.1.1"
 
@@ -1043,15 +1043,15 @@
     "@portkey/types" "^2.0.0-alpha.0"
     "@types/readable-stream" "^2.3.15"
 
-"@portkey/types@^2.0.0-alpha.0", "@portkey/types@^2.0.0-alpha.28":
-  version "2.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.0.0-alpha.28.tgz#345e8b4170712107032aea12618921c478d463c4"
-  integrity sha512-AexD8hFvqBj+hnSNJLrfmVNOAzUwCjuaz+jYu/0YUqR8u7f/CCWj1uF3Su59SAqjAOi979yUntWacsMFv/AO3g==
+"@portkey/types@^2.0.0", "@portkey/types@^2.0.0-alpha.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@portkey/types/-/types-2.0.0.tgz#3bb48500ef698302b9e8ae6fede5ecd86f2e139b"
+  integrity sha512-U9j5PmnGec3jQuWbdxMwu5f+IKFnjqTyCsQqF4opfhxtO5mtc1hPRpvnYkmll1WWArL7rXdsTSWDWMFFLddB5Q==
 
-"@portkey/utils@^2.0.0-alpha.28":
-  version "2.0.0-alpha.28"
-  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.0.0-alpha.28.tgz#443c30293ee099d322d905b2fa00709d1e054614"
-  integrity sha512-sjreTZkoprhKlJYQoLblDB6mvXwQVntBxHDXdOLU2bsbBSe+Jx7X+olF7pOjvb7VAFN3A04n32RVspi14eRg0Q==
+"@portkey/utils@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@portkey/utils/-/utils-2.0.0.tgz#db6a7996f6637d859a561b7a984a651ac367a767"
+  integrity sha512-26shZ/jecAqSu4lV9NQGebgbX8Yz6+Jw5TZ8L66QeTalM1SHmkRRkQ9ZMOcnxOVQ1F6HQ6c0p45KTlMWu+8x1g==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -2999,9 +2999,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001332:
-  version "1.0.30001588"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001588.tgz#07f16b65a7f95dba82377096923947fb25bce6e3"
-  integrity sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==
+  version "1.0.30001589"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001589.tgz#7ad6dba4c9bf6561aec8291976402339dc157dfb"
+  integrity sha512-vNQWS6kI+q6sBlHbh71IIeC+sRwK2N3EDySc/updIGhIee2x5z00J4c1242/5/d6EpEMdOnk/m+6tuk4/tcsqg==
 
 caseless@~0.12.0:
   version "0.12.0"

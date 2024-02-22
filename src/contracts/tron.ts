@@ -83,7 +83,7 @@ export const getTRCChainBalance = async (tokenAddress: string, owner?: string) =
   let balance = 0;
   if (window.tronWeb) {
     const tokenTronContract = await window.tronWeb?.contract().at(tokenAddress);
-    const callBalance = await tokenTronContract.balanceOf(owner).call();
+    const callBalance = await tokenTronContract?.balanceOf(owner).call();
     balance = window.tronWeb?.toDecimal(callBalance);
   }
   return balance;

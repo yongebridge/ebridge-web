@@ -1,4 +1,5 @@
 import { BRIDGE_IN_ABI, BRIDGE_OUT_ABI, ERC20_ABI, LIMIT_ABI } from 'constants/abis';
+
 import { useCallback, useEffect, useMemo } from 'react';
 import { AelfInstancesKey, ChainId } from 'types';
 import { getAElf, getWallet, isELFChain } from 'utils/aelfUtils';
@@ -232,12 +233,19 @@ export function useBridgeOutContract(chainId?: ChainId, isPortkey?: boolean) {
 }
 
 export function useLimitContract(fromChainId?: ChainId, toChainId?: ChainId) {
-  const contractAddress = useMemo(() => {
-    if (isChainSupportedByTRC(fromChainId)) {
-      return TRCChainConstants.constants?.LIMIT_CONTRACT;
-    } else {
-      return ERCChainConstants.constants?.LIMIT_CONTRACT;
-    }
-  }, [fromChainId]);
-  return useERCContract(contractAddress || '', LIMIT_ABI, isELFChain(fromChainId) ? toChainId : fromChainId);
+  const trcContract = useTRCContract(
+    TRCChainConstants.constants?.LIMIT_CONTRACT || '',
+    LIMIT_ABI,
+    isELFChain(fromChainId) ? toChainId : fromChainId,
+  );
+  const ercContract = useERCContract(
+    ERCChainConstants.constants?.LIMIT_CONTRACT || '',
+    LIMIT_ABI,
+    isELFChain(fromChainId) ? toChainId : fromChainId,
+  );
+  if (isChainSupportedByTRC(fromChainId)) {
+    return trcContract;
+  } else {
+    return ercContract;
+  }
 }
