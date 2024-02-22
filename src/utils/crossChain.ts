@@ -392,7 +392,7 @@ export async function getReceiptLimit({
       throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
 
-    return isChainSupportedByTRC(fromChainId)
+    return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
       ? {
           remain: new BigNumber(receiptDailyLimit.tokenAmount.toString()),
           maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity.toString()),
@@ -440,7 +440,7 @@ export async function getSwapLimit({
       throw new Error(swapDailyLimit.error || swapTokenBucket.error);
     }
 
-    return isChainSupportedByTRC(fromChainId)
+    return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
       ? {
           remain: new BigNumber(swapDailyLimit.tokenAmount.toString()),
           maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity.toString()),

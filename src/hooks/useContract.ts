@@ -243,7 +243,7 @@ export function useLimitContract(fromChainId?: ChainId, toChainId?: ChainId) {
     LIMIT_ABI,
     isELFChain(fromChainId) ? toChainId : fromChainId,
   );
-  if (isChainSupportedByTRC(fromChainId)) {
+  if (isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)) {
     return trcContract;
   } else {
     return ercContract;
