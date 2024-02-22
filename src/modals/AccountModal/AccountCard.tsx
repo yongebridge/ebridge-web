@@ -21,7 +21,7 @@ function AccountCard() {
   const [{ accountWallet, accountChainId }, { dispatch }] = useModal();
   const chainDispatch = useChainDispatch();
 
-  const { connector, account, chainId, deactivate, aelfInstance, walletType } = accountWallet || {};
+  const { connector, account, chainId, deactivate, aelfInstance, walletType, defaultAddress } = accountWallet || {};
   const filter = useCallback(
     (k: string) => {
       const isMetaMask = !!window.ethereum?.isMetaMask;
@@ -50,6 +50,10 @@ function AccountCard() {
         console.log('error: ', error);
       } finally {
         if (isChainSupportedByTRC(accountChainId)) {
+          // Disconnecting TRON wallet
+          if (window.tronWeb) {
+            window.tronWeb = null;
+          }
           chainDispatch(setSelectTRCWallet(undefined));
         } else {
           chainDispatch(setSelectERCWallet(undefined));
@@ -67,6 +71,14 @@ function AccountCard() {
       }),
     );
   }, [connector, dispatch, walletType, chainId, connection?.connector, chainDispatch, deactivate]);
+
+  const getAddress = (walletAccount: string) => {
+    if (isChainSupportedByTRC(chainId)) {
+      return defaultAddress.base58.toString();
+    } else {
+      return walletAccount;
+    }
+  };
 
   const changeWallet = useCallback(async () => {
     try {
@@ -97,14 +109,14 @@ function AccountCard() {
                 <Row gutter={[8, 0]}>
                   {account ? (
                     <Col className="flex-row-center account-modal-account">
-                      {shortenString(isELF ? formatAddress(accountChainId, account) : account, 8, 9)}
+                      {shortenString(isELF ? formatAddress(accountChainId, account) : getAddress(account), 8, 9)}
                     </Col>
                   ) : null}
                   {account ? (
                     <Col>
                       <Copy
                         className="account-modal-copy cursor-pointer"
-                        toCopy={isELF ? formatAddress(accountChainId, account) : account}></Copy>
+                        toCopy={isELF ? formatAddress(accountChainId, account) : getAddress(account)}></Copy>
                     </Col>
                   ) : null}
                 </Row>
@@ -114,7 +126,7 @@ function AccountCard() {
                   <CommonLink
                     showIcon={false}
                     className="account-modal-card-box-link"
-                    href={getExploreLink(account, 'address', accountChainId)}>
+                    href={getExploreLink(getAddress(account), 'address', accountChainId)}>
                     {isELF
                       ? `View on ${new URL(getExploreLink(account, 'address', accountChainId)).host}`
                       : isTRC
