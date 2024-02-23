@@ -392,6 +392,10 @@ export async function getReceiptLimit({
       throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
 
+    // When we receive a response from the getReceiptDailyLimit & getCurrentReceiptTokenBucketState Method,
+    // Method are returned in different formats depending on the chainId used.
+    // For TRC chainId, the response are returned in BigNumber hex format and need to be converted to normal number format.
+    // For other chainId, the response are already in normal number format and do not require conversion.
     return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
       ? {
           remain: new BigNumber(receiptDailyLimit.tokenAmount.toString()),
@@ -440,6 +444,10 @@ export async function getSwapLimit({
       throw new Error(swapDailyLimit.error || swapTokenBucket.error);
     }
 
+    // When we receive a response from the getSwapDailyLimit & getCurrentSwapTokenBucketState Method,
+    // Method are returned in different formats depending on the chainId used.
+    // For TRC chainId, the response are returned in BigNumber hex format and need to be converted to normal number format.
+    // For other chainId, the response are already in normal number format and do not require conversion.
     return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
       ? {
           remain: new BigNumber(swapDailyLimit.tokenAmount.toString()),
