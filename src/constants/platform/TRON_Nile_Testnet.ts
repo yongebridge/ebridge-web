@@ -3,18 +3,17 @@ import { SupportedChainId } from '../chain';
 export const CHAIN_INFO = {
   chainId: SupportedChainId.TRON_NILE_TESTNET,
   exploreUrl: 'https://nile.tronscan.org/',
-  rpcUrl: 'https://api.nileex.io',
+  rpcUrl: 'https://nile.trongrid.io',
   chainName: 'TRON Nile Testnet',
   nativeCurrency: {
     name: 'TRON Nile Testnet Native Token',
     symbol: 'nTRX',
-    decimals: 6,
+    decimals: 8,
   },
   iconUrls: ['https://etherscan.io/token/images/trontrx_32.png'],
-  rpcUrls: ['https://api.nileex.io'],
+  rpcUrls: ['https://nile.trongrid.io'],
   blockExplorerUrls: ['https://nile.tronscan.org/'],
 };
-
-export const BRIDGE_CONTRACT = '0xD032D743A87586039056E3d35894D9F0560E26Be'; // TODO
-export const BRIDGE_CONTRACT_OUT = '0x4C6720dec7C7dcdE1c7B5E9dd2b327370AC9F834'; // TODO
-export const LIMIT_CONTRACT = '0x37cf44B567bA9e2a26E38B777Cc1001b7289324B'; // TODO
+export const BRIDGE_CONTRACT = 'TAyJxS7ATKCp9iVzms1wPGg3iXV9p51SGe'; // TODO
+export const BRIDGE_CONTRACT_OUT = 'TQGdZkonWomNTxPskkUX3f19kB5W3yJeuS'; // TODO
+export const LIMIT_CONTRACT = 'TEAr3Cg1YXX1GaXFcbzsVWtXnjsZZ4yX9m'; // TODO

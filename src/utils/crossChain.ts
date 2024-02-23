@@ -392,13 +392,25 @@ export async function getReceiptLimit({
       throw new Error(receiptDailyLimit.error || receiptTokenBucket.error);
     }
 
-    return {
-      remain: new BigNumber(receiptDailyLimit.tokenAmount),
-      maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
-      currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
-      fillRate: new BigNumber(receiptTokenBucket.rate),
-      isEnable: receiptTokenBucket.isEnabled,
-    };
+    // When we receive a response from the getReceiptDailyLimit & getCurrentReceiptTokenBucketState Method,
+    // Method are returned in different formats depending on the chainId used.
+    // For TRC chainId, the response are returned in BigNumber hex format and need to be converted to normal number format.
+    // For other chainId, the response are already in normal number format and do not require conversion.
+    return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
+      ? {
+          remain: new BigNumber(receiptDailyLimit.tokenAmount.toString()),
+          maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity.toString()),
+          currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount.toString()),
+          fillRate: new BigNumber(receiptTokenBucket.rate.toString()),
+          isEnable: receiptTokenBucket.isEnabled,
+        }
+      : {
+          remain: new BigNumber(receiptDailyLimit.tokenAmount),
+          maxCapcity: new BigNumber(receiptTokenBucket.tokenCapacity),
+          currentCapcity: new BigNumber(receiptTokenBucket.currentTokenAmount),
+          fillRate: new BigNumber(receiptTokenBucket.rate),
+          isEnable: receiptTokenBucket.isEnabled,
+        };
   } catch (error: any) {
     CommonMessage.error(error.message);
   }
@@ -432,13 +444,25 @@ export async function getSwapLimit({
       throw new Error(swapDailyLimit.error || swapTokenBucket.error);
     }
 
-    return {
-      remain: new BigNumber(swapDailyLimit.tokenAmount),
-      maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
-      currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
-      fillRate: new BigNumber(swapTokenBucket.rate),
-      isEnable: swapTokenBucket.isEnabled,
-    };
+    // When we receive a response from the getSwapDailyLimit & getCurrentSwapTokenBucketState Method,
+    // Method are returned in different formats depending on the chainId used.
+    // For TRC chainId, the response are returned in BigNumber hex format and need to be converted to normal number format.
+    // For other chainId, the response are already in normal number format and do not require conversion.
+    return isChainSupportedByTRC(fromChainId) || isChainSupportedByTRC(toChainId)
+      ? {
+          remain: new BigNumber(swapDailyLimit.tokenAmount.toString()),
+          maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity.toString()),
+          currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount.toString()),
+          fillRate: new BigNumber(swapTokenBucket.rate.toString()),
+          isEnable: swapTokenBucket.isEnabled,
+        }
+      : {
+          remain: new BigNumber(swapDailyLimit.tokenAmount),
+          maxCapcity: new BigNumber(swapTokenBucket.tokenCapacity),
+          currentCapcity: new BigNumber(swapTokenBucket.currentTokenAmount),
+          fillRate: new BigNumber(swapTokenBucket.rate),
+          isEnable: swapTokenBucket.isEnabled,
+        };
   } catch (error: any) {
     CommonMessage.error(error.message);
   }

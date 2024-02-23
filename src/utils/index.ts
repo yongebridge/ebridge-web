@@ -27,7 +27,7 @@ export function getExploreLink(
   } else if (isChainSupportedByTRC(chainId)) {
     prefix = TRCChainConstants.constants?.CHAIN_INFO.exploreUrl.concat('#/');
   } else {
-    prefix = ERCChainConstants.constants.CHAIN_INFO.exploreUrl;
+    prefix = ERCChainConstants.constants?.CHAIN_INFO.exploreUrl;
   }
   switch (type) {
     case 'transaction': {

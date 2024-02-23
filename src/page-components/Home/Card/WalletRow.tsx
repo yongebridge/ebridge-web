@@ -42,14 +42,18 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   };
 
   const renderRightBtn = useMemo(() => {
-    if (account && isPortkey() && isELFChain(chainId)) {
+    let selectedAccount = account;
+    if (selectedAccount == 'false') {
+      selectedAccount = JSON.parse(selectedAccount);
+    }
+    if (selectedAccount && isPortkey() && isELFChain(chainId)) {
       return null;
     }
 
     return (
       <>
         <Divider type="vertical" className={styles['wallet-divider']} />
-        {account ? (
+        {selectedAccount ? (
           <Row
             onClick={() =>
               modalDispatch(
@@ -63,7 +67,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
             <WalletIcon connector={connector} className={styles['wallet-icon']} />
             <div className={styles['wallet-address']}>
               {shortenString(
-                isELFChain(chainId) ? formatAddress(chainId, getAddress(account)) : getAddress(account),
+                isELFChain(chainId) ? formatAddress(chainId, getAddress(selectedAccount)) : getAddress(selectedAccount),
                 8,
                 9,
               )}

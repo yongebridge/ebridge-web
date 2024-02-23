@@ -18,6 +18,7 @@ import styles from './styles.module.less';
 import { CrossChainItem } from 'types/api';
 import { ChainId } from 'types';
 import { getTokenInfoByWhitelist } from 'utils/whitelist';
+import { isChainSupportedByTRC } from 'utils/common';
 
 const calculateMinValue = (
   input1: LimitDataProps | undefined,
@@ -161,6 +162,18 @@ export default function useLimitAmountModal() {
     [getLimitDataByContract],
   );
 
+  const getTrcLimitDataFn = useCallback(
+    (type: 'transfer' | 'swap', crossInfo: ICrossInfo): Array<any> => {
+      console.log('crossInfo: ', crossInfo);
+      const promiseList = [getLimitDataByGQL(crossInfo, crossInfo?.toDecimals)];
+      if (type === 'transfer') {
+        promiseList.unshift(getLimitDataByContract(type, crossInfo, crossInfo?.fromDecimals));
+      }
+      return promiseList;
+    },
+    [getLimitDataByContract],
+  );
+
   const checkDailyLimit = useCallback(
     function (input: BigNumber, { remain }: LimitDataProps, { fromChainId, toChainId, symbol }: ICrossInfo): boolean {
       if (remain.isZero()) {
@@ -269,6 +282,8 @@ export default function useLimitAmountModal() {
 
       const promistList = isELFChain(fromChainId)
         ? getElfLimitDataFn(type, crossInfo)
+        : isChainSupportedByTRC(fromChainId)
+        ? getTrcLimitDataFn(type, crossInfo)
         : getEvmLimitDataFn(type, crossInfo);
       const results: Array<LimitDataProps> = await Promise.all(promistList);
 

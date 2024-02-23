@@ -9,6 +9,8 @@ import styles from './styles.module.less';
 import clsx from 'clsx';
 import useMediaQueries from 'hooks/useMediaQueries';
 import CommonMessage from 'components/CommonMessage';
+import { isChainSupportedByELF } from 'utils/common';
+import { useWallet } from 'contexts/useWallet/hooks';
 
 export default function Network({
   networkList,
@@ -23,12 +25,33 @@ export default function Network({
   className?: string;
   chainId?: ChainId;
 }) {
+  const { fromWallet, toWallet } = useWallet();
+  const allowedNetwork = (allNetwork: NetworkType[]) => {
+    if (isChainSupportedByELF(chainId)) {
+      if (isChainSupportedByELF(fromWallet?.chainId) && isChainSupportedByELF(toWallet?.chainId)) {
+        if (fromWallet?.chainId == chainId) {
+          return allNetwork.filter((item) => isChainSupportedByELF(item.info.chainId));
+        } else {
+          return allNetwork.filter((item) => {
+            return !(isChainSupportedByELF(item.info.chainId) && toWallet?.chainId == item.info.chainId);
+          });
+        }
+      } else {
+        return allNetwork.filter((item) => isChainSupportedByELF(item.info.chainId));
+      }
+    } else {
+      const AELFChainId = isChainSupportedByELF(fromWallet?.chainId) ? fromWallet?.chainId : toWallet?.chainId;
+      return allNetwork.filter((item) => {
+        return !(isChainSupportedByELF(item.info.chainId) && AELFChainId == item.info.chainId);
+      });
+    }
+  };
   const { t } = useLanguage();
   const menu = useMemo(() => {
     return (
       <Menu
         selectedKeys={chainId ? [chainId.toString()] : ['']}
-        items={networkList.map((i) => {
+        items={allowedNetwork(networkList).map((i) => {
           return {
             key: i.info.chainId,
             label: i.title,
@@ -37,6 +60,7 @@ export default function Network({
         })}
       />
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, networkList, onChange]);
 
   const iconProps = useMemo(() => {
