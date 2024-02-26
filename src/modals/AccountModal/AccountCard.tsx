@@ -1,4 +1,5 @@
 import { Button, Card, Col, Row } from 'antd';
+import { useLanguage } from 'i18n';
 import { useCallback, useMemo } from 'react';
 import { injected } from '../../walletConnectors';
 import { getExploreLink, shortenString } from '../../utils';
@@ -20,6 +21,7 @@ import { isChainSupportedByTRC } from 'utils/common';
 function AccountCard() {
   const [{ accountWallet, accountChainId }, { dispatch }] = useModal();
   const chainDispatch = useChainDispatch();
+  const { t } = useLanguage();
 
   const { connector, account, chainId, deactivate, aelfInstance, walletType, defaultAddress } = accountWallet || {};
   const filter = useCallback(
@@ -50,6 +52,7 @@ function AccountCard() {
         console.log('error: ', error);
       } finally {
         if (isChainSupportedByTRC(accountChainId)) {
+          CommonMessage.error(t('Disconnect tron wallet'));
           chainDispatch(setSelectTRCWallet(undefined));
         } else {
           chainDispatch(setSelectERCWallet(undefined));
@@ -59,13 +62,15 @@ function AccountCard() {
     } else {
       deactivate?.();
     }
-    dispatch(
-      basicModalView.setWalletModal(true, {
-        walletWalletType: walletType,
-        walletChainType: walletType === 'ERC' ? 'ERC' : walletType === 'TRC' ? 'TRC' : 'ELF',
-        walletChainId: chainId,
-      }),
-    );
+    if (walletType !== 'TRC') {
+      dispatch(
+        basicModalView.setWalletModal(true, {
+          walletWalletType: walletType,
+          walletChainType: walletType === 'ERC' ? 'ERC' : 'ELF',
+          walletChainId: chainId,
+        }),
+      );
+    }
   }, [connector, dispatch, walletType, chainId, connection?.connector, chainDispatch, deactivate]);
 
   const getAddress = (walletAccount: string) => {
@@ -137,13 +142,15 @@ function AccountCard() {
       </Card>
       {aelfInstance?.connect ? null : (
         <Col span={24}>
-          <Row justify="space-between" className="account-modal-button">
+          <Row justify={isTRC ? 'end' : 'space-between'} className="account-modal-button">
             <Button type="primary" onClick={onDisconnect}>
               Disconnect
             </Button>
-            <Button type="primary" onClick={changeWallet}>
-              Change
-            </Button>
+            {!isTRC && (
+              <Button type="primary" onClick={changeWallet}>
+                Change
+              </Button>
+            )}
           </Row>
         </Col>
       )}

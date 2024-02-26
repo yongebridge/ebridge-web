@@ -88,12 +88,19 @@ export default function WalletList() {
         const option = SUPPORTED_WALLETS[key];
         const isStringConnector = typeof option.connector === 'string';
         const isStringChain = typeof chainId === 'string' || walletChainType === 'ELF';
+        if (walletChainType == 'TRC') {
+          return option.name == SUPPORTED_WALLETS.TRON_LINK.name;
+        }
         if (isPortkey()) {
           if (isStringChain) return isPortkeyConnector(option.connector as string);
           if (!isStringConnector)
             return !(option.connector instanceof MetaMask || option.connector instanceof TronLink);
         }
-        return isStringConnector ? isStringChain : !isStringChain;
+        return isStringConnector
+          ? isStringChain
+          : option.name == SUPPORTED_WALLETS.TRON_LINK.name
+          ? false
+          : !isStringChain;
       }),
     [chainId, walletChainType],
   );
