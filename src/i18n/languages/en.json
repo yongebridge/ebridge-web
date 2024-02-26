@@ -132,7 +132,6 @@
     "Supported tokens": "Tokens:",
     "OK": "OK",
     "eBridge limit rules Token": "Token",
-    "Disconnect tron wallet": "To disconnect from the Tron wallet, please open the Tron wallet extension and disconnect it.",
     "eBridge limit rules Allowance": "Daily Transfer Limit",
     "About allowance": "{{allowance}} {{tokenSymbol}}",
     "Rate limit Token": "Token",

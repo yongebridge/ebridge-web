@@ -142,7 +142,6 @@
     "input address error": "請輸入與“To”鏈匹配的錢包地址。",
     "Synchronising data on the chain 1": "{{chainType}}同步數據中...",
     "Synchronising data on the chain 2": "請等待5-10分鐘後再發起跨鏈。",
-    "Disconnect tron wallet": "要断开与 Tron 钱包的连接，请打开 Tron 钱包扩展程序并断开连接。",
     "main chain": "主鏈",
     "side chain": "側鏈",
     "Request rejected. eBridge needs your permission to continue": "請求被拒絕。eBridge需要您的授權才能繼續。",
