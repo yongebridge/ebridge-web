@@ -1,4 +1,5 @@
 import { Connector } from '@web3-react/types';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import {
   ALL_SUPPORTED_CHAIN_IDS,
   SUPPORTED_ERC_CHAIN_IDS,
@@ -142,7 +143,9 @@ export const switchChain = async (
   connector?: Connector | string,
   isWeb3Active?: boolean,
   web3ChainId?: ChainId,
+  trcAccount?: string | undefined,
 ) => {
+  const adapter = new TronLinkAdapter();
   const { chainId, chainName, nativeCurrency, rpcUrls, blockExplorerUrls, iconUrls } = info;
   if (typeof chainId === 'string') {
     eventBus.emit(storages.userELFChainId, info.chainId);
@@ -155,8 +158,6 @@ export const switchChain = async (
   if (SUPPORTED_TRON_CHAIN_IDS.includes(Number(info.chainId))) {
     eventBus.emit(storages.userTRCChainId, info.chainId);
 
-    const connector = tronLink;
-
     try {
       // send Tronlink transaction process
       if (!window.tronWeb) {
@@ -167,17 +168,17 @@ export const switchChain = async (
         // check tronlink is connect wallet in website
         const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
         if (!response) {
-          // if tronlink is not connected .....
-          CommonMessage.error('Please Unlock the TronLink wallet, switch to Nile Testnet and then try again.');
-          retryTronConnection();
+          if (!adapter.connected) {
+            await adapter.connect();
+            window.location.reload();
+          }
           return false;
         } else if (response === 200) {
           // get tronlink current chains config
           console.log('All ok');
         } else {
           // if node not correct .....
-          console.log('Else ok: ', response);
-          // connector.activate();
+          if (!trcAccount) window.location.reload();
         }
       }
     } catch (err) {
@@ -226,15 +227,4 @@ export const switchChain = async (
     // unlink metamask
     switchNetwork(info);
   }
-};
-
-const retryTronConnection = () => {
-  const timer = setInterval(async () => {
-    console.log('Trying connection');
-    const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
-    if (response) {
-      clearTimeout(timer);
-      window.location.reload();
-    }
-  }, 1000);
 };

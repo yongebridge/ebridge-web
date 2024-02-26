@@ -1,9 +1,10 @@
 import { Button } from 'antd';
 import { useCallback, useMemo, useState } from 'react';
 import { useModalDispatch } from 'contexts/useModal/hooks';
+import { ConnectionType } from 'walletConnectors';
 import { basicModalView } from 'contexts/useModal/actions';
 import clsx from 'clsx';
-import { useAEflConnect, usePortkeyConnect } from 'hooks/web3';
+import { useAEflConnect, usePortkeyConnect, useTRCWeb } from 'hooks/web3';
 import { Connector } from '@web3-react/types';
 import { useChainDispatch } from 'contexts/useChain';
 import { useModal } from 'contexts/useModal';
@@ -27,6 +28,7 @@ export default function WalletList() {
   const portkeyConnect = usePortkeyConnect();
   const [loading, setLoading] = useState<any>();
   const dispatch = useModalDispatch();
+  const trcWebWallet = useTRCWeb();
   const chainDispatch = useChainDispatch();
   const onCancel = useCallback(() => {
     setLoading(undefined);
@@ -46,7 +48,9 @@ export default function WalletList() {
             break;
           case 'TRONLINK':
             await sleep(500);
-            await switchChain(DEFAULT_TRC_CHAIN_INFO as any, connector, true);
+            localStorage.setItem('isTronDisconnected', JSON.stringify(false));
+            chainDispatch(setSelectTRCWallet(ConnectionType.TRON_LINK));
+            await switchChain(DEFAULT_TRC_CHAIN_INFO as any, connector, true, undefined, trcWebWallet.account);
             break;
           default:
             if (typeof connector === 'string') {
@@ -88,12 +92,19 @@ export default function WalletList() {
         const option = SUPPORTED_WALLETS[key];
         const isStringConnector = typeof option.connector === 'string';
         const isStringChain = typeof chainId === 'string' || walletChainType === 'ELF';
+        if (walletChainType == 'TRC') {
+          return option.name == SUPPORTED_WALLETS.TRON_LINK.name;
+        }
         if (isPortkey()) {
           if (isStringChain) return isPortkeyConnector(option.connector as string);
           if (!isStringConnector)
             return !(option.connector instanceof MetaMask || option.connector instanceof TronLink);
         }
-        return isStringConnector ? isStringChain : !isStringChain;
+        return isStringConnector
+          ? isStringChain
+          : option.name == SUPPORTED_WALLETS.TRON_LINK.name
+          ? false
+          : !isStringChain;
       }),
     [chainId, walletChainType],
   );

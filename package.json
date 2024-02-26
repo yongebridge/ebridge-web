@@ -22,6 +22,7 @@
     "@portkey/detect-provider": "^2.0.0-alpha.5",
     "@portkey/onboarding": "^2.0.0-alpha.28",
     "@sentry/nextjs": "^7.48.0",
+    "@tronweb3/tronwallet-adapters": "^1.2.0",
     "@walletconnect/ethereum-provider": "^2.9.2",
     "@web3-react/coinbase-wallet": "^8.2.2",
     "@web3-react/core": "^8.2.2",
