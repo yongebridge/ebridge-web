@@ -1,4 +1,5 @@
 import { Connector } from '@web3-react/types';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import {
   ALL_SUPPORTED_CHAIN_IDS,
   SUPPORTED_ERC_CHAIN_IDS,
@@ -155,8 +156,6 @@ export const switchChain = async (
   if (SUPPORTED_TRON_CHAIN_IDS.includes(Number(info.chainId))) {
     eventBus.emit(storages.userTRCChainId, info.chainId);
 
-    const connector = tronLink;
-
     try {
       // send Tronlink transaction process
       if (!window.tronWeb) {
@@ -167,9 +166,10 @@ export const switchChain = async (
         // check tronlink is connect wallet in website
         const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
         if (!response) {
-          // if tronlink is not connected .....
-          CommonMessage.error('Please Unlock the TronLink wallet and then try again.');
-          retryTronConnection();
+          const adapter = new TronLinkAdapter();
+          // connect
+          await adapter.connect();
+          window.location.reload();
           return false;
         } else if (response === 200) {
           // get tronlink current chains config
@@ -177,7 +177,6 @@ export const switchChain = async (
         } else {
           // if node not correct .....
           console.log('Else ok: ', response);
-          // connector.activate();
         }
       }
     } catch (err) {
@@ -226,15 +225,4 @@ export const switchChain = async (
     // unlink metamask
     switchNetwork(info);
   }
-};
-
-const retryTronConnection = () => {
-  const timer = setInterval(async () => {
-    console.log('Trying connection');
-    const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
-    if (response) {
-      clearTimeout(timer);
-      window.location.reload();
-    }
-  }, 1000);
 };
