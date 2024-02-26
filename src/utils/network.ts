@@ -168,7 +168,7 @@ export const switchChain = async (
         const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
         if (!response) {
           // if tronlink is not connected .....
-          CommonMessage.error('Please Unlock the TronLink wallet, switch to Nile Testnet and then try again.');
+          CommonMessage.error('Please Unlock the TronLink wallet and then try again.');
           retryTronConnection();
           return false;
         } else if (response === 200) {
