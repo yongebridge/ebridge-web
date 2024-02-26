@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import { FromCard, ToCard } from './Card';
 import HomeProvider from './HomeContext';
 import SelectTokenModal from './SelectTokenModal';
@@ -20,6 +21,17 @@ import { isPortkey } from 'utils/portkey';
 import LimitAmountDescModal from './LimitAmountDescModal';
 
 export default function Home() {
+  const adapter = new TronLinkAdapter();
+
+  const handleConnect = () => {
+    window.location.reload();
+  };
+
+  const handleDisconnect = () => {
+    window.location.reload();
+  };
+  adapter.on('connect', handleConnect);
+  adapter.on('disconnect', handleDisconnect);
   const isMd = useMediaQueries('md');
   const { t } = useLanguage();
   const [isShowNotice, setShowNotice] = useState(false);

@@ -3,7 +3,7 @@ import { BRIDGE_IN_ABI, BRIDGE_OUT_ABI, ERC20_ABI, LIMIT_ABI } from 'constants/a
 import { useCallback, useEffect, useMemo } from 'react';
 import { AelfInstancesKey, ChainId } from 'types';
 import { getAElf, getWallet, isELFChain } from 'utils/aelfUtils';
-import { isChainSupportedByTRC } from 'utils/common';
+import { isChainSupportedByERC, isChainSupportedByTRC } from 'utils/common';
 import { provider } from 'web3-core';
 import { useAElf, useWeb3, useTRCWeb } from './web3';
 import { ELFChainConstants, ERCChainConstants, TRCChainConstants } from 'constants/ChainConstants';
@@ -44,7 +44,7 @@ export function getPortkeyContract(
 export function useERCContract(address: string | undefined, ABI: any, chainId?: ChainId) {
   const { library } = useWeb3();
   return useMemo(() => {
-    if (!address || isELFChain(chainId)) return undefined;
+    if (!address || isELFChain(chainId) || !isChainSupportedByERC(chainId)) return undefined;
     try {
       return getContract(address, ABI, library);
     } catch (error) {
@@ -57,7 +57,7 @@ export function useERCContract(address: string | undefined, ABI: any, chainId?: 
 
 export function useTRCContract(address: string | undefined, ABI: any, chainId?: ChainId) {
   const { library } = useTRCWeb();
-  if (!address || isELFChain(chainId)) return undefined;
+  if (!address || isELFChain(chainId) || !isChainSupportedByTRC(chainId)) return undefined;
   try {
     return getContract(address, ABI, library, chainId);
   } catch (error) {

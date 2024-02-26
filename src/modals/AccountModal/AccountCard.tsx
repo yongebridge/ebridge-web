@@ -1,5 +1,5 @@
 import { Button, Card, Col, Row } from 'antd';
-import { useLanguage } from 'i18n';
+import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import { useCallback, useMemo } from 'react';
 import { injected } from '../../walletConnectors';
 import { getExploreLink, shortenString } from '../../utils';
@@ -19,9 +19,16 @@ import CommonMessage from 'components/CommonMessage';
 import { isChainSupportedByTRC } from 'utils/common';
 
 function AccountCard() {
+  const adapter = new TronLinkAdapter();
   const [{ accountWallet, accountChainId }, { dispatch }] = useModal();
   const chainDispatch = useChainDispatch();
-  const { t } = useLanguage();
+  const handleDisconnect = () => {
+    if (window.tronWeb) {
+      window.tronWeb.defaultAddress = { ...window.tronWeb.defaultAddress };
+    }
+    localStorage.setItem('isTronDisconnected', JSON.stringify(true));
+    window.location.reload();
+  };
 
   const { connector, account, chainId, deactivate, aelfInstance, walletType, defaultAddress } = accountWallet || {};
   const filter = useCallback(
@@ -33,6 +40,7 @@ function AccountCard() {
     },
     [connector],
   );
+  adapter.on('disconnect', handleDisconnect);
   const connection = useMemo(() => {
     if (!connector || typeof connector === 'string') return;
     return getConnection(connector);
@@ -52,7 +60,7 @@ function AccountCard() {
         console.log('error: ', error);
       } finally {
         if (isChainSupportedByTRC(accountChainId)) {
-          CommonMessage.error(t('Disconnect tron wallet'));
+          adapter.disconnect();
           chainDispatch(setSelectTRCWallet(undefined));
         } else {
           chainDispatch(setSelectERCWallet(undefined));
@@ -62,7 +70,7 @@ function AccountCard() {
     } else {
       deactivate?.();
     }
-    if (walletType !== 'TRC') {
+    if (!isChainSupportedByTRC(chainId)) {
       dispatch(
         basicModalView.setWalletModal(true, {
           walletWalletType: walletType,

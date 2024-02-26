@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useModalDispatch } from 'contexts/useModal/hooks';
 import { setFromWallet, setToWallet } from 'contexts/useWallet/actions';
 import { useWalletActions } from 'contexts/useWallet/hooks';
-import { usePortkey, useWeb3 } from 'hooks/web3';
+import { usePortkey, useWeb3, useTRCWeb } from 'hooks/web3';
 import { isChainSupportedByTRC } from 'utils/common';
 import { memo, useCallback, useMemo } from 'react';
 import { Trans } from 'react-i18next';
@@ -30,6 +30,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   const { chainId, account, connector, defaultAddress } = wallet || {};
   const { i18n } = useTranslation();
   const portkeyWallet = usePortkey();
+  const trcWebWallet = useTRCWeb();
   const [{ selectELFWallet }] = useChain();
   const modalDispatch = useModalDispatch();
 
@@ -42,18 +43,14 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
   };
 
   const renderRightBtn = useMemo(() => {
-    let selectedAccount = account;
-    if (selectedAccount == 'false') {
-      selectedAccount = JSON.parse(selectedAccount);
-    }
-    if (selectedAccount && isPortkey() && isELFChain(chainId)) {
+    if (account && isPortkey() && isELFChain(chainId)) {
       return null;
     }
 
     return (
       <>
         <Divider type="vertical" className={styles['wallet-divider']} />
-        {selectedAccount ? (
+        {account ? (
           <Row
             onClick={() =>
               modalDispatch(
@@ -67,7 +64,7 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
             <WalletIcon connector={connector} className={styles['wallet-icon']} />
             <div className={styles['wallet-address']}>
               {shortenString(
-                isELFChain(chainId) ? formatAddress(chainId, getAddress(selectedAccount)) : getAddress(selectedAccount),
+                isELFChain(chainId) ? formatAddress(chainId, getAddress(account)) : getAddress(account),
                 8,
                 9,
               )}
@@ -120,7 +117,13 @@ function WalletRow({ wallet, isForm, chainType }: { wallet?: Web3Type; isForm?: 
         dispatch(setWallet({ chainType: 'ERC' }));
       }
       try {
-        await switchChain(info, !isELFChain(info.chainId) ? web3Connector : connector, !!web3Account, web3ChainId);
+        await switchChain(
+          info,
+          !isELFChain(info.chainId) ? web3Connector : connector,
+          !!web3Account,
+          web3ChainId,
+          trcWebWallet.account,
+        );
       } catch (error: any) {
         CommonMessage.error(error.message);
       }

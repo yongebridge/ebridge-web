@@ -138,11 +138,12 @@ export function usePortkey(): Web3Type {
 
 export function useTRCWeb(): Web3Type {
   const trcReact = window.tronWeb;
+  const isDisconnected = JSON.parse(localStorage.getItem('isTronDisconnected') || 'false');
   const tmpContext = useMemo(() => {
     const contextNetwork: any = {
       ...trcReact,
-      account: trcReact?.defaultAddress.hex.toString(),
-      address: trcReact?.defaultAddress.hex.toString(),
+      account: !isDisconnected && trcReact?.defaultAddress.hex ? trcReact?.defaultAddress.hex.toString() : undefined,
+      address: !isDisconnected && trcReact?.defaultAddress.hex ? trcReact?.defaultAddress.hex.toString() : undefined,
     };
     return {
       ...contextNetwork,
