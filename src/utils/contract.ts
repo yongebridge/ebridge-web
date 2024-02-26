@@ -418,7 +418,7 @@ export class TronContractBasic {
   }
 
   public initContract: InitContract = async (provider, address, ABI) => {
-    this.contract = window.tronWeb.contract(ABI as any, address);
+    this.contract = window.tronWeb?.contract(ABI as any, address);
     return this.contract as any;
   };
 

@@ -1,5 +1,4 @@
 import { Connector } from '@web3-react/types';
-import { TronLinkAdapter } from '@tronweb3/tronwallet-adapter-tronlink';
 import {
   ALL_SUPPORTED_CHAIN_IDS,
   SUPPORTED_ERC_CHAIN_IDS,
@@ -166,10 +165,9 @@ export const switchChain = async (
         // check tronlink is connect wallet in website
         const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
         if (!response) {
-          const adapter = new TronLinkAdapter();
-          // connect
-          await adapter.connect();
-          window.location.reload();
+          // if tronlink is not connected .....
+          CommonMessage.error('Please Unlock the TronLink wallet, switch to Nile Testnet and then try again.');
+          retryTronConnection();
           return false;
         } else if (response === 200) {
           // get tronlink current chains config
@@ -225,4 +223,14 @@ export const switchChain = async (
     // unlink metamask
     switchNetwork(info);
   }
+};
+
+const retryTronConnection = () => {
+  const timer = setInterval(async () => {
+    const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
+    if (response) {
+      clearTimeout(timer);
+      window.location.reload();
+    }
+  }, 1000);
 };
