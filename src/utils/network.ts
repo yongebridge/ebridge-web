@@ -228,13 +228,3 @@ export const switchChain = async (
     switchNetwork(info);
   }
 };
-
-const retryTronConnection = () => {
-  const timer = setInterval(async () => {
-    const response = await window.tronWeb.request({ method: 'tron_requestAccounts' });
-    if (response) {
-      clearTimeout(timer);
-      window.location.reload();
-    }
-  }, 1000);
-};
