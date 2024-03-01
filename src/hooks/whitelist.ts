@@ -33,7 +33,11 @@ export function useCurrentWhitelist() {
   const toChainId = toWallet?.chainId;
   return useMemo(() => {
     if (!allList || !toChainId || !fromChainId) return [];
-    return allList?.filter((item) => item?.[fromChainId] && item?.[toChainId]);
+    return allList?.filter((item) => {
+      const canForm = !item?.[fromChainId]?.onlyTo;
+      const canTo = !item?.[toChainId]?.onlyForm;
+      return canForm && canTo;
+    });
   }, [allList, fromChainId, toChainId]);
 }
 

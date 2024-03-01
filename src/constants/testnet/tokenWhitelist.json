@@ -92,6 +92,31 @@
     },
     "tDVW": { "name": "BNB Token", "decimals": 8, "symbol": "BNB", "address": "", "issueChainId": 9992731 }
   },
+  "SGR": {
+    "11155111": {
+      "name": "Schrodinger Cat",
+      "decimals": 6,
+      "symbol": "SGR",
+      "address": "0x77c2686501ff82287558fe3c98424c074ca34e4a",
+      "onlyForm": true
+    },
+    "tDVV": {
+      "name": "Schrodinger Cat",
+      "decimals": 6,
+      "symbol": "SGR",
+      "address": "",
+      "issueChainId": 9992731,
+      "onlyTo": true
+    },
+    "tDVW": {
+      "name": "Schrodinger Cat",
+      "decimals": 6,
+      "symbol": "SGR-1",
+      "address": "",
+      "issueChainId": 9992731,
+      "onlyTo": true
+    }
+  },
   "WRITE": {
     "AELF": { "name": "WRITE Token", "decimals": 8, "symbol": "WRITE", "address": "", "issueChainId": 9992731 },
     "tDVV": { "name": "WRITE Token", "decimals": 8, "symbol": "WRITE", "address": "", "issueChainId": 9992731 },
